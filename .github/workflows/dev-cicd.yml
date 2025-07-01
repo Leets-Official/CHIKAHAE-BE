@@ -64,6 +64,9 @@ jobs:
           source: ".env"
           target: "/home/ubuntu/chikahae-dev/docker/"
 
+      - name: Check docker-compose.dev.yml exists
+        run: ls -al ./docker/
+
       - name: 3. docker-compose.yml 전달
         uses: appleboy/scp-action@master
         with:
@@ -71,7 +74,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           source: "./docker/docker-compose.dev.yml"
-          target: "/home/ubuntu/chikahae-dev/docker/"  
+          target: "/home/ubuntu/chikahae-dev/"
 
       - name: 4. SSH to Dev Server and Deploy
         uses: appleboy/ssh-action@master
