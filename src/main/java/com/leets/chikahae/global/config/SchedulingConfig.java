@@ -1,6 +1,14 @@
 package com.leets.chikahae.global.config;
 
-public class SchedulingConfig {
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
-	// 스케줄 관련 설정 파일
+@Configuration
+@EnableScheduling
+public class SchedulingConfig {
+	/**
+	 * Spring 스케줄링 설정 클래스
+	 * - @Scheduled 어노테이션이 달린 메서드를 스케줄 태스크로 실행합니다.
+	 */
+
 }
