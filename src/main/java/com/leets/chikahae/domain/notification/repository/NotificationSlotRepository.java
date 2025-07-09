@@ -4,13 +4,14 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.leets.chikahae.domain.notification.entity.NotificationSlot;
 import com.leets.chikahae.domain.notification.entity.SlotType;
 
 @Repository
-public interface NotificationSlotRepository {
+public interface NotificationSlotRepository extends JpaRepository<NotificationSlot, Long> {
 
 	/**
 	 * 활성화된 슬롯 중, nextSendAt이 현재 시각 이전(또는 같은)인 슬롯을 조회
