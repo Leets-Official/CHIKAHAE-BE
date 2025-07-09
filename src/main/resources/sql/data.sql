@@ -40,19 +40,19 @@ INSERT INTO member_item (member_id, item_id) VALUES
 
 -- 6. daily_quiz
 INSERT INTO daily_quiz (daily_quiz_id, quiz_date) VALUES
-                                                      (1, '2024-07-07 00:00:00'),
-                                                      (2, '2024-07-08 00:00:00'),
-                                                      (3, '2024-07-09 00:00:00'),
-                                                      (4, '2024-07-10 00:00:00'),
-                                                      (5, '2024-07-11 00:00:00');
+                                                      (1, '2025-07-07 '),
+                                                      (2, '2025-07-08'),
+                                                      (3, '2025-07-09'),
+                                                      (4, '2025-07-10'),
+                                                      (5, '2025-07-11');
 
 -- 7. quiz
-INSERT INTO quiz (quiz_id, daily_quiz_id, image, type, question, answer, answer_description, options) VALUES
-                                                                                                          (1, 1, 'quiz1.png', 'OX', '양치는 하루에 두 번 해야 한다.', 'O', '정답: 하루 두 번 양치가 권장됩니다.', '["O","X"]'),
-                                                                                                          (2, 1, 'quiz2.png', 'MCQ', '치약의 주성분은?', '불소', '불소는 충치 예방에 효과적입니다.', '["불소","소금","설탕","물"]'),
-                                                                                                          (3, 2, 'quiz3.png', 'OX', '양치 후에는 물로 충분히 헹궈야 한다.', 'O', '정답: 잔여 치약이 남지 않도록 충분히 헹굽니다.', '["O","X"]'),
-                                                                                                          (4, 3, 'quiz4.png', 'MCQ', '칫솔은 몇 개월마다 교체해야 할까요?', '3개월', '정답: 3개월마다 교체 권장.', '["1개월","3개월","6개월","1년"]'),
-                                                                                                          (5, 4, 'quiz5.png', 'OX', '치실은 양치 후에 사용하는 것이 좋다.', 'O', '정답: 치실은 양치 후 사용 권장.', '["O","X"]');
+INSERT INTO quiz (quiz_id, daily_quiz_id, type, question, answer, answer_description, options) VALUES
+                                                                                                          (1, 1,  'OX', '양치는 하루에 두 번 해야 한다.', 'O', '정답: 하루 두 번 양치가 권장됩니다.', '["O","X"]'),
+                                                                                                          (2, 1,  'MCQ', '치약의 주성분은?', '불소', '불소는 충치 예방에 효과적입니다.', '["불소","소금","설탕","물"]'),
+                                                                                                          (3, 2, 'OX', '양치 후에는 물로 충분히 헹궈야 한다.', 'O', '정답: 잔여 치약이 남지 않도록 충분히 헹굽니다.', '["O","X"]'),
+                                                                                                          (4, 3, 'MCQ', '칫솔은 몇 개월마다 교체해야 할까요?', '3개월', '정답: 3개월마다 교체 권장.', '["1개월","3개월","6개월","1년"]'),
+                                                                                                          (5, 4, 'OX', '치실은 양치 후에 사용하는 것이 좋다.', 'O', '정답: 치실은 양치 후 사용 권장.', '["O","X"]');
 
 -- 8. member_quiz
 INSERT INTO member_quiz (quiz_answer_id, parent_id, member_id, quiz_question_id, selected_answer, is_correct) VALUES

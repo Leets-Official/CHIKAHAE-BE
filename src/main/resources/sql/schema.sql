@@ -76,13 +76,13 @@ CREATE TABLE member_item (
 
 CREATE TABLE daily_quiz (
                             daily_quiz_id BIGINT PRIMARY KEY,
-                            quiz_date DATETIME NOT NULL
+                            quiz_date DATE NOT NULL
+
 );
 
 CREATE TABLE quiz (
                       quiz_id BIGINT PRIMARY KEY,
                       daily_quiz_id BIGINT NOT NULL,
-                      image VARCHAR(255),
                       type ENUM('OX','MCQ') NOT NULL,
                       question VARCHAR(255) NOT NULL,
                       answer VARCHAR(255) NOT NULL,
