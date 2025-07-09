@@ -53,9 +53,9 @@ public class NotificationSlot extends BaseEntity {
 	protected NotificationSlot() {
 	}
 
-	public NotificationSlot(Long memberId, SlotType slotType, LocalTime sendTime,
+	public NotificationSlot(Member member, SlotType slotType, LocalTime sendTime,
 		Instant nextSendAt, String title, String message) {
-		this.memberId = memberId;
+		this.member = member;
 		this.slotType = slotType;
 		this.sendTime = sendTime;
 		this.nextSendAt = nextSendAt;
