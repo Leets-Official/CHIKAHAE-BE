@@ -2,6 +2,7 @@ package com.leets.chikahae.domain.notification.entity;
 
 import java.time.Instant;
 import java.time.LocalTime;
+import java.time.ZoneId;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -56,6 +57,17 @@ public class NotificationSlot extends BaseEntity {
 		this.nextSendAt = nextSendAt;
 		this.title = title;
 		this.message = message;
+	}
+
+	public void changeEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public void changeSendTime(LocalTime sendTime, ZoneId zone) {
+		this.sendTime = sendTime;
+		this.nextSendAt = sendTime.atDate(
+			Instant.now().atZone(zone).toLocalDate()
+		).atZone(zone).toInstant();
 	}
 
 }
