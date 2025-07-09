@@ -27,8 +27,8 @@ public class FcmToken extends BaseEntity {
 	protected FcmToken() {
 	}
 
-	public FcmToken(Long memberId, String fcmToken) {
-		this.memberId = memberId;
+	public FcmToken(Member member, String fcmToken) {
+		this.member = member;
 		this.fcmToken = fcmToken;
 	}
 }
