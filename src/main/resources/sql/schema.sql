@@ -75,13 +75,12 @@ CREATE TABLE member_item (
 
 
 CREATE TABLE daily_quiz (
-                            daily_quiz_id BIGINT PRIMARY KEY,
+                            daily_quiz_id BIGINT PRIMARY KEY AUTO_INCREMENT,
                             quiz_date DATE NOT NULL
-
 );
 
 CREATE TABLE quiz (
-                      quiz_id BIGINT PRIMARY KEY,
+                      quiz_id BIGINT PRIMARY KEY AUTO_INCREMENT,
                       daily_quiz_id BIGINT NOT NULL,
                       type ENUM('OX','MCQ') NOT NULL,
                       question VARCHAR(255) NOT NULL,
@@ -96,10 +95,9 @@ CREATE TABLE quiz (
 );
 
 CREATE TABLE member_quiz (
-                             quiz_answer_id BIGINT PRIMARY KEY,
-                             parent_id BIGINT NOT NULL,
+                             member_quiz_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                              member_id BIGINT NOT NULL,
-                             quiz_question_id BIGINT NOT NULL,
+                             quiz_id BIGINT NOT NULL,
                              selected_answer VARCHAR(255),
                              is_correct BOOLEAN,
                              CONSTRAINT fk_member_quiz_member
@@ -107,13 +105,8 @@ CREATE TABLE member_quiz (
                                      REFERENCES member(member_id)
                                      ON DELETE CASCADE
                                      ON UPDATE CASCADE,
-                             CONSTRAINT fk_member_quiz_parent
-                                 FOREIGN KEY (parent_id)
-                                     REFERENCES parent(parent_id)
-                                     ON DELETE CASCADE
-                                     ON UPDATE CASCADE,
                              CONSTRAINT fk_member_quiz_quiz
-                                 FOREIGN KEY (quiz_question_id)
+                                 FOREIGN KEY (quiz_id)
                                      REFERENCES quiz(quiz_id)
                                      ON DELETE CASCADE
                                      ON UPDATE CASCADE
