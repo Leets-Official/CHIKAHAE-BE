@@ -2,8 +2,16 @@ package com.leets.chikahae.domain.quiz.entity;
 
 import com.leets.chikahae.domain.user.Member;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "member_quiz")
 public class MemberQuiz {
 
@@ -25,5 +33,14 @@ public class MemberQuiz {
 
     @Column(name = "is_correct")
     private Boolean isCorrect;
+
+    public static MemberQuiz of(Quiz quiz, Member member, String userAnswer, Boolean isCorrect) {
+        return MemberQuiz.builder()
+                .quiz(quiz)
+                .member(member)
+                .selectedAnswer(userAnswer)
+                .isCorrect(isCorrect)
+                .build();
+    }
 
 }
