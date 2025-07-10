@@ -7,12 +7,13 @@ INSERT INTO parent (parent_id, kakao_id, email, name, created_at, updated_at, is
                                                                                              (5, 'kakao_005', 'parent5@example.com', '정수연', NOW(), NOW(), 'N');
 
 -- 2. member
-INSERT INTO member (member_id, parent_id, password, name, nickname, birth, profile_image, gender, point, is_delete, created_at, updated_at) VALUES
-                                                                                                                                                (101, 1, 'pw_hash_101', '김서준', '치카요정1', '2015-04-12', NULL, 1, 120, 'N', NOW(), NOW()),
-                                                                                                                                                (102, 1, 'pw_hash_102', '김하린', '치카요정2', '2017-08-25', NULL, 0, 200, 'N', NOW(), NOW()),
-                                                                                                                                                (103, 2, 'pw_hash_103', '이도윤', '치카마스터', '2016-12-02', NULL, 1, 95, 'N', NOW(), NOW()),
-                                                                                                                                                (104, 3, 'pw_hash_104', '박지민', '치카짱', '2014-09-30', NULL, 0, 180, 'N', NOW(), NOW()),
-                                                                                                                                                (105, 4, 'pw_hash_105', '최예린', '치카왕', '2013-11-20', NULL, 1, 150, 'N', NOW(), NOW());
+INSERT INTO member (member_id, parent_id, name, nickname, birth, profile_image, gender, is_deleted, created_at, updated_at)
+VALUES
+    (101, 1, '김서준', '치카요정1', '2015-04-12', NULL, 1, FALSE, NOW(), NOW()),
+    (102, 1, '김하린', '치카요정2', '2017-08-25', NULL, 0, FALSE, NOW(), NOW()),
+    (103, 2, '이도윤', '치카마스터', '2016-12-02', NULL, 1, FALSE, NOW(), NOW()),
+    (104, 3, '박지민', '치카짱', '2014-09-30', NULL, 0, FALSE, NOW(), NOW()),
+    (105, 4, '최예린', '치카왕', '2013-11-20', NULL, 1, FALSE, NOW(), NOW());
 
 -- 3. point
 INSERT INTO point (member_id, coin) VALUES
