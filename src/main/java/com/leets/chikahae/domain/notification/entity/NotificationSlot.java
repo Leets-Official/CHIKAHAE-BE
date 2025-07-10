@@ -16,8 +16,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.Getter;
 
 @Entity
+@Getter
 @Table(name = "notification_slots",
 	uniqueConstraints = @UniqueConstraint(columnNames = {"member_id", "slot_type"}))
 public class NotificationSlot extends BaseEntity {
