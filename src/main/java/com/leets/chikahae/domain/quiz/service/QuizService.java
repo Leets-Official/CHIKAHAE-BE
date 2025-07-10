@@ -2,6 +2,8 @@ package com.leets.chikahae.domain.quiz.service;
 
 import com.leets.chikahae.domain.quiz.dto.response.CheckQuizResponse;
 import com.leets.chikahae.domain.quiz.dto.response.QuizResponse;
+import com.leets.chikahae.domain.quiz.dto.response.QuizResultResponse;
+
 import java.util.List;
 
 
@@ -11,5 +13,8 @@ public interface QuizService {
 
     CheckQuizResponse checkQuizAnswer(Long quizId, String selectedAnswer, Long memberId);
 
-//    CheckQuizResponse getQuizResult(Long quizId);
+    void resetQuizHistory(long memberId);
+
+    QuizResultResponse getQuizResult(long memberId);
+
 }

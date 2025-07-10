@@ -1,3 +1,4 @@
+-- 부모 테이블
 CREATE TABLE parent (
                         parent_id BIGINT PRIMARY KEY NOT NULL COMMENT '고유 ID',
                         kakao_id VARCHAR(50) NOT NULL COMMENT '카카오 고유 ID',
@@ -8,39 +9,74 @@ CREATE TABLE parent (
                         is_delete ENUM('Y', 'N') NOT NULL COMMENT '계정탈퇴 여부 (Y/N)'
 );
 
+
+-- 자녀 테이블
 CREATE TABLE member (
-                        member_id BIGINT PRIMARY KEY NOT NULL COMMENT '고유 ID',
+                        member_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '고유 ID',
                         parent_id BIGINT NOT NULL COMMENT '부모 ID',
-                        password VARCHAR(200) NULL COMMENT '암호화 (고려 중)',
                         name VARCHAR(200) NULL COMMENT '자녀 이름',
-                        nickname VARCHAR(200) NOT NULL COMMENT '자녀 닉네임',
+                        nickname VARCHAR(200) NOT NULL UNIQUE COMMENT '자녀 닉네임',
                         birth DATE NOT NULL COMMENT '생년월일',
                         profile_image VARCHAR(255) NULL COMMENT '프로필 이미지',
-                        gender BOOLEAN NOT NULL COMMENT '성별',
-                        point INT NOT NULL COMMENT '치카코인',
-                        is_delete ENUM('Y', 'N') NOT NULL COMMENT '계정탈퇴 여부 (Y/N)',
-                        created_at DATETIME NULL COMMENT '회원가입 일',
-                        updated_at DATETIME NULL COMMENT '수정일 (마이페이지)',
+                        gender BOOLEAN NOT NULL COMMENT '성별 (true: 남, false: 여)',
+                        is_deleted BOOLEAN NOT NULL DEFAULT FALSE COMMENT '계정탈퇴 여부',
+                        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '회원가입 일',
+                        updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정일 (마이페이지)',
                         CONSTRAINT fk_member_parent
                             FOREIGN KEY (parent_id)
-                                REFERENCES parent(parent_id)
+                                REFERENCES PARENT(parent_id)
+                                ON DELETE CASCADE
+                                ON UPDATE CASCADE
 );
 
+
+-- 토큰 테이블
 CREATE TABLE account_token (
-                               token_id BIGINT PRIMARY KEY NOT NULL COMMENT '토큰ID',
-                               member_id BIGINT NOT NULL COMMENT '고유 ID',
+                               token_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '토큰ID',
+                               member_id BIGINT NOT NULL COMMENT '회원 ID',
+                               token_type ENUM('ACCESS', 'REFRESH') NOT NULL DEFAULT 'ACCESS' COMMENT '토큰 유형',
                                ip_address VARCHAR(200) NULL COMMENT '보안 로그인(고려)',
                                user_agent VARCHAR(200) NULL COMMENT '기기, 브라우저 기록',
                                expires_at DATETIME NULL COMMENT '만료일',
-                               created_at DATETIME NULL COMMENT '생성일',
-                               updated_at DATETIME NULL COMMENT '수정일',
+                               created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성일',
+                               updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정일',
                                CONSTRAINT fk_account_token_member
                                    FOREIGN KEY (member_id)
-                                       REFERENCES member(member_id)
+                                       REFERENCES MEMBER(member_id)
                                        ON DELETE CASCADE
                                        ON UPDATE CASCADE
 );
 
+-- 카카오 채널 토큰 테이블
+CREATE TABLE kakao_channel_token (
+                                     token_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '카카오 채널 토큰 ID',
+                                     member_id BIGINT NOT NULL COMMENT '회원 ID',
+                                     channel_user_id VARCHAR(100) NOT NULL COMMENT '카카오 채널 유저 ID',
+                                     is_valid BOOLEAN NOT NULL DEFAULT TRUE COMMENT '토큰 유효 여부',
+                                     linked_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '연동 시각',
+
+                                     CONSTRAINT fk_kakao_token_member FOREIGN KEY (member_id)
+                                         REFERENCES MEMBER(member_id)
+                                         ON DELETE CASCADE
+                                         ON UPDATE CASCADE
+);
+
+-- 알람 로그 테이블
+CREATE TABLE alarm_log (
+                           alarm_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '알림 고유 ID',
+                           member_id BIGINT NOT NULL COMMENT '대상 회원',
+                           message_title VARCHAR(100) NOT NULL COMMENT '알림 제목',
+                           message_content TEXT NOT NULL COMMENT '알림 내용',
+                           sent_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '전송 시각',
+                           success BOOLEAN NOT NULL DEFAULT TRUE COMMENT '전송 성공 여부',
+
+                           CONSTRAINT fk_alarm_member FOREIGN KEY (member_id)
+                               REFERENCES MEMBER(member_id)
+                               ON DELETE CASCADE
+                               ON UPDATE CASCADE
+);
+
+-- 포인트 테이블
 CREATE TABLE point (
                        member_id BIGINT PRIMARY KEY,
                        coin INT NOT NULL,
@@ -50,8 +86,10 @@ CREATE TABLE point (
                                ON DELETE CASCADE
                                ON UPDATE CASCADE
 );
+
+-- 아이템 테이블
 CREATE TABLE item (
-                      item_id BIGINT PRIMARY KEY,
+                      item_id BIGINT PRIMARY KEY AUTO_INCREMENT,
                       name VARCHAR(255),
                       price INT,
                       image VARCHAR(255)
@@ -95,7 +133,7 @@ CREATE TABLE quiz (
 );
 
 CREATE TABLE member_quiz (
-                             member_quiz_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                             member_quiz_id BIGINT PRIMARY KEY AUTO_INCREMENT,
                              member_id BIGINT NOT NULL,
                              quiz_id BIGINT NOT NULL,
                              selected_answer VARCHAR(255),
@@ -106,7 +144,7 @@ CREATE TABLE member_quiz (
                                      ON DELETE CASCADE
                                      ON UPDATE CASCADE,
                              CONSTRAINT fk_member_quiz_quiz
-                                 FOREIGN KEY (quiz_id)
+                                 FOREIGN KEY (quiz_id )
                                      REFERENCES quiz(quiz_id)
                                      ON DELETE CASCADE
                                      ON UPDATE CASCADE
@@ -187,7 +225,7 @@ CREATE TABLE notification_slots (
 CREATE TABLE fcm_tokens (
                             fcm_token_id BIGINT AUTO_INCREMENT PRIMARY KEY,
                             member_id BIGINT NOT NULL,
-                            FCM_token VARCHAR(255) NOT NULL UNIQUE,
+                            fcm_token VARCHAR(255) NOT NULL UNIQUE,
                             created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                             updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                             CONSTRAINT fk_fcm_tokens_member
