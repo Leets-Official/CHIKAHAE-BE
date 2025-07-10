@@ -13,15 +13,15 @@ spring:
 
 ---
 
-# local 프로필  -  로컬 .env에서 주입
+# local 프로필
 spring:
   config:
     activate:
       on-profile: local
   datasource:
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: jdbc:mysql://localhost:3306/chikahae
+    username: chikahae
+    password: chikahae
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: true
@@ -30,6 +30,12 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: update
+  sql:
+    init:
+      mode: always
+      data-locations:
+        - classpath:sql/schema.sql
+        - classpath:sql/data.sql
 
 ---
 
