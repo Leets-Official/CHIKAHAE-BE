@@ -1,10 +1,9 @@
 package com.leets.chikahae.global.config;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+
 
 @Configuration
-@EnableJpaAuditing
 public class JpaAuditingConfig {
 	/**
 	 JPA 엔티티에 자동으로 createdAt(생성 시각)와 updatedAt(수정 시각)을 채워 주는 기능
