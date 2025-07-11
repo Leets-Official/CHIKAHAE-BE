@@ -4,6 +4,8 @@ import java.time.Instant;
 import java.time.LocalTime;
 import java.time.ZoneId;
 
+import com.leets.chikahae.domain.BaseEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
