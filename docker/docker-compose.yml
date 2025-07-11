@@ -1,0 +1,15 @@
+services:
+  # MySQL
+  mysql:
+    image: mysql:8.0
+    container_name: chikahae-mysql
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+
