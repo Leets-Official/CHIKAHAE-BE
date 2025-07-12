@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.leets.chikahae.domain.notification.entity.NotificationSlot;
 import com.leets.chikahae.domain.notification.entity.SlotType;
+import com.leets.chikahae.domain.member.entity.Member;
 
 @Repository
 public interface NotificationSlotRepository extends JpaRepository<NotificationSlot, Long> {
