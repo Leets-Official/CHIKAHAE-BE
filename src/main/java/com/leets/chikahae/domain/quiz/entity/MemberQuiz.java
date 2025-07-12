@@ -43,4 +43,7 @@ public class MemberQuiz {
                 .build();
     }
 
+    public boolean isCorrect() {
+        return isCorrect != null && isCorrect;
+    }
 }
