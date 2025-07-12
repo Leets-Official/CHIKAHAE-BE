@@ -37,8 +37,8 @@ public class NotificationScheduler {
 		List<NotificationSlot> dueSlots = notificationSlotService.findDueSlot(now);
 
 		for (NotificationSlot slot : dueSlots) {
-			// 토큰 조회: 인스턴스 메서드 호출
-			List<String> tokens = fcmTokenService.getTokens(slot.getMember()).stream()
+			// 토큰 조회: 인스턴스 메서드 호출 (멤버아이디까지 가져오게끔 수정 07/12)
+			List<String> tokens = fcmTokenService.getTokens(slot.getMember().getMemberId()).stream()
 				.map(t -> t.getFcmToken())
 				.collect(Collectors.toList());
 
