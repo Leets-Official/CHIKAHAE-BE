@@ -8,11 +8,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import com.leets.chikahae.domain.BaseEntity;
+import com.leets.chikahae.domain.member.entity.Member;
 
 @Entity
 @Getter
+@Table(name = "fcm_tokens")
 public class FcmToken extends BaseEntity {
 
 	@Id
