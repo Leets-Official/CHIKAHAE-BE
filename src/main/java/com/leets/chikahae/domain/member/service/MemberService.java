@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -37,4 +38,5 @@ public class MemberService {
     public Optional<Member> findFirstChildByParentId(Long parentId) {
         return memberRepository.findFirstByParentId(parentId);
     }
+
 }//class

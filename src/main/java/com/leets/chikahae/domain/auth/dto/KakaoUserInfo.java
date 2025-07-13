@@ -12,6 +12,7 @@ public class KakaoUserInfo {
     @JsonProperty("kakao_account")
     private KakaoAccount kakaoAccount;
 
+
     @Builder
     public KakaoUserInfo(Long id, KakaoAccount kakaoAccount) {
         this.id = id;
@@ -46,4 +47,5 @@ public class KakaoUserInfo {
                 )
                 .build();
     }
+
 }//class

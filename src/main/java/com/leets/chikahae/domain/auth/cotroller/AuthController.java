@@ -32,6 +32,7 @@ public class AuthController {
     public ResponseEntity<SignupResponse> signupKakao(
             @RequestBody KakaoSignupRequest request) {
         SignupResponse response = authService.signup(request);
+
         return ResponseEntity.ok(response);
     }
 
