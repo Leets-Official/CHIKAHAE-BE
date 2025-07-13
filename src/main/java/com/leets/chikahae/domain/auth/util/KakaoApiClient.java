@@ -13,14 +13,24 @@ public class KakaoApiClient {
     private final WebClient webClient = WebClient.create("https://kapi.kakao.com");
 
     public KakaoUserInfo getUserInfo(String accessToken) {
-        return webClient.get()
-                .uri("/v2/user/me")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                .retrieve()
-                .bodyToMono(KakaoUserInfo.class)
-                .block(); // 동기 처리
-
-        // 예외 처리는 try-catch 혹은 onStatus로 처리 가능
+        try {
+            return webClient.get()
+                    .uri("/v2/user/me")
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                    .retrieve()
+                    .onStatus(
+                            status -> status.is4xxClientError() || status.is5xxServerError(),
+                            clientResponse -> clientResponse.bodyToMono(String.class)
+                                    .map(body -> new RuntimeException("Kakao API error: " + body))
+                    )
+                    .bodyToMono(KakaoUserInfo.class)
+                    .block();
+        } catch (Exception e) {
+            log.warn("카카오 사용자 정보 조회 실패: {}", e.getMessage());
+            throw new RuntimeException("카카오 사용자 정보 조회 실패", e);
+        }
     }
+
+
 
 }

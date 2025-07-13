@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -33,11 +35,8 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-
-
-
-
-
-
+    public Optional<Member> findFirstChildByParentId(Long parentId) {
+        return memberRepository.findFirstByParentId(parentId);
+    }
 
 }//class

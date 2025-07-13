@@ -46,5 +46,17 @@ public class Parent {
         return this.parentId;
     }
 
+    public static Parent of(Long parentId,String kakaoId, String email, String name) {
+        return Parent.builder()
+                .parentId(parentId)
+                .kakaoId(kakaoId)
+                .email(email)
+                .name(name)
+                .isDelete("N") // 기본값은 "N"
+                .build();
+
+    }
+
+
 
 }//class

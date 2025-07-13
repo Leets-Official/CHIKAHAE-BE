@@ -7,4 +7,7 @@ import java.util.Optional;
 
 public interface ParentRepository extends JpaRepository<Parent, Long> {
     Optional<Parent> findByKakaoId(String kakaoId);
+
+    Optional<Parent> findByParentId(Long parentId);
+
 }

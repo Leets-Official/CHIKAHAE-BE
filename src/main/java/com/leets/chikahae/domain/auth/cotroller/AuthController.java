@@ -5,7 +5,6 @@ import com.leets.chikahae.domain.auth.dto.SignupResponse;
 import com.leets.chikahae.domain.auth.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,13 +30,9 @@ public class AuthController {
 
     @PostMapping("/kakao")
     public ResponseEntity<SignupResponse> signupKakao(
-            @RequestBody KakaoSignupRequest request,
-            HttpServletRequest servletRequest) {
+            @RequestBody KakaoSignupRequest request) {
+        SignupResponse response = authService.signup(request);
 
-        String ip = servletRequest.getRemoteAddr();
-        String userAgent = servletRequest.getHeader("USER_AGENT");
-
-        SignupResponse response = authService.signup(request, ip, userAgent);
         return ResponseEntity.ok(response);
     }
 
