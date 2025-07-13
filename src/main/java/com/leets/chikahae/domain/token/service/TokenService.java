@@ -1,12 +1,13 @@
 package com.leets.chikahae.domain.token.service;
 
+import com.leets.chikahae.security.util.JwtProvider;
 import com.leets.chikahae.domain.token.entity.AccountToken;
 import com.leets.chikahae.domain.token.repository.AccountTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
+
 
 @Service
 @RequiredArgsConstructor
@@ -14,25 +15,14 @@ public class TokenService {
 
 
     private final AccountTokenRepository accountTokenRepository;
+    private final JwtProvider jwtProvider;
 
-    public String issueAccessToken(Long memberId, String ipAddress, String userAgent) {
-        String token = UUID.randomUUID().toString(); // 실제는 JWT 발급
-
-        AccountToken accessToken = AccountToken.builder()
-                .memberId(memberId)
-                .tokenType("ACCESS")
-                .ipAddress(ipAddress)
-                .userAgent(userAgent)
-                .expiresAt(LocalDateTime.now().plusHours(2))
-                .build();
-
-        accountTokenRepository.save(accessToken);
-        return token;
+    public String issueAccessToken(Long memberId) {
+        return jwtProvider.generateAccessToken(memberId);
     }
 
     public String issueRefreshToken(Long memberId) {
-        String token = UUID.randomUUID().toString();
-
+        String token= jwtProvider.generateRefreshToken(memberId);
         AccountToken refreshToken = AccountToken.builder()
                 .memberId(memberId)
                 .tokenType("REFRESH")
