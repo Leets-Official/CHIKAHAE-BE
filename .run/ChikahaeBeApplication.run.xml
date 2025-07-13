@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ChikahaeBeApplication" type="Application" factoryName="Application">
+    <option name="ALTERNATIVE_JRE_PATH" value="17" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <envs>
+      <env name="MYSQL_DATABASE" value="chikahae" />
+      <env name="MYSQL_USER" value="chikahae" />
+      <env name="MYSQL_PASSWORD" value="chikahae" />
+      <env name="MYSQL_ROOT_PASSWORD" value="chikahae" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="com.leets.chikahae.ChikahaeBeApplication" />
+    <module name="chikahae.main" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
