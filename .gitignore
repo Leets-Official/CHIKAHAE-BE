@@ -42,3 +42,6 @@ out/
 # Firebase 서비스 계정 키 (JSON) 무시
 /src/main/resources/firebase/*.json
 
+
+# application.yml
+src/main/resources/application.yml
