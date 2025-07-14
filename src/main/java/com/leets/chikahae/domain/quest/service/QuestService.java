@@ -1,5 +1,7 @@
 package com.leets.chikahae.domain.quest.service;
 
+import com.leets.chikahae.domain.member.entity.Member;
+import com.leets.chikahae.domain.member.repository.MemberRepository;
 import com.leets.chikahae.domain.quest.dto.QuestResponseDto;
 import com.leets.chikahae.domain.quest.entity.Quest;
 import com.leets.chikahae.domain.quest.entity.UserQuest;
