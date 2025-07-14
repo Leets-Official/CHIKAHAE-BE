@@ -106,7 +106,7 @@ public class QuestService {
     public void generateDailyQuests() {
         LocalDate today = LocalDate.now();
 
-        boolean exists = questRepository.existsByStepAndCreatedAt(1, today.atStartOfDay(), today.plusDays(1).atStartOfDay());
+        boolean exists = questRepository.existsByStepAndCreatedAtBetween(1, today.atStartOfDay(), today.plusDays(1).atStartOfDay());
         if (exists) {
             log.info("[QuestService] 오늘의 Quest가 이미 생성되어 있음 → 스킵");
             return;
