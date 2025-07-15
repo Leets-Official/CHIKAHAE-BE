@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth/kakao")
+@RequestMapping("/login/kakao")
 @RequiredArgsConstructor
 public class KakaoTestController {
 
@@ -18,12 +18,12 @@ public class KakaoTestController {
 
     /**
      * 인가 코드(code)를 받아 access token JSON을 반환하는 테스트용 API
-     * 사용 예시: GET /auth/kakao/token?code=xxxxx
+     * 사용 예시: GET /login/kakao/callback
      */
-    @GetMapping("/token")
+    @GetMapping("/callback")
     public ResponseEntity<String> getToken(@RequestParam String code) {
-        String tokenJson = fetcher.getAccessToken(code);
-        return ResponseEntity.ok(tokenJson);
+        String token = fetcher.getAccessToken(code);
+        return ResponseEntity.ok(token);
     }
 
 

@@ -24,7 +24,7 @@ public class AuthService {
 
     @Transactional
     public SignupResponse signup(KakaoSignupRequest request, String ipAddress, String userAgent) {
-        KakaoUserInfo kakaoInfo = kakaoApiClient.getUserInfo(request.getKakaoAccessToken());
+        KakaoUserInfo kakaoInfo = kakaoApiClient.getUserInfo(request.kakaoAccessToken());
         String kakaoId = String.valueOf(kakaoInfo.getId());
 //        String email = kakaoInfo.getKakaoAccount().getEmail();
         String email = (kakaoInfo.getKakaoAccount().getEmail() != null)
@@ -38,11 +38,11 @@ public class AuthService {
         // ✅ 여기서 호출만 하고
         Member member = memberService.registerChild(
                 parent.getId(),
-                request.getName(),
-                request.getNickname(),
-                request.getBirth(),
-                request.getGender(),
-                request.getProfileImage()
+                request.name(),
+                request.nickname(),
+                request.birth(),
+                request.gender(),
+                request.profileImage()
         );
 
         String accessToken = tokenService.issueAccessToken(member.getId(), ipAddress, userAgent);
