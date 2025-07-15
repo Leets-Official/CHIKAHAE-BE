@@ -18,6 +18,14 @@ repositories {
 }
 
 dependencies {
+	//카카오 회원가입 기능에서 추가 (신은지 0711)--
+	//implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	// WebClient만 사용하기 위한 최소 의존성
+	implementation 'org.springframework:spring-webflux'
+
+	//------------------------------------------
+
+	//
 	implementation 'org.springframework.boot:spring-boot-starter'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
