@@ -5,6 +5,7 @@ import com.leets.chikahae.domain.auth.dto.SignupResponse;
 import com.leets.chikahae.domain.auth.util.KakaoApiClient;
 import com.leets.chikahae.domain.member.entity.Member;
 import com.leets.chikahae.domain.member.service.MemberService;
+import com.leets.chikahae.domain.notification.service.NotificationSlotService;
 import com.leets.chikahae.domain.parent.entity.Parent;
 import com.leets.chikahae.domain.parent.service.ParentService;
 import com.leets.chikahae.domain.token.service.TokenService;
@@ -14,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.ZoneId;
 import java.util.List;
 
 
@@ -25,6 +28,7 @@ public class AuthService {
     private final ParentService parentService;
     private final MemberService memberService;
     private final TokenService tokenService;
+    private final NotificationSlotService notificationSlotService;
 
     @Transactional
     public SignupResponse signup(KakaoSignupRequest request) {
@@ -52,6 +56,10 @@ public class AuthService {
                 request.getGender(),
                 request.getProfileImage()
         );
+
+        //기본 슬롯 생성 (07-15 문석준)
+        notificationSlotService.createDefaultSlots(member, ZoneId.of("Asia/Seoul"));
+
 
         return authenticateAndIssueTokens(kakaoInfo, member);
     }
