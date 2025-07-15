@@ -43,29 +43,26 @@ public class NotificationSlotService {
 		return notificationSlotRepo.findByEnabledTrueAndNextSendAtBefore(nowUtc);
 	}
 
-	//슬롯 on/off (enable -> false or true로)
+	//슬롯 on/off - Long memberId로 수정
 	@Transactional
-	public void toggleSlot(Member member, SlotType type, boolean enabled) {
+	public void toggleSlot(Long memberId, SlotType type, boolean enabled) {
 		NotificationSlot slot = notificationSlotRepo
-			.findByMemberAndSlotType(member, type)
-			.orElseThrow(() -> new IllegalArgumentException("슬롯이 없음")); // 공통예외로 빼야함
+			.findByMember_MemberIdAndSlotType(memberId, type)
+			.orElseThrow(() -> new IllegalArgumentException("슬롯이 없음"));
 		slot.changeEnabled(enabled);
 	}
 
-
-	//슬롯 시간 변경 + nextSendAt 재계산
+	//슬롯 시간 변경 - Long memberId로 수정
 	@Transactional
-	public void updateSlotTime(Member member, SlotType type, LocalTime sendTime, ZoneId zone) {
+	public void updateSlotTime(Long memberId, SlotType type, LocalTime sendTime, ZoneId zone) {
 		NotificationSlot slot = notificationSlotRepo
-			.findByMemberAndSlotType(member, type)
-			.orElseThrow(() -> new IllegalArgumentException("슬롯이 없음")); //공통예외로 뺴야함
+			.findByMember_MemberIdAndSlotType(memberId, type)
+			.orElseThrow(() -> new IllegalArgumentException("슬롯이 없음"));
 		slot.changeSendTime(sendTime, zone);
 	}
 
-
-	//해당 회원의 모든 슬롯 조회
-	public List<NotificationSlot> getSlots(Member member) {
-		return notificationSlotRepo.findByMember(member);
+	// Member ID로 조회하도록 수정
+	public List<NotificationSlot> getSlots(Long memberId) {
+		return notificationSlotRepo.findByMember_MemberId(memberId);
 	}
-
 }
