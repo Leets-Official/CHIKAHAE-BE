@@ -12,6 +12,8 @@ import com.leets.chikahae.domain.member.entity.Member;
 import com.leets.chikahae.domain.notification.entity.NotificationSlot;
 import com.leets.chikahae.domain.notification.entity.SlotType;
 import com.leets.chikahae.domain.notification.repository.NotificationSlotRepository;
+import com.leets.chikahae.global.response.CustomException;
+import com.leets.chikahae.global.response.ErrorCode;
 
 @Service
 public class NotificationSlotService {
@@ -48,16 +50,23 @@ public class NotificationSlotService {
 	public void toggleSlot(Long memberId, SlotType type, boolean enabled) {
 		NotificationSlot slot = notificationSlotRepo
 			.findByMember_MemberIdAndSlotType(memberId, type)
-			.orElseThrow(() -> new IllegalArgumentException("슬롯이 없음"));
+			.orElseThrow(() -> new CustomException(
+				ErrorCode.SLOT_NOT_FOUND,
+				"memberId=" + memberId + ", slotType=" + type
+			));
 		slot.changeEnabled(enabled);
 	}
 
 	//슬롯 시간 변경 - Long memberId로 수정
 	@Transactional
-	public void updateSlotTime(Long memberId, SlotType type, LocalTime sendTime, ZoneId zone) {
+	public void updateSlotTime(Long memberId, SlotType type,
+		LocalTime sendTime, ZoneId zone) {
 		NotificationSlot slot = notificationSlotRepo
 			.findByMember_MemberIdAndSlotType(memberId, type)
-			.orElseThrow(() -> new IllegalArgumentException("슬롯이 없음"));
+			.orElseThrow(() -> new CustomException(
+				ErrorCode.SLOT_NOT_FOUND,
+				"memberId=" + memberId + ", slotType=" + type
+			));
 		slot.changeSendTime(sendTime, zone);
 	}
 
