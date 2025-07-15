@@ -1,6 +1,28 @@
+
+-- 드랍
+-- 자식 테이블 먼저 드롭 (의존도 순서 중요)
+DROP TABLE IF EXISTS fcm_tokens;
+DROP TABLE IF EXISTS notification_slots;
+DROP TABLE IF EXISTS user_point_history;
+DROP TABLE IF EXISTS user_mission;
+DROP TABLE IF EXISTS member_quiz;
+DROP TABLE IF EXISTS quiz;
+DROP TABLE IF EXISTS daily_quiz;
+DROP TABLE IF EXISTS member_item;
+DROP TABLE IF EXISTS item;
+DROP TABLE IF EXISTS point;
+DROP TABLE IF EXISTS alarm_log;
+DROP TABLE IF EXISTS kakao_channel_token;
+DROP TABLE IF EXISTS account_token;
+DROP TABLE IF EXISTS member;
+DROP TABLE IF EXISTS mission;
+DROP TABLE IF EXISTS parent;
+
+
+
 -- 부모 테이블
 CREATE TABLE parent (
-                        parent_id BIGINT PRIMARY KEY NOT NULL COMMENT '고유 ID',
+                        parent_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '고유 ID',
                         kakao_id VARCHAR(50) NOT NULL COMMENT '카카오 고유 ID',
                         email VARCHAR(100) NOT NULL COMMENT '카카오 이메일',
                         name VARCHAR(50) NOT NULL COMMENT '부모 이름(카톡에서 가져옴)',
@@ -13,7 +35,7 @@ CREATE TABLE parent (
 -- 자녀 테이블
 CREATE TABLE member (
                         member_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '고유 ID',
-                        parent_id BIGINT NOT NULL COMMENT '부모 ID',
+                        parent_id BIGINT NULL COMMENT '부모 ID',
                         name VARCHAR(200) NULL COMMENT '자녀 이름',
                         nickname VARCHAR(200) NOT NULL UNIQUE COMMENT '자녀 닉네임',
                         birth DATE NOT NULL COMMENT '생년월일',
