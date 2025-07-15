@@ -32,4 +32,10 @@ public interface NotificationSlotRepository extends JpaRepository<NotificationSl
 	 * 마이페이지에서 사용자 설정 전체를 보여줄 때 사용
 	 */
 	List<NotificationSlot> findByMember(Member member);
+
+	//memberId로도 회원의 슬롯조회하는 메소드
+	List<NotificationSlot> findByMember_MemberId(Long memberId);
+
+	Optional<NotificationSlot> findByMember_MemberIdAndSlotType(Long memberId, SlotType slotType);
 }
+
