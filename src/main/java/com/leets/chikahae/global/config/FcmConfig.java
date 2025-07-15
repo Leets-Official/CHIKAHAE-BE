@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -23,26 +24,30 @@ public class FcmConfig {
 	 */
 	@Bean
 	public FirebaseMessaging firebaseMessaging() throws IOException {
-		ClassPathResource resource = new ClassPathResource("firebase/team-chikahae-firebase-adminsdk-fbsvc-c6b2c76cbb.json");
+		// 1) 서비스 계정 JSON 파일 로드
+		ClassPathResource resource = new ClassPathResource(
+			"firebase/team-chikahae-firebase-adminsdk-fbsvc-c6b2c76cbb.json"
+		);
 		InputStream serviceAccountStream = resource.getInputStream();
 
-		FirebaseApp firebaseApp = null;
+		// 2) ServiceAccountCredentials 로 읽어서 projectId 를 꺼내올 수 있게
+		ServiceAccountCredentials credentials =
+			ServiceAccountCredentials.fromStream(serviceAccountStream);
+
+		// 3) FirebaseOptions 에 credentials + projectId 를 모두 설정
+		FirebaseOptions options = FirebaseOptions.builder()
+			.setCredentials(credentials)
+			.setProjectId(credentials.getProjectId())   // ★ 프로젝트 ID 추가
+			.build();
+
+		// 4) 이미 초기화된 앱이 있으면 재사용, 없으면 초기화
 		List<FirebaseApp> apps = FirebaseApp.getApps();
-		if (apps != null && !apps.isEmpty()) {
-			for (FirebaseApp app : apps) {
-				if (FirebaseApp.DEFAULT_APP_NAME.equals(app.getName())) {
-					firebaseApp = app;
-					break;
-				}
-			}
-		}
-		if (firebaseApp == null) {
-			FirebaseOptions options = FirebaseOptions.builder()
-				.setCredentials(GoogleCredentials.fromStream(serviceAccountStream))
-				.build();
-			firebaseApp = FirebaseApp.initializeApp(options);
-		}
-		return FirebaseMessaging.getInstance(firebaseApp);
+		FirebaseApp app = apps.stream()
+			.filter(a -> FirebaseApp.DEFAULT_APP_NAME.equals(a.getName()))
+			.findFirst()
+			.orElseGet(() -> FirebaseApp.initializeApp(options));
+
+		return FirebaseMessaging.getInstance(app);
 	}
 }
 
