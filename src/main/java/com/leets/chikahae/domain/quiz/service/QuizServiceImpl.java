@@ -30,6 +30,7 @@ import static java.util.stream.Collectors.toList;
 @Transactional
 @RequiredArgsConstructor
 public class QuizServiceImpl implements QuizService {
+
     private static final int QUIZ_COUNT_PER_DAY = 3;
     private static final int REWARD_ALL_CORRECT = 30;
     private static final int REWARD_TWO_CORRECT = 20;
@@ -80,7 +81,7 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public void resetQuizHistory(long memberId) {
         // memberId로 퀴즈 응답 기록 삭제
-        memberQuizRepository.deleteByMemberId(memberId);
+        memberQuizRepository.deleteByMember_MemberId(memberId);
     }
 
     // memberId로 회원 조회
@@ -101,13 +102,13 @@ public class QuizServiceImpl implements QuizService {
     @Transactional
     public QuizResultResponse getQuizResult(long memberId) {
         // 퀴즈를 3문제 다 풀었는지 확인
-        int solvedCount = memberQuizRepository.countByMemberId(memberId);
+        int solvedCount = memberQuizRepository.countByMember_MemberId(memberId);
         if (solvedCount < QUIZ_COUNT_PER_DAY) {
             throw new CustomException(ErrorCode.NOT_ENOUGH_QUIZ_SOLVED);
         }
 
         // 정답 개수 조회
-        int correctCount = memberQuizRepository.countCorrectAnswersByMemberId(memberId);
+        int correctCount = memberQuizRepository.countByMember_MemberIdAndIsCorrectTrue(memberId);
 
         // 보상 계산
         int coinReward = calculateReward(correctCount); // 예: 3문제 정답 시 30코인

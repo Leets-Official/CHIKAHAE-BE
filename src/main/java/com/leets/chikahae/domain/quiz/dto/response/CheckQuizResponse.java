@@ -4,6 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record CheckQuizResponse(
+
         Long quizId,
         boolean isCorrect,
         String selectedAnswer,

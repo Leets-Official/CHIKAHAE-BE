@@ -42,8 +42,4 @@ public class Quiz {
     @Column(name = "type", nullable = false)
     private QuizType type; // 문제 유형 (OX, 객관식 등)
 
-
-
-
-
 }

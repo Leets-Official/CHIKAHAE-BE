@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/quiz")
-public class QuizController {
+public class QuizController implements QuizControllerSpec {
 
     private final QuizService quizService;
 

@@ -7,7 +7,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Builder
-public record TodayQuizListResponse(
+public record
+TodayQuizListResponse(
         @JsonFormat(pattern = "yyyy-MM-dd")
         LocalDate quizDate,
 

@@ -8,10 +8,12 @@ import java.util.List;
 
 @Builder
 public record QuizResponse(
+
     Long quizId,
     QuizType type,
     String question,
     List<String> options
+
 ) {
     public static QuizResponse from(Quiz quiz) {
         return QuizResponse.builder()

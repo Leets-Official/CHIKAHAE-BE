@@ -10,6 +10,7 @@ public record QuizResultResponse(
         Integer correctCount,
         Integer coinReward,
         List<CheckQuizResponse> checkQuizResponse
+
 ) {
     public static QuizResultResponse from(int correctCount, int coinReward, List<CheckQuizResponse> responses) {
         return QuizResultResponse.builder()
