@@ -17,6 +17,7 @@ import com.leets.chikahae.domain.notification.dto.response.NotificationSlotRespo
 import com.leets.chikahae.domain.notification.entity.SlotType;
 import com.leets.chikahae.domain.notification.service.NotificationSlotService;
 import com.leets.chikahae.global.response.ApiResponse;
+import com.leets.chikahae.security.util.PrincipalDetails;
 
 @RestController
 @RequestMapping("/api/notifications/slots")
@@ -33,13 +34,15 @@ public class NotificationSlotController {
 	 * 알림 조회
 	 */
 	@GetMapping
-	public ApiResponse<List<NotificationSlotResponseDto>> getSlots(@AuthenticationPrincipal Member member) {
-		List<NotificationSlotResponseDto> response = notificationSlotService.getSlots(member).stream()
+	public ApiResponse<List<NotificationSlotResponseDto>> getSlots(
+		@AuthenticationPrincipal PrincipalDetails principalDetails) {
+
+		Long memberId = principalDetails.getKakaoUserInfo().getId();
+		List<NotificationSlotResponseDto> response = notificationSlotService.getSlots(memberId).stream()
 			.map(NotificationSlotResponseDto::from)
 			.toList();
 		return ApiResponse.ok(response);
 	}
-
 	//MORNING, LUNCH, EVENING 중 하나를 slotType 자리에 넣어 주면 됩니다.
 
 	/**
@@ -49,17 +52,20 @@ public class NotificationSlotController {
 	 */
 	@PatchMapping("/{slotType}/time")
 	public ApiResponse<Void> updateTime(
-		@AuthenticationPrincipal Member member,
+		@AuthenticationPrincipal PrincipalDetails principalDetails,
 		@PathVariable SlotType slotType,
 		@RequestBody NotificationSlotUpdateTimeRequestDto request) {
+
+		Long memberId = principalDetails.getKakaoUserInfo().getId();
 		notificationSlotService.updateSlotTime(
-			member,
+			memberId,
 			slotType,
 			NotificationSlotUpdateTimeRequestDto.toLocalTime(request),
 			java.time.ZoneId.systemDefault()
 		);
 		return ApiResponse.ok(null);
 	}
+
 
 	/**
 	 * PATCH /api/notifications/slots/{slotType}/enabled
@@ -68,11 +74,13 @@ public class NotificationSlotController {
 	 */
 	@PatchMapping("/{slotType}/enabled")
 	public ApiResponse<Void> toggleSlot(
-		@AuthenticationPrincipal Member member,
+		@AuthenticationPrincipal PrincipalDetails principalDetails,
 		@PathVariable SlotType slotType,
 		@RequestBody NotificationSlotToggleRequestDto request) {
+
+		Long memberId = principalDetails.getKakaoUserInfo().getId();
 		notificationSlotService.toggleSlot(
-			member,
+			memberId,
 			slotType,
 			NotificationSlotToggleRequestDto.toEnabled(request)
 		);
