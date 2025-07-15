@@ -1,6 +1,8 @@
 package com.leets.chikahae.security.util;
 
 import com.leets.chikahae.domain.auth.dto.KakaoUserInfo;
+import com.leets.chikahae.domain.member.entity.Member;
+import com.leets.chikahae.domain.member.repository.MemberRepository;
 import com.leets.chikahae.domain.parent.entity.Parent;
 import com.leets.chikahae.domain.parent.repository.ParentRepository;
 import com.leets.chikahae.global.response.ErrorCode;
@@ -37,6 +39,7 @@ public class JwtTokenExtractor {
 
     private SecretKey secretKey;
     private final ParentRepository parentRepository;
+    private final MemberRepository memberRepository; //--수정
 
     @PostConstruct
     private void setSecretKey() {
@@ -101,6 +104,7 @@ public class JwtTokenExtractor {
     }
 
     // 인증 객체 생성
+   /*
     public Authentication getAuthentication(String token) {
         Claims claims = parseClaims(token);
         List<String> authoritiesList = (List<String>) claims.get("authorities");
@@ -125,6 +129,38 @@ public class JwtTokenExtractor {
 
         return new UsernamePasswordAuthenticationToken(details, token, authorities);
     }
+
+    */
+
+    // 인증 객체 생성 - Member 기반으로 수정
+    public Authentication getAuthentication(String token) {
+        Claims claims = parseClaims(token);
+        List<String> authoritiesList = (List<String>) claims.get("authorities");
+        if (authoritiesList == null) {
+            log.warn("JWT에 권한 정보(authorities)가 없습니다.");
+            authoritiesList = List.of();
+        }
+        Collection<? extends GrantedAuthority> authorities =
+            authoritiesList.stream().map(SimpleGrantedAuthority::new).toList();
+
+        // Member ID로 Member 조회
+        Long claimMemberId = claims.get(ID_CLAIM, Long.class);
+        Member member = memberRepository.findById(claimMemberId)
+            .orElseThrow(() -> new NoSuchElementException(ErrorCode.USER_NOT_FOUND.getMessage()));
+
+        // Member의 parentId로 Parent 조회
+        Parent parent = parentRepository.findById(member.getParentId())
+            .orElseThrow(() -> new NoSuchElementException("부모를 찾을 수 없습니다."));
+
+        // PrincipalDetails 생성
+        PrincipalDetails details = PrincipalDetails.of(
+            KakaoUserInfo.of(member.getId(), parent.getEmail(), member.getName()),
+            authorities
+        );
+
+        return new UsernamePasswordAuthenticationToken(details, token, authorities);
+    }
+
 
     // 사용자 정보 추출
     public String getId(String token) {

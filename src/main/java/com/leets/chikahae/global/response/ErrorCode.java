@@ -55,6 +55,7 @@ public enum ErrorCode {
         DATE_NOT_FOUND(404_007, HttpStatus.NOT_FOUND, "해당 날짜에 대한 정보를 찾을 수 없습니다."),
         QUIZ_NOT_FOUND(404_008,HttpStatus.NOT_FOUND, "해당 퀴즈를 찾을 수 없습니다."),
         POINT_NOT_FOUND(404_009, HttpStatus.INTERNAL_SERVER_ERROR, "사용자가 포인트 데이터를 가지고 있지 않습니다."),
+        SLOT_NOT_FOUND(404_0010, HttpStatus.NOT_FOUND,    "알림 슬롯을 찾을 수 없습니다."),
 
         // ========================
         // 409 Conflict
@@ -67,7 +68,8 @@ public enum ErrorCode {
         // ========================
         INTERNAL_SERVER_ERROR(500_000, HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류입니다."),
         DUPLICATE_RESPONSE(500_001, HttpStatus.INTERNAL_SERVER_ERROR, "이미 해당 퀴즈에 응답하셨습니다."),
-        NOT_ENOUGH_QUIZ_SOLVED(500_002, HttpStatus.INTERNAL_SERVER_ERROR, "해당 퀴즈를 풀지 않았습니다.");
+        NOT_ENOUGH_QUIZ_SOLVED(500_002, HttpStatus.INTERNAL_SERVER_ERROR, "해당 퀴즈를 풀지 않았습니다."),
+        FCM_PUSH_ERROR(500_003, HttpStatus.INTERNAL_SERVER_ERROR, "FCM 푸시 전송에 실패했습니다.");
 
         // 기타 공통
 
