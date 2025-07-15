@@ -1,3 +1,4 @@
+
 -- 드랍
 -- 자식 테이블 먼저 드롭 (의존도 순서 중요)
 DROP TABLE IF EXISTS fcm_tokens;
