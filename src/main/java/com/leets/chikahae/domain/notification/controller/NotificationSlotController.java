@@ -19,6 +19,13 @@ import com.leets.chikahae.domain.notification.service.NotificationSlotService;
 import com.leets.chikahae.global.response.ApiResponse;
 import com.leets.chikahae.security.util.PrincipalDetails;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "Notification Slots", description = "알림 슬롯 조회·수정 API")
 @RestController
 @RequestMapping("/api/notifications/slots")
 public class NotificationSlotController {
@@ -33,6 +40,10 @@ public class NotificationSlotController {
 	 * GET /api/notifications/slots
 	 * 알림 조회
 	 */
+	@Operation(
+		summary     = "알림 슬롯 조회",
+		description = "현재 사용자의 모든 알림 슬롯 설정을 조회합니다."
+	)
 	@GetMapping
 	public ApiResponse<List<NotificationSlotResponseDto>> getSlots(
 		@AuthenticationPrincipal PrincipalDetails principalDetails) {
@@ -50,6 +61,22 @@ public class NotificationSlotController {
 	 * 슬롯 시간대 변경
 	 * 요청 예시: { "sendTime": "HH:mm:ss" }
 	 */
+	@Operation(
+		summary     = "슬롯 시간대 변경",
+		description = "지정한 슬롯의 발송 시간을 업데이트합니다.",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+			required    = true,
+			description = "변경할 발송 시간 정보",
+			content     = @Content(
+				mediaType = "application/json",
+				schema    = @Schema(implementation = NotificationSlotUpdateTimeRequestDto.class),
+				examples  = @ExampleObject(
+					name  = "요청 예시",
+					value = "{\"sendTime\": \"HH:mm:ss\"}"
+				)
+			)
+		)
+	)
 	@PatchMapping("/{slotType}/time")
 	public ApiResponse<Void> updateTime(
 		@AuthenticationPrincipal PrincipalDetails principalDetails,
@@ -72,6 +99,22 @@ public class NotificationSlotController {
 	 * 슬롯 on/off
 	 * 요청 예시: { "enabled": true }
 	 */
+	@Operation(
+		summary     = "슬롯 on/off 토글",
+		description = "지정한 슬롯의 활성화 상태를 변경합니다.",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+			required    = true,
+			description = "토글할 활성화 상태 정보",
+			content     = @Content(
+				mediaType = "application/json",
+				schema    = @Schema(implementation = NotificationSlotToggleRequestDto.class),
+				examples  = @ExampleObject(
+					name  = "요청 예시",
+					value = "{\"enabled\": true}"
+				)
+			)
+		)
+	)
 	@PatchMapping("/{slotType}/enabled")
 	public ApiResponse<Void> toggleSlot(
 		@AuthenticationPrincipal PrincipalDetails principalDetails,

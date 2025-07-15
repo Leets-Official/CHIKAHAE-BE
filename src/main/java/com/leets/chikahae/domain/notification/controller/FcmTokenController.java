@@ -15,6 +15,13 @@ import com.leets.chikahae.domain.notification.dto.response.FcmTokenResponseDto;
 import com.leets.chikahae.domain.notification.service.FcmTokenService;
 import com.leets.chikahae.global.response.ApiResponse;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "FCM Tokens", description = "FCM 토큰 생성·조회·삭제 API")
 @RestController
 @RequestMapping("/api/users/{memberId}/fcm-tokens")
 public class FcmTokenController {
@@ -30,6 +37,22 @@ public class FcmTokenController {
 	 * 토큰 등록
 	 * 요청 예시: { "fcmToken": "FCM_DEVICE_TOKEN" }
 	 */
+	@Operation(
+		summary     = "FCM 토큰 등록",
+		description = "회원의 FCM 토큰을 등록 또는 업데이트합니다.",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+			required    = true,
+			description = "등록할 FCM 토큰 정보",
+			content     = @Content(
+				mediaType = "application/json",
+				schema    = @Schema(implementation = FcmTokenRequestDto.class),
+				examples  = @ExampleObject(
+					name  = "등록 예시",
+					value = "{\"fcmToken\": \"FCM_DEVICE_TOKEN\"}"
+				)
+			)
+		)
+	)
 	@PostMapping
 	public ApiResponse<Void> registerToken(
 		@PathVariable Long memberId,
@@ -45,6 +68,10 @@ public class FcmTokenController {
 	 * DELETE /api/users/{memberId}/fcm-tokens/{token}
 	 * 토큰 삭제
 	 */
+	@Operation(
+		summary     = "FCM 토큰 삭제",
+		description = "회원의 특정 FCM 토큰을 삭제합니다."
+	)
 	@DeleteMapping("/{token}")
 	public ApiResponse<Void> deleteToken(
 		@PathVariable Long memberId,
@@ -57,6 +84,10 @@ public class FcmTokenController {
 	 * GET /api/users/{memberId}/fcm-tokens
 	 * 토큰 조회
 	 */
+	@Operation(
+		summary     = "FCM 토큰 조회",
+		description = "회원이 등록한 모든 FCM 토큰을 조회합니다."
+	)
 	@GetMapping
 	public ApiResponse<List<FcmTokenResponseDto>> getTokens(
 		@PathVariable Long memberId) {
