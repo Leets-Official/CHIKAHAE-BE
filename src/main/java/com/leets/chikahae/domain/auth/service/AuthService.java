@@ -1,4 +1,5 @@
 package com.leets.chikahae.domain.auth.service;
+
 import com.leets.chikahae.domain.auth.dto.*;
 import com.leets.chikahae.domain.auth.util.KakaoApiClient;
 import com.leets.chikahae.domain.member.entity.Member;
@@ -9,6 +10,7 @@ import com.leets.chikahae.domain.token.service.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 
 @Service
@@ -32,7 +34,6 @@ public class AuthService {
 
         Parent parent = parentService.saveOrFind(kakaoId, email, parentName);
 
-        // ✅ 여기서 호출만 하고
         Member member = memberService.registerChild(
                 parent.getId(),
                 request.name(),
@@ -65,6 +66,7 @@ public class AuthService {
         Member member = memberService.findByKakaoId(kakaoId)
                 .orElseThrow(() -> new RuntimeException("등록된 사용자가 아닙니다."));
 
+         
         // 3) 토큰 재발급
         String newAccess  = tokenService.issueAccessToken(member.getId(), ipAddress, userAgent);
         String newRefresh = tokenService.issueRefreshToken(member.getId());
@@ -78,7 +80,33 @@ public class AuthService {
         );
     }
 
+   
 
+//     @Transactional(readOnly = true)
+//     public SignupResponse kakaoLogin(KakaoSignupRequest request) {
+//         KakaoUserInfo kakaoInfo = kakaoApiClient.getUserInfo(request.getKakaoAccessToken());
+//         String kakaoId = String.valueOf(kakaoInfo.getId());
 
+//         Parent parent = parentService.findByKakaoId(kakaoId)
+//                 .orElseThrow(() -> new IllegalArgumentException("해당 카카오 계정으로 등록된 부모가 없습니다."));
+
+//         Member member = memberService.findFirstChildByParentId(parent.getId())
+//                 .orElseThrow(() -> new IllegalArgumentException("해당 카카오 계정으로 등록된 자녀가 없습니다."));
+
+//         return authenticateAndIssueTokens(kakaoInfo, member);
+//     }
+
+//     // 공통 토큰 발급 로직
+//     private SignupResponse authenticateAndIssueTokens(KakaoUserInfo kakaoInfo, Member member) {
+//         PrincipalDetails principalDetails = new PrincipalDetails(
+//                 kakaoInfo, List.of(new SimpleGrantedAuthority("ROLE_USER"))
+//         );
+//         SecurityUtil.setAuthentication(principalDetails);
+
+//         String accessToken = tokenService.issueAccessToken(member.getId());
+//         String refreshToken = tokenService.issueRefreshToken(member.getId());
+
+//         return new SignupResponse(accessToken, refreshToken);
+    }
 }//class
 

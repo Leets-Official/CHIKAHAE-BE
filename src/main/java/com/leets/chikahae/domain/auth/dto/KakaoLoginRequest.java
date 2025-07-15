@@ -12,4 +12,5 @@ public class KakaoLoginRequest {
     @Schema(description = "새로운 Access Token")
     private String accessToken;
 
+
 }
