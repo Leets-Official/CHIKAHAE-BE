@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.leets.chikahae.domain.member.entity.Member;
 import com.leets.chikahae.domain.notification.entity.NotificationSlot;
 import com.leets.chikahae.domain.notification.entity.SlotType;
 import com.leets.chikahae.domain.notification.repository.NotificationSlotRepository;

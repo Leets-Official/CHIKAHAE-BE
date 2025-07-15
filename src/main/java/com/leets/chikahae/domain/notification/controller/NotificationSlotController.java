@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
+import com.leets.chikahae.domain.member.entity.Member;
 import com.leets.chikahae.domain.notification.dto.request.NotificationSlotToggleRequestDto;
 import com.leets.chikahae.domain.notification.dto.request.NotificationSlotUpdateTimeRequestDto;
 import com.leets.chikahae.domain.notification.dto.response.NotificationSlotResponseDto;
