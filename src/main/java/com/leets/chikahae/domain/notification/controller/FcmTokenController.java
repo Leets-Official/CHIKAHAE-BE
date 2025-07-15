@@ -28,7 +28,7 @@ public class FcmTokenController {
 	/**
 	 * POST /api/users/{memberId}/fcm-tokens
 	 * 토큰 등록
-	 * 요청 예시: { "deviceToken": "FCM_DEVICE_TOKEN" }
+	 * 요청 예시: { "fcmToken": "FCM_DEVICE_TOKEN" }
 	 */
 	@PostMapping
 	public ApiResponse<Void> registerToken(
