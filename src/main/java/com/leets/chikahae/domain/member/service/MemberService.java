@@ -4,6 +4,8 @@ import com.leets.chikahae.domain.member.entity.Member;
 import com.leets.chikahae.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,6 +19,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
+    @Transactional
     public Member registerChild(Long parentId, String name, String nickname,
                                 LocalDate birth, Boolean gender, String profileImage) {
 
@@ -35,8 +38,11 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    public Optional<Member> findFirstChildByParentId(Long parentId) {
-        return memberRepository.findFirstByParentId(parentId);
+
+    public Optional<Member> findByKakaoId(String kakaoId) {
+        return memberRepository.findByParentKakaoId(kakaoId);
     }
+
+
 
 }//class
