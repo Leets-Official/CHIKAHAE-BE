@@ -9,7 +9,7 @@ import lombok.Getter;
 @Schema(description = "카카오 로그인 요청 DTO")
 public class KakaoLoginRequest {
 
-    @Schema(description = "새로운 Access Token")
+    @Schema(description = "카카오 Access Token", example = "ya29.A0ARrdaM9...")
     private String accessToken;
 
 

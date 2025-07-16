@@ -10,10 +10,17 @@ import java.util.Optional;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    //  닉네임 중복 확인용
+    // ✅ 닉네임 중복 확인용
     boolean existsByNickname(String nickname);
 
-    @Query("SELECT m FROM Member m JOIN Parent p ON m.parentId = p.id WHERE p.kakaoId = :kakaoId")
+    /**
+     * 부모의 카카오 ID로 회원 조회
+     */
+    @Query("SELECT m FROM Member m JOIN Parent p ON m.parentId = p.parentId WHERE p.kakaoId = :kakaoId")
     Optional<Member> findByParentKakaoId(@Param("kakaoId") String kakaoId);
 
-}//interface
+    /**
+     * 부모 ID로 첫 번째 자녀 조회 (Optional 반환)
+     */
+    Optional<Member> findFirstByParentId(Long parentId);
+}

@@ -29,9 +29,8 @@ public class AuthController implements AuthControllerSpec {
 
         String ip = servletRequest.getRemoteAddr();
         String userAgent = servletRequest.getHeader("USER_AGENT");
-
-        // kakao accessToken을
         SignupResponse response = authService.signup(request, ip, userAgent);
+
         return ResponseEntity
                 .status(ApiResponse.ok(response).httpStatus())
                 .body(ApiResponse.ok(response));
