@@ -1,4 +1,4 @@
-package com.leets.chikahae.security.util;
+package com.leets.chikahae.security.jwt;
 
 import com.leets.chikahae.domain.auth.dto.KakaoUserInfo;
 import com.leets.chikahae.domain.member.entity.Member;
@@ -7,6 +7,7 @@ import com.leets.chikahae.domain.parent.entity.Parent;
 import com.leets.chikahae.domain.parent.repository.ParentRepository;
 import com.leets.chikahae.global.response.ErrorCode;
 import com.leets.chikahae.security.exception.JwtAuthenticationException;
+import com.leets.chikahae.security.auth.PrincipalDetails;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;

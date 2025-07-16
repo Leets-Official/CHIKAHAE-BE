@@ -1,11 +1,11 @@
-package com.leets.chikahae.domain.auth.cotroller;
+package com.leets.chikahae.domain.auth.controller;
 
 import com.leets.chikahae.domain.auth.dto.KakaoUserInfo;
 import com.leets.chikahae.domain.parent.entity.Parent;
 import com.leets.chikahae.domain.parent.repository.ParentRepository;
 import com.leets.chikahae.domain.token.service.TokenService;
 import com.leets.chikahae.global.response.ApiResponse;
-import com.leets.chikahae.security.util.PrincipalDetails;
+import com.leets.chikahae.security.auth.PrincipalDetails;
 import com.leets.chikahae.security.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

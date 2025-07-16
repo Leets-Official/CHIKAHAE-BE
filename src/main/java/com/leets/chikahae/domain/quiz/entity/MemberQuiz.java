@@ -1,6 +1,6 @@
 package com.leets.chikahae.domain.quiz.entity;
 
-import com.leets.chikahae.domain.user.Member;
+import com.leets.chikahae.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

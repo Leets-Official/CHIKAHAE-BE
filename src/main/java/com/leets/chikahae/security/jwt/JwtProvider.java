@@ -1,5 +1,6 @@
-package com.leets.chikahae.security.util;
+package com.leets.chikahae.security.jwt;
 
+import com.leets.chikahae.security.auth.PrincipalDetails;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.annotation.PostConstruct;

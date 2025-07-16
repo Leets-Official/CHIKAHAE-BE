@@ -41,4 +41,11 @@ public class Point {
         }
         this.coin -= amount;
     }
+
+    public void addCoin(int coinReward) {
+        if (coinReward < 0) {
+            throw new IllegalArgumentException("포인트는 음수로 추가할 수 없습니다.");
+        }
+        this.coin += coinReward;
+    }
 }

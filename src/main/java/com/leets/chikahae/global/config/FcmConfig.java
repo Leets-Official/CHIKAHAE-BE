@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
-import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -26,7 +25,7 @@ public class FcmConfig {
 	public FirebaseMessaging firebaseMessaging() throws IOException {
 		// 1) 서비스 계정 JSON 파일 로드
 		ClassPathResource resource = new ClassPathResource(
-			"firebase/team-chikahae-firebase-adminsdk-fbsvc-c6b2c76cbb.json"
+                "firebase/team-chikahae-firebase-adminsdk-fbsvc-c6b2c76cbb.json"
 		);
 		InputStream serviceAccountStream = resource.getInputStream();
 

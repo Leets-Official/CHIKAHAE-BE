@@ -10,14 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
-import com.leets.chikahae.domain.member.entity.Member;
 import com.leets.chikahae.domain.notification.dto.request.NotificationSlotToggleRequestDto;
 import com.leets.chikahae.domain.notification.dto.request.NotificationSlotUpdateTimeRequestDto;
 import com.leets.chikahae.domain.notification.dto.response.NotificationSlotResponseDto;
 import com.leets.chikahae.domain.notification.entity.SlotType;
 import com.leets.chikahae.domain.notification.service.NotificationSlotService;
 import com.leets.chikahae.global.response.ApiResponse;
-import com.leets.chikahae.security.util.PrincipalDetails;
+import com.leets.chikahae.security.auth.PrincipalDetails;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

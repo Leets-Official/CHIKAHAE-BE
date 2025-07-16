@@ -1,7 +1,10 @@
 package com.leets.chikahae.domain.quiz.service;
 
-import com.leets.chikahae.domain.point.Point;
-import com.leets.chikahae.domain.point.PointRepository;
+
+import com.leets.chikahae.domain.member.entity.Member;
+import com.leets.chikahae.domain.member.repository.MemberRepository;
+import com.leets.chikahae.domain.point.entity.Point;
+import com.leets.chikahae.domain.point.repository.PointRepository;
 import com.leets.chikahae.domain.quiz.dto.response.CheckQuizResponse;
 import com.leets.chikahae.domain.quiz.dto.response.QuizResponse;
 import com.leets.chikahae.domain.quiz.dto.response.QuizResultResponse;
@@ -11,8 +14,6 @@ import com.leets.chikahae.domain.quiz.entity.Quiz;
 import com.leets.chikahae.domain.quiz.repository.DailyQuizRepository;
 import com.leets.chikahae.domain.quiz.repository.MemberQuizRepository;
 import com.leets.chikahae.domain.quiz.repository.QuizRepository;
-import com.leets.chikahae.domain.user.Member;
-import com.leets.chikahae.domain.user.MemberRepository;
 import com.leets.chikahae.global.response.CustomException;
 import com.leets.chikahae.global.response.ErrorCode;
 import lombok.RequiredArgsConstructor;

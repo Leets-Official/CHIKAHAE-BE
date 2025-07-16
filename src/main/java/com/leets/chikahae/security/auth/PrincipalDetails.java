@@ -1,4 +1,4 @@
-package com.leets.chikahae.security.util;
+package com.leets.chikahae.security.auth;
 
 import com.leets.chikahae.domain.auth.dto.KakaoUserInfo;
 import lombok.Getter;

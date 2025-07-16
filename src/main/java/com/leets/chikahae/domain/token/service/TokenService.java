@@ -1,6 +1,6 @@
 package com.leets.chikahae.domain.token.service;
 
-import com.leets.chikahae.security.util.JwtProvider;
+import com.leets.chikahae.security.jwt.JwtProvider;
 
 import com.leets.chikahae.domain.token.entity.AccountToken;
 import com.leets.chikahae.domain.token.repository.AccountTokenRepository;

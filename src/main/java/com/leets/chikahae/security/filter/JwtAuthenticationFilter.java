@@ -3,7 +3,7 @@ package com.leets.chikahae.security.filter;
 
 import com.leets.chikahae.global.response.ErrorCode;
 import com.leets.chikahae.security.exception.JwtAuthenticationException;
-import com.leets.chikahae.security.util.JwtTokenExtractor;
+import com.leets.chikahae.security.jwt.JwtTokenExtractor;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
