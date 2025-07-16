@@ -47,7 +47,7 @@ public class NotificationSlotController {
 	public ApiResponse<List<NotificationSlotResponseDto>> getSlots(
 		@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-		Long memberId = principalDetails.getKakaoUserInfo().getId();
+		Long memberId = principalDetails.getMember().getMemberId();
 		List<NotificationSlotResponseDto> response = notificationSlotService.getSlots(memberId).stream()
 			.map(NotificationSlotResponseDto::from)
 			.toList();
@@ -82,7 +82,7 @@ public class NotificationSlotController {
 		@PathVariable SlotType slotType,
 		@RequestBody NotificationSlotUpdateTimeRequestDto request) {
 
-		Long memberId = principalDetails.getKakaoUserInfo().getId();
+		Long memberId = principalDetails.getMember().getMemberId();
 		notificationSlotService.updateSlotTime(
 			memberId,
 			slotType,
@@ -120,7 +120,7 @@ public class NotificationSlotController {
 		@PathVariable SlotType slotType,
 		@RequestBody NotificationSlotToggleRequestDto request) {
 
-		Long memberId = principalDetails.getKakaoUserInfo().getId();
+		Long memberId = principalDetails.getMember().getMemberId();
 		notificationSlotService.toggleSlot(
 			memberId,
 			slotType,

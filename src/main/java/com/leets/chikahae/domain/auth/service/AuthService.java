@@ -11,9 +11,14 @@ import com.leets.chikahae.domain.parent.service.ParentService;
 import com.leets.chikahae.domain.member.entity.Member;
 import com.leets.chikahae.domain.member.service.MemberService;
 import com.leets.chikahae.domain.token.service.TokenService;
+import com.leets.chikahae.security.auth.PrincipalDetails;
+import com.leets.chikahae.security.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,13 +40,10 @@ public class AuthService {
                 ? kakaoInfo.getKakaoAccount().getEmail()
                 : "no-email-" + kakaoId + "@kakao.local";
 
-        String parentName = kakaoInfo.getKakaoAccount().getProfile().getNickname();
-
-        Parent parent = parentService.saveOrFind(kakaoId, email, parentName);
+        Parent parent = parentService.saveOrFind(kakaoId, email, request.getParentName(),request.getParentGender(),request.getParentBirth());
 
         Member member = memberService.registerChild(
                 parent.getId(),
-                request.getName(),
                 request.getNickname(),
                 request.getBirth(),
                 request.getGender(),
@@ -50,6 +52,12 @@ public class AuthService {
 
         String accessToken = tokenService.issueAccessToken(member.getId(), ipAddress, userAgent);
         String refreshToken = tokenService.issueRefreshToken(member.getId());
+
+        // 인증 정보 주입
+        PrincipalDetails principalDetails = new PrincipalDetails(
+                member, List.of(new SimpleGrantedAuthority("ROLE_USER"))
+        );
+        SecurityUtil.setAuthentication(principalDetails);
 
         return new SignupResponse(
                 member.getId(),
@@ -72,6 +80,12 @@ public class AuthService {
 
         String newAccess = tokenService.issueAccessToken(member.getId(), ipAddress, userAgent);
         String newRefresh = tokenService.issueRefreshToken(member.getId());
+
+        // 인증 정보 주입
+        PrincipalDetails principalDetails = new PrincipalDetails(
+                member, List.of(new SimpleGrantedAuthority("ROLE_USER"))
+        );
+        SecurityUtil.setAuthentication(principalDetails);
 
         return new LoginResponse(
                 member.getId(),

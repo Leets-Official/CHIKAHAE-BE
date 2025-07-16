@@ -1,7 +1,7 @@
 package com.leets.chikahae.domain.auth.controller;
 
-import com.leets.chikahae.domain.auth.dto.KakaoUserInfo;
-import com.leets.chikahae.domain.parent.entity.Parent;
+import com.leets.chikahae.domain.member.entity.Member;
+import com.leets.chikahae.domain.member.repository.MemberRepository;
 import com.leets.chikahae.domain.parent.repository.ParentRepository;
 import com.leets.chikahae.domain.token.service.TokenService;
 import com.leets.chikahae.global.response.ApiResponse;
@@ -13,6 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Tag(name = "Auth", description = "개발자용 로그인 API")
@@ -22,37 +23,48 @@ public class DevAuthController {
 
     private final ParentRepository parentRepository;
     private final TokenService tokenService;
+    private final MemberRepository memberRepository;
 
     @PostMapping("/dev-login")
     public ApiResponse<String> devLogin() {
-        // 1. 개발자용 Parent 생성
-        Parent parent = Parent.of(null, "devkakaoId", "dev@gmail.com", "개발자계정");
-        parentRepository.save(parent);  // ID는 DB가 AUTO_INCREMENT로 생성
+        Member member = Member.of(
+                1L,                                  // parentId (DB에 존재하는 값인지 확인)
+                "개발자",
+                LocalDate.of(2021, 7, 14),
+                true,
+                "https://example.com/profile.jpg"
+        );
 
-        // 2. 카카오 사용자 정보 생성
-        KakaoUserInfo kakaoUserInfo = KakaoUserInfo.of(parent.getId(), parent.getEmail(), parent.getName());
+        Member savedMember = memberRepository.save(member);
+        System.out.println("Saved Member: " + savedMember);
 
-        // 3. 권한 부여 및 PrincipalDetails 생성
+        Long memberId = savedMember.getId();
+        System.out.println("Member ID: " + memberId);
+
+        if (memberId == null) {
+            throw new RuntimeException("Member 저장 후 ID가 생성되지 않았습니다.");
+        }
+
         var authorities = List.of(new SimpleGrantedAuthority("ROLE_MEMBER"));
-        PrincipalDetails principalDetails = PrincipalDetails.of(kakaoUserInfo, authorities);
+        PrincipalDetails principalDetails = PrincipalDetails.of(savedMember, authorities);
 
-        // 4. 인증 정보 등록
         SecurityUtil.setAuthentication(principalDetails);
 
-        // 5. AccessToken 발급 및 반환
-        String accessToken = tokenService.issueAccessToken(parent.getId());
+        String accessToken = tokenService.issueAccessToken(savedMember.getId(), null, null);
+
         return ApiResponse.ok(accessToken);
     }
+
 
     @GetMapping("/protected")
     public String protectedApi(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         if (principalDetails == null) {
             return "인증이 필요합니다. (principalDetails is null)";
         }
-        String nickname = principalDetails.getKakaoUserInfo().getKakaoAccount().getProfile().getNickname();
-        Long userId = principalDetails.getKakaoUserInfo().getId();
+        String nickname = principalDetails.getName();
+        Long memberId = principalDetails.getId();
 
-        return String.format("인증 성공! 사용자 ID: %d, 닉네임: %s", userId, nickname);
+        return String.format("인증 성공! 사용자 ID: %d, 닉네임: %s", memberId, nickname);
 
     }
 }
