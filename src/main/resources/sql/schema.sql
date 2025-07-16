@@ -26,6 +26,8 @@ CREATE TABLE parent (
                         kakao_id VARCHAR(50) NOT NULL COMMENT '카카오 고유 ID',
                         email VARCHAR(100) NOT NULL COMMENT '카카오 이메일',
                         name VARCHAR(50) NOT NULL COMMENT '부모 이름(카톡에서 가져옴)',
+                        gender BOOLEAN NOT NULL COMMENT '성별 (true: 남, false: 여)',
+                        birth DATE NOT NULL COMMENT '부모 생년월일',
                         created_at DATETIME NOT NULL COMMENT '가입일시',
                         updated_at DATETIME NOT NULL COMMENT '정보수정일시',
                         is_delete ENUM('Y', 'N') NOT NULL COMMENT '계정탈퇴 여부 (Y/N)'
@@ -36,7 +38,6 @@ CREATE TABLE parent (
 CREATE TABLE member (
                         member_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '고유 ID',
                         parent_id BIGINT NULL COMMENT '부모 ID',
-                        name VARCHAR(200) NULL COMMENT '자녀 이름',
                         nickname VARCHAR(200) NOT NULL UNIQUE COMMENT '자녀 닉네임',
                         birth DATE NOT NULL COMMENT '생년월일',
                         profile_image VARCHAR(255) NULL COMMENT '프로필 이미지',
