@@ -155,8 +155,8 @@ public class JwtTokenExtractor {
 
         // PrincipalDetails 생성
         PrincipalDetails details = PrincipalDetails.of(
-            KakaoUserInfo.of(member.getId(), parent.getEmail(), member.getName()),
-            authorities
+                member,  // 기존 JPA 엔티티 그대로 사용
+                authorities
         );
 
         return new UsernamePasswordAuthenticationToken(details, token, authorities);
