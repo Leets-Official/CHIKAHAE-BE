@@ -1,5 +1,8 @@
 package com.leets.chikahae.domain.auth.controller;
 
+import com.leets.chikahae.domain.auth.dto.KakaoCallbackResponse;
+import com.leets.chikahae.domain.auth.dto.KakaoUserInfo;
+import com.leets.chikahae.domain.auth.util.KakaoApiClient;
 import com.leets.chikahae.domain.auth.util.KakaoTokenFetcher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,7 @@ public class KakaoTestController {
 
 
     private final KakaoTokenFetcher fetcher;
+    private final KakaoApiClient kakaoApiClient;
 
     /**
      * 인가 코드(code)를 받아 access token JSON을 반환하는 테스트용 API
@@ -22,10 +26,12 @@ public class KakaoTestController {
      * // 여기서 부모 정보를 반환
      */
     @GetMapping("/callback")
-    public ResponseEntity<String> getToken(@RequestParam String code) {
+    public ResponseEntity<KakaoCallbackResponse> getToken(@RequestParam String code) {
         String token = fetcher.getAccessToken(code);
 
-        return ResponseEntity.ok(token);
+        // 부모 이름 반환
+        KakaoUserInfo user = kakaoApiClient.getUserInfo(token);
+        return ResponseEntity.ok(new KakaoCallbackResponse(token, user.getKakaoAccount().getProfile().getNickname())); // 3. 토큰 + 닉네임 반환
     }
 
 
