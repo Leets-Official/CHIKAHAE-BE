@@ -37,48 +37,69 @@ public class JwtProvider {
         secretKey = Keys.hmacShaKeyFor(key.getBytes());
     }
 
-    // Access token 발급
-    public String generateAccessToken(Long memberId) {
-        return generateToken(memberId,accessTokenExpiration);
+
+    // Access token 발급 - PrincipalDetails 기반
+    public String generateAccessToken(PrincipalDetails principalDetails, Long memberId) {
+        return generateToken(principalDetails, memberId, accessTokenExpiration);
     }
 
-    // Refresh token 발급
+    // Refresh token 발급 - PrincipalDetails 기반
+    public String generateRefreshToken(PrincipalDetails principalDetails, Long memberId) {
+        return generateToken(principalDetails, memberId, refreshTokenExpiration);
+    }
+
+    // 권한 없이 발급하는 기본 버전
+    public String generateAccessToken(Long memberId) {
+        return generateToken(memberId, accessTokenExpiration);
+    }
+
     public String generateRefreshToken(Long memberId) {
         return generateToken(memberId, refreshTokenExpiration);
     }
 
-    /// 토큰 생성 함수
-    public String generateToken(Long memberId, long expireTime) {
 
-        /// 시간 설정
+
+    //토큰 생성 함수
+    public String generateToken(PrincipalDetails principalDetails, Long memberId, long expireTime) {
+        // 권한 리스트 추출
+        Collection<? extends GrantedAuthority> collection = principalDetails.getAuthorities();
+        List<String> authorities = collection == null ? List.of() :
+                collection.stream().map(GrantedAuthority::getAuthority).toList();
+
         Date now = new Date();
         Date expiredDate = new Date(now.getTime() + expireTime);
 
-        /// 인증에서 객체 가져오기
-        PrincipalDetails principalDetails= (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        // 권한 리스트 추출
-        Collection<? extends GrantedAuthority> collection = principalDetails.getAuthorities();
-
-        // String 형태로 변환
-        List<String> authorities = collection == null ? List.of() : collection.stream()
-                .map(GrantedAuthority::getAuthority)
-                .toList();
-
-        /// JWT 내용 생성
         Map<String, Object> claims = new HashMap<>();
         claims.put(ID_CLAIM, memberId);
-        claims.put("authorities", authorities); // 권한 정보 추가
+        claims.put("authorities", authorities);
 
-        // 토큰 반환
         return Jwts.builder()
-                .setSubject(String.valueOf(memberId)) // 사용자 Id
+                .setSubject(String.valueOf(memberId))
                 .setClaims(claims)
-                .setIssuedAt(now)                                // 발급 시간
-                .setExpiration(expiredDate)                      // 만료 시간
-                .signWith(secretKey, SignatureAlgorithm.HS512)   // 서명
+                .setIssuedAt(now)
+                .setExpiration(expiredDate)
+                .signWith(secretKey, SignatureAlgorithm.HS512)
                 .compact();
     }
 
-}
+    // 권한 없이 memberId만으로 토큰 생성하는 오버로드
+    public String generateToken(Long memberId, long expireTime) {
+        Date now = new Date();
+        Date expiredDate = new Date(now.getTime() + expireTime);
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(ID_CLAIM, memberId);
+        claims.put("authorities", List.of()); // 빈 권한
+
+        return Jwts.builder()
+                .setSubject(String.valueOf(memberId))
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(expiredDate)
+                .signWith(secretKey, SignatureAlgorithm.HS512)
+                .compact();
+    }
+
+
+}//class
 

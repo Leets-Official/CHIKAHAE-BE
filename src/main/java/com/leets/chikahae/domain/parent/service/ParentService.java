@@ -4,18 +4,18 @@ import com.leets.chikahae.domain.parent.entity.Parent;
 import com.leets.chikahae.domain.parent.repository.ParentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
-
 
 @Service
 @RequiredArgsConstructor
 public class ParentService {
 
-
     private final ParentRepository parentRepository;
 
+    /**
+     * 카카오 ID로 부모 조회, 없으면 저장
+     */
     public Parent saveOrFind(String kakaoId, String email, String name) {
         return parentRepository.findByKakaoId(kakaoId)
                 .orElseGet(() -> {
@@ -31,10 +31,11 @@ public class ParentService {
                 });
     }
 
-
+    /**
+     * 카카오 ID로 부모 조회 (Optional 반환)
+     */
     public Optional<Parent> findByKakaoId(String kakaoId) {
         return parentRepository.findByKakaoId(kakaoId);
     }
 
-
-}//class
+}
