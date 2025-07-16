@@ -6,21 +6,18 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-@Schema(description = "카카오 회원가입 응답 DTO")
-public class SignupResponse {
-
+@Schema(description = "카카오 로그인 응답 DTO")
+public class LoginResponse {
 
     @Schema(description = "회원 ID", example = "123")
     private Long memberId;
 
-    @Schema(description = "닉네임", example = "초코송이")
+    @Schema(description = "회원 닉네임", example = "초코송이엄마")
     private String nickname;
 
-    @Schema(description = "Access Token", example = "eyJhbGciOiJIUzI1NiJ9...")
+    @Schema(description = "새로운 Access Token")
     private String accessToken;
 
-    @Schema(description = "Refresh Token", example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...")
+    @Schema(description = "새로운 Refresh Token")
     private String refreshToken;
-
-
 }//class

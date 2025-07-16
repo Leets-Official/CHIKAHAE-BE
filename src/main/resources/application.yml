@@ -37,6 +37,15 @@ spring:
         - classpath:sql/schema.sql
         - classpath:sql/data.sql
 
+# local 프로필 섹션 직후, 루트 레벨에 위치시킵니다.
+chikahae:
+  jwt:
+    key: fN2cF4tUnfGxYvPqzVbGtYdLpWrKuXsYjMnBoPlErTgVxWzCtJmNzQsRtUkVmXpA
+    access:
+      expiration: 3600      # 액세스 토큰 만료 시간 (초 단위) 1시간
+    refresh:
+      expiration: 1209600   # 리프레시 토큰 만료 시간 (초 단위) 14일
+
 ---
 
 # dev 프로필  -  시크릿파일 ENV에서 주입
@@ -76,3 +85,4 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: validate
+
