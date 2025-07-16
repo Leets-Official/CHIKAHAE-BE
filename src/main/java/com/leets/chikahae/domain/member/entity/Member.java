@@ -23,9 +23,6 @@ public class Member {
 	@Column(name = "parent_id", nullable = false)
 	private Long parentId;
 
-	@Column(name = "name")
-	private String name;
-
 	@Column(name = "nickname", nullable = false, unique = true)
 	private String nickname;
 
@@ -48,6 +45,24 @@ public class Member {
 	@Column(name = "updated_at", nullable = false)
 	@UpdateTimestamp
 	private LocalDateTime updatedAt;
+
+	public static Member of(
+			Long parentId,
+			String nickname,
+			LocalDate birth,
+			Boolean gender,
+			String profileImage
+	) {
+		return Member.builder()
+				.parentId(parentId)
+				.nickname(nickname)
+				.birth(birth)
+				.gender(gender)
+				.profileImage(profileImage)
+				.isDeleted(false)
+				.build();
+	}
+
 
 	// ✔️ AuthService에서 사용할 수 있도록 추가
 	public Long getId() {

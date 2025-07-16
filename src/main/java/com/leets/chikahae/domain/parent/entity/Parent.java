@@ -8,6 +8,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -29,7 +30,13 @@ public class Parent {
     private String email;
 
     @Column(nullable = false)
-    private String name;
+    private String name; // 카톡에서 받은 이름
+
+    @Column(nullable = false)
+    private Boolean gender; // true: 남성, false: 여성
+
+    @Column(name = "birth", nullable = false)
+    private LocalDate birth; // 생년월일 (예: 1990-01-01)
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp

@@ -20,12 +20,11 @@ public class MemberService {
      * 자녀 등록
      */
     @Transactional
-    public Member registerChild(Long parentId, String name, String nickname,
+    public Member registerChild(Long parentId, String nickname,
                                 LocalDate birth, Boolean gender, String profileImage) {
 
         Member member = Member.builder()
                 .parentId(parentId)
-                .name(name)
                 .nickname(nickname)
                 .birth(birth)
                 .gender(gender)
@@ -35,7 +34,7 @@ public class MemberService {
                 .updatedAt(LocalDateTime.now())
                 .build();
 
-        return memberRepository.save(member);
+        return memberRepository.saveAndFlush(member);
     }
 
     /**
