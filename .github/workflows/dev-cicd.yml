@@ -24,6 +24,7 @@ jobs:
 
       - name: firebase json 설정
         run: |
+          mkdir -p src/main/resources/firebase
           echo "${{ secrets.FIREBASE_JSON }}" > ./src/main/resources/firebase/team-chikahae-firebase-adminsdk-fbsvc-c6b2c76cbb.json 
           
 
