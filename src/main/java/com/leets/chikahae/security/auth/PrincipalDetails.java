@@ -1,6 +1,7 @@
-package com.leets.chikahae.security.util;
+package com.leets.chikahae.security.auth;
 
-import com.leets.chikahae.domain.auth.dto.KakaoUserInfo;
+import com.leets.chikahae.domain.member.entity.Member;
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,26 +9,34 @@ import org.springframework.security.core.GrantedAuthority;
 import java.util.Collection;
 
 /**
- * 카카오 로그인 시 사용자의 정보를 담고 있는 클래스
+ *  멤버의 정보를 담고 있는 클래스
  */
 @Getter
+@Builder
 public class PrincipalDetails implements Authentication {
 
-    private final KakaoUserInfo kakaoUserInfo;
+    private final Member member;
     private final Collection<? extends GrantedAuthority> authorities;
     private boolean authenticated = true;
 
-    // 카카오 로그인용 생성자
     public static PrincipalDetails of(
-            KakaoUserInfo kakaoUserInfo,
+            Member member,
             Collection<? extends GrantedAuthority> authorities
     ) {
-        return new PrincipalDetails(kakaoUserInfo, authorities);
+        return new PrincipalDetails(member, authorities);
     }
 
     // 생성자
-    public PrincipalDetails(KakaoUserInfo kakaoUserInfo, Collection<? extends GrantedAuthority> authorities) {
-        this.kakaoUserInfo = kakaoUserInfo;
+    @Builder
+    public PrincipalDetails(Member member, Collection<? extends GrantedAuthority> authorities, boolean authenticated) {
+        this.member = member;
+        this.authorities = authorities;
+        this.authenticated = authenticated;
+    }
+
+    // 생성자
+    public PrincipalDetails(Member member, Collection<? extends GrantedAuthority> authorities) {
+        this.member = member;
         this.authorities = authorities;
     }
 
@@ -48,9 +57,8 @@ public class PrincipalDetails implements Authentication {
 
     @Override
     public Object getPrincipal() {
-        return this;
+        return member;  // Member 객체 반환
     }
-
     @Override
     public boolean isAuthenticated() {
         return authenticated;
@@ -63,10 +71,10 @@ public class PrincipalDetails implements Authentication {
 
     @Override
     public String getName() {
-        return kakaoUserInfo != null ? kakaoUserInfo.getKakaoAccount().getProfile().getNickname() : "";
+        return member != null ? member.getNickname(): "";
     }
 
-    public String getId() {
-        return kakaoUserInfo != null ? String.valueOf(kakaoUserInfo.getId()) : "";
+    public Long getId() {
+        return member != null ? member.getMemberId(): null;
     }
 }

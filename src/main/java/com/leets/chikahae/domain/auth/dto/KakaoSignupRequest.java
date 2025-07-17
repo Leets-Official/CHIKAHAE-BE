@@ -12,10 +12,7 @@ public class KakaoSignupRequest {
     @Schema(description = "카카오 Access Token", example = "kakao-access-token-example")
     private String kakaoAccessToken;
 
-    @Schema(description = "자녀 이름", example = "난아가")
-    private String name;             // 자녀 이름
-
-    @Schema(description = "자녀 닉네임", example = "치카요정2")
+    @Schema(description = "자녀 닉네임", example = "나는치카요정")
     private String nickname;        // 자녀 닉네임
 
     @Schema(description = "생년월일", example = "2017-08-25")
@@ -27,6 +24,14 @@ public class KakaoSignupRequest {
     @Schema(description = "프로필 이미지 URL", example = "https://example.com/profile.png")
     private String profileImage;    // 프로필 이미지 (nullable)
 
+    @Schema(description = "카톡 로그인에서 받아온 부모 이름", example = "홍길동")
+    private String parentName;      // 카톡 로그인에서 받아온 부모 이름
+
+    @Schema(description = "성별 (true: 남자, false: 여자)", example = "false")
+    private Boolean parentGender;         // true: 남, false: 여
+
+    @Schema(description = "부모 생년월일", example = "1987-08-25")
+    private LocalDate parentBirth;        // 생년월일
 
 
 }//class

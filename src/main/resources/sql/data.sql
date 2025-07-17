@@ -1,19 +1,19 @@
 -- 1. parent
-INSERT INTO parent (parent_id, kakao_id, email, name, created_at, updated_at, is_delete) VALUES
-                                                                                             (1, 'kakao_001', 'parent1@example.com', '김민수', NOW(), NOW(), 'N'),
-                                                                                             (2, 'kakao_002', 'parent2@example.com', '이영희', NOW(), NOW(), 'N'),
-                                                                                             (3, 'kakao_003', 'parent3@example.com', '박정우', NOW(), NOW(), 'Y'),
-                                                                                             (4, 'kakao_004', 'parent4@example.com', '최지훈', NOW(), NOW(), 'N'),
-                                                                                             (5, 'kakao_005', 'parent5@example.com', '정수연', NOW(), NOW(), 'N');
+INSERT INTO parent (parent_id, kakao_id, email, name, gender, birth, created_at, updated_at, is_delete) VALUES
+                                                                                                            (1, 'kakao_001', 'parent1@example.com', '김민수', TRUE, '1980-01-01', NOW(), NOW(), 'N'),
+                                                                                                            (2, 'kakao_002', 'parent2@example.com', '이영희', FALSE, '1982-03-14', NOW(), NOW(), 'N'),
+                                                                                                            (3, 'kakao_003', 'parent3@example.com', '박정우', TRUE, '1975-07-28', NOW(), NOW(), 'Y'),
+                                                                                                            (4, 'kakao_004', 'parent4@example.com', '최지훈', TRUE, '1987-11-11', NOW(), NOW(), 'N'),
+                                                                                                            (5, 'kakao_005', 'parent5@example.com', '정수연', FALSE, '1990-05-09', NOW(), NOW(), 'N');
 
 -- 2. member
-INSERT INTO member (member_id, parent_id, name, nickname, birth, profile_image, gender, is_deleted, created_at, updated_at)
+INSERT INTO member (member_id, parent_id, nickname, birth, profile_image, gender, is_deleted, created_at, updated_at)
 VALUES
-    (101, 1, '김서준', '치카요정1', '2015-04-12', NULL, 1, FALSE, NOW(), NOW()),
-    (102, 1, '김하린', '치카요정2', '2017-08-25', NULL, 0, FALSE, NOW(), NOW()),
-    (103, 2, '이도윤', '치카마스터', '2016-12-02', NULL, 1, FALSE, NOW(), NOW()),
-    (104, 3, '박지민', '치카짱', '2014-09-30', NULL, 0, FALSE, NOW(), NOW()),
-    (105, 4, '최예린', '치카왕', '2013-11-20', NULL, 1, FALSE, NOW(), NOW());
+    (101, 1, '치카요정1', '2015-04-12', NULL, TRUE, FALSE, NOW(), NOW()),
+    (102, 1, '치카요정2', '2017-08-25', NULL, FALSE, FALSE, NOW(), NOW()),
+    (103, 2, '치카마스터', '2016-12-02', NULL, TRUE, FALSE, NOW(), NOW()),
+    (104, 3, '치카짱', '2014-09-30', NULL, FALSE, FALSE, NOW(), NOW()),
+    (105, 4, '치카왕', '2013-11-20', NULL, TRUE, FALSE, NOW(), NOW());
 
 -- 3. point
 INSERT INTO point (member_id, coin) VALUES
