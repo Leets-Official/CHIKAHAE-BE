@@ -52,7 +52,7 @@ public class NotificationSlot extends BaseEntity {
 	@Column(name = "title", nullable = false, length = 200)
 	private String title;
 
-	@Column(name = "message", nullable = false, length = 200)
+	@Column(name = "message", nullable = false, length = 500)
 	private String message;
 
 	protected NotificationSlot() {
