@@ -1,4 +1,4 @@
-package com.leets.chikahae.domain.item.entity;
+package com.leets.chikahae.domain.store.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

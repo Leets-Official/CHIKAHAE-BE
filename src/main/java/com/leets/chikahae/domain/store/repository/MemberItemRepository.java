@@ -1,7 +1,6 @@
-package com.leets.chikahae.domain.item.repository;
+package com.leets.chikahae.domain.store.repository;
 
-import com.leets.chikahae.domain.item.entity.Item;
-import com.leets.chikahae.domain.item.entity.MemberItem;
+import com.leets.chikahae.domain.store.entity.MemberItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

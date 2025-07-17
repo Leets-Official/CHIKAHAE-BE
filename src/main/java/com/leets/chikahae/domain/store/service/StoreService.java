@@ -1,4 +1,4 @@
-package com.leets.chikahae.domain.item.service;
+package com.leets.chikahae.domain.store.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
