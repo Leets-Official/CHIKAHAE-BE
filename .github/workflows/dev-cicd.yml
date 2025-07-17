@@ -17,6 +17,12 @@ jobs:
           java-version: 17
           distribution: temurin
 
+      - name: application.yml 파일 설정
+        run: |
+          mkdir -p src/main/resources
+          echo "${{ secrets.APPLICATION_YML }}" > ./src/main/resources/application.yml
+          
+
       - name: 3. Gradle Wrapper 권한 부여
         run: chmod +x gradlew
 
