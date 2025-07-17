@@ -20,7 +20,7 @@ public class Member {
 	@Column(name = "member_id")
 	private Long memberId;
 
-	@Column(name = "parent_id", nullable = false)
+	@Column(name = "parent_id")
 	private Long parentId;
 
 	@Column(name = "nickname", nullable = false, unique = true)
