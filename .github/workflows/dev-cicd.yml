@@ -4,6 +4,9 @@ on:
   push:
     branches: ["develop","feat/CICD"]
 
+  pull_request:
+    branches: ["develop","feat/CICD"]
+
 jobs:
   ci:
     runs-on: ubuntu-latest
