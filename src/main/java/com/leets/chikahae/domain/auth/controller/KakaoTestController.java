@@ -4,6 +4,7 @@ import com.leets.chikahae.domain.auth.dto.KakaoCallbackResponse;
 import com.leets.chikahae.domain.auth.dto.KakaoUserInfo;
 import com.leets.chikahae.domain.auth.util.KakaoApiClient;
 import com.leets.chikahae.domain.auth.util.KakaoTokenFetcher;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Auth", description = "카카오톡 콜백 함수")
 @RestController
 @RequestMapping("/login/kakao")
 @RequiredArgsConstructor

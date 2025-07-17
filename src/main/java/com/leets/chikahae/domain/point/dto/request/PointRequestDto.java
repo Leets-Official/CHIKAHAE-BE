@@ -9,10 +9,6 @@ import lombok.Getter;
 @Getter
 public class PointRequestDto {
 
-    @NotNull
-    @Schema(description = "회원 ID", example = "1")
-    private Long memberId;
-
     @Min(1)
     @Schema(description = "포인트 증감량", example = "50 (1 이상이어야 함)")
     private int amount;

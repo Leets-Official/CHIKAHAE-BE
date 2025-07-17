@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 카카오 로그인 전용 컨트롤러
  */
 @RestController
-@RequestMapping("/login/kakao")
+@RequestMapping("api/login/kakao")
 @RequiredArgsConstructor
 @Tag(name = "Auth", description = "로그인 API")
 public class LoginController {

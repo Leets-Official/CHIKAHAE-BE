@@ -38,10 +38,11 @@ public class SecurityConfig {
     public static final String[] PERMIT_ALL_PATTERNS = {
             // 기본/홈/인증 관련
             "/",                        // 홈
-            "/login/**",                // 로그인 관련
-            "/dev-login",               // 개발자 로그인
-            "/signup/**",               // 회원가입 관련
-            "/auth/**",                 // 인증 관련 (ex: 카카오 콜백 등)
+            "/api/login/**",                // 로그인 관련
+            "/api/dev-login",               // 개발자 로그인
+            "/api/signup/**",               // 회원가입 관련
+            "/api/auth/**",                 // 인증 관련 (ex: 카카오 콜백 등)
+            "/login/kakao/callback",        // 카카오 로그인 콜백
 
             // 인증/토큰 관련
             "/api/v1/auth/reissue",     // 토큰 재발급

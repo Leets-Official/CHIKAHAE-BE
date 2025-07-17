@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/signup")
+@RequestMapping("api/signup")
 @RequiredArgsConstructor
 public class AuthController implements AuthControllerSpec {
 

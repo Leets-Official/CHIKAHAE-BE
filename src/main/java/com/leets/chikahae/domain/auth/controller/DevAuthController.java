@@ -25,7 +25,7 @@ public class DevAuthController {
     private final TokenService tokenService;
     private final MemberRepository memberRepository;
 
-    @PostMapping("/dev-login")
+    @PostMapping("api/dev-login")
     public ApiResponse<String> devLogin() {
         Member member = Member.of(
                 1L,                                  // parentId (DB에 존재하는 값인지 확인)
@@ -56,7 +56,7 @@ public class DevAuthController {
     }
 
 
-    @GetMapping("/protected")
+    @GetMapping("api/protected")
     public String protectedApi(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         if (principalDetails == null) {
             return "인증이 필요합니다. (principalDetails is null)";

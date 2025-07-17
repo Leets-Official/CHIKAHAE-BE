@@ -45,10 +45,9 @@ public class NotificationSlotController {
 	)
 	@GetMapping
 	public ApiResponse<List<NotificationSlotResponseDto>> getSlots(
-		@AuthenticationPrincipal PrincipalDetails principalDetails) {
+		@AuthenticationPrincipal PrincipalDetails user) {
 
-		Long memberId = principalDetails.getMember().getMemberId();
-		List<NotificationSlotResponseDto> response = notificationSlotService.getSlots(memberId).stream()
+		List<NotificationSlotResponseDto> response = notificationSlotService.getSlots(user.getId()).stream()
 			.map(NotificationSlotResponseDto::from)
 			.toList();
 		return ApiResponse.ok(response);
@@ -78,13 +77,12 @@ public class NotificationSlotController {
 	)
 	@PatchMapping("/{slotType}/time")
 	public ApiResponse<Void> updateTime(
-		@AuthenticationPrincipal PrincipalDetails principalDetails,
+		@AuthenticationPrincipal PrincipalDetails user,
 		@PathVariable SlotType slotType,
 		@RequestBody NotificationSlotUpdateTimeRequestDto request) {
 
-		Long memberId = principalDetails.getMember().getMemberId();
 		notificationSlotService.updateSlotTime(
-			memberId,
+				user.getId(),
 			slotType,
 			NotificationSlotUpdateTimeRequestDto.toLocalTime(request),
 			java.time.ZoneId.systemDefault()
