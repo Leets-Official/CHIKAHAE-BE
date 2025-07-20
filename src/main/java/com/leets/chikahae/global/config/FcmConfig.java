@@ -30,7 +30,8 @@ public class FcmConfig {
 	@Bean
 	public FirebaseMessaging firebaseMessaging() throws IOException {
 		// 1) 서비스 계정 JSON 파일 로드
-		InputStream serviceAccountStream = new FileInputStream("src/main/resources/firebase/" + filePath);  // 또는 절대 경로 처리
+		ClassPathResource resource = new ClassPathResource("firebase/" + filePath);
+		InputStream serviceAccountStream = resource.getInputStream();
 
 		// 2) ServiceAccountCredentials 로 읽어서 projectId 를 꺼내올 수 있게
 		ServiceAccountCredentials credentials =
