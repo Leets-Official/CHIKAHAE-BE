@@ -30,11 +30,11 @@ public class NotificationSlotService {
 		Instant nowUtc = Instant.now();
 		List<NotificationSlot> slots = List.of(
 			new NotificationSlot(member, SlotType.MORNING, LocalTime.of(7, 30),
-				nowUtc, "아침 알림", "상쾌한 아침을 위한 양치 시간입니다!"),
+				zone, "아침 알림", "상쾌한 아침을 위한 양치 시간입니다!"),
 			new NotificationSlot(member, SlotType.LUNCH,   LocalTime.of(12, 30),
-				nowUtc, "점심 알림", "점심 식사 후 상쾌함을 위해 양치하세요!"),
+				zone, "점심 알림", "점심 식사 후 상쾌함을 위해 양치하세요!"),
 			new NotificationSlot(member, SlotType.EVENING, LocalTime.of(21, 0),
-				nowUtc, "저녁 알림", "하루 마무리 전, 잊지 말고 양치합시다!" )
+				zone, "저녁 알림", "하루 마무리 전, 잊지 말고 양치합시다!" )
 		);
 		notificationSlotRepo.saveAll(slots);
 	}
