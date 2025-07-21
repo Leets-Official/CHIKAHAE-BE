@@ -7,6 +7,7 @@ import com.leets.chikahae.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -44,9 +45,6 @@ public class SecurityConfig {
             "/api/auth/**",                 // 인증 관련 (ex: 카카오 콜백 등)
             "/login/kakao/callback",        // 카카오 로그인 콜백
 
-            // 인증/토큰 관련
-            "/api/v1/auth/reissue",     // 토큰 재발급
-            "/api/v1/auth/logout",      // 로그아웃
 
             // 정적/문서/리소스
             "/docs/**",                 // API 문서
@@ -68,13 +66,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.authorizeHttpRequests(auth -> auth
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers(PERMIT_ALL_PATTERNS).permitAll()
                 .anyRequest().authenticated()
         );
@@ -98,9 +97,9 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://chika-hae.site"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://api.chika-hae.site","https://chika-hae.site"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin"));
         configuration.setExposedHeaders(Arrays.asList(ACCESS_TOKEN_SUBJECT, REFRESH_TOKEN_SUBJECT));
         configuration.setAllowCredentials(true);
 
