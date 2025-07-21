@@ -20,6 +20,9 @@ import com.leets.chikahae.domain.notification.service.NotificationSlotService;
 import com.leets.chikahae.global.response.ApiResponse;
 import com.leets.chikahae.security.auth.PrincipalDetails;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/api/notifications")
 public class NotificationTestController {
@@ -38,44 +41,49 @@ public class NotificationTestController {
 	@PostMapping("/trigger")
 	public ApiResponse<TriggerResult> triggerNow(
 		@AuthenticationPrincipal PrincipalDetails user
-	) throws Exception {
-		// 스케줄 무시: 회원의 모든 활성화된 슬롯을 가져옴.
+	) {
+		// 1) 활성화된 모든 슬롯을 가져온다
 		List<NotificationSlot> allSlots = slotService.getSlots(user.getId())
 			.stream()
 			.filter(NotificationSlot::isEnabled)
 			.toList();
 
-		int totalSuccess = 0, totalFailure = 0;
+			log.info("▶ Trigger FCM push for {} slots", allSlots.size());
+
+		// 2) 슬롯별로 토큰 조회 → sendToEach 호출 (서비스에서 개별 로그)
 		for (NotificationSlot slot : allSlots) {
+			Long slotId = slot.getSlotId();       // slot.getId() 가 없으면 실제 필드명 확인
+			String title = slot.getTitle();
+			String message = slot.getMessage();
+
+			log.info("→ Processing slotId={} | title='{}' | message='{}'", slotId, title, message);
+
 			List<String> tokens = tokenService.getTokens(slot.getMember().getMemberId())
 				.stream()
 				.map(FcmToken::getFcmToken)
-				.toList();
+				.collect(Collectors.toList());
 
-			if (!tokens.isEmpty()) {
-				var resp = pushService.sendMulticast(tokens, slot.getTitle(), slot.getMessage());
-				totalSuccess += resp.getSuccessCount();
-				totalFailure += resp.getFailureCount();
+			if (tokens.isEmpty()) {
+				log.warn("⚠ No tokens found for slotId={}", slotId);
+				continue;
 			}
+
+			pushService.sendToEach(tokens, title, message);
 		}
 
-		TriggerResult result = new TriggerResult(allSlots.size(), totalSuccess, totalFailure);
-		return ApiResponse.ok(result);
+		// 3) 처리된 슬롯 개수 반환
+		return ApiResponse.ok(new TriggerResult(allSlots.size()));
 	}
 
 	public static class TriggerResult {
 		private final int slotCount;
-		private final int successCount;
-		private final int failureCount;
 
-		public TriggerResult(int slotCount, int successCount, int failureCount) {
+		public TriggerResult(int slotCount) {
 			this.slotCount = slotCount;
-			this.successCount = successCount;
-			this.failureCount = failureCount;
 		}
 
-		public int getSlotCount() { return slotCount; }
-		public int getSuccessCount() { return successCount; }
-		public int getFailureCount() { return failureCount; }
+		public int getSlotCount() {
+			return slotCount;
+		}
 	}
 }
