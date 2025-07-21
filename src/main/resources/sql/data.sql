@@ -1,26 +1,26 @@
 -- 1. parent
-INSERT INTO parent (parent_id, kakao_id, email, name, gender, birth, created_at, updated_at, is_delete)
-VALUES (1, 'kakao_001', 'parent1@example.com', '김민수', TRUE, '1980-01-01', NOW(), NOW(), 'N'),
-       (2, 'kakao_002', 'parent2@example.com', '이영희', FALSE, '1982-03-14', NOW(), NOW(), 'N'),
-       (3, 'kakao_003', 'parent3@example.com', '박정우', TRUE, '1975-07-28', NOW(), NOW(), 'Y'),
-       (4, 'kakao_004', 'parent4@example.com', '최지훈', TRUE, '1987-11-11', NOW(), NOW(), 'N'),
-       (5, 'kakao_005', 'parent5@example.com', '정수연', FALSE, '1990-05-09', NOW(), NOW(), 'N');
+INSERT INTO parent (kakao_id, email, name, gender, birth, created_at, updated_at, is_delete)
+VALUES ('kakao_001', 'parent1@example.com', '김민수', TRUE, '1980-01-01', NOW(), NOW(), 'N'),
+       ( 'kakao_002', 'parent2@example.com', '이영희', FALSE, '1982-03-14', NOW(), NOW(), 'N'),
+       ( 'kakao_003', 'parent3@example.com', '박정우', TRUE, '1975-07-28', NOW(), NOW(), 'Y'),
+       ( 'kakao_004', 'parent4@example.com', '최지훈', TRUE, '1987-11-11', NOW(), NOW(), 'N'),
+       ( 'kakao_005', 'parent5@example.com', '정수연', FALSE, '1990-05-09', NOW(), NOW(), 'N');
 
 -- 2. member
-INSERT INTO member (member_id, parent_id, nickname, birth, profile_image, gender, is_deleted, created_at, updated_at)
-VALUES (101, 1, '치카요정1', '2015-04-12', NULL, TRUE, FALSE, NOW(), NOW()),
-       (102, 1, '치카요정2', '2017-08-25', NULL, FALSE, FALSE, NOW(), NOW()),
-       (103, 2, '치카마스터', '2016-12-02', NULL, TRUE, FALSE, NOW(), NOW()),
-       (104, 3, '치카짱', '2014-09-30', NULL, FALSE, FALSE, NOW(), NOW()),
-       (105, 4, '치카왕', '2013-11-20', NULL, TRUE, FALSE, NOW(), NOW());
+INSERT INTO member (parent_id, nickname, birth, profile_image, gender, is_deleted, created_at, updated_at)
+VALUES (1, '치카요정1', '2015-04-12', NULL, TRUE, FALSE, NOW(), NOW()),
+       ( 1, '치카요정2', '2017-08-25', NULL, FALSE, FALSE, NOW(), NOW()),
+       (2, '치카마스터', '2016-12-02', NULL, TRUE, FALSE, NOW(), NOW()),
+       (2, '치카짱', '2014-09-30', NULL, FALSE, FALSE, NOW(), NOW()),
+       (3,  '치카왕', '2013-11-20', NULL, TRUE, FALSE, NOW(), NOW());
 
 -- 3. point
 INSERT INTO point (member_id, coin)
-VALUES (101, 100),
-       (102, 200),
-       (103, 150),
-       (104, 170),
-       (105, 90);
+VALUES (1, 100),
+       (2, 200),
+       (3, 150),
+       (4, 170),
+       (5, 90);
 
 -- 4. item
 INSERT INTO item (item_id, name, price, image)
@@ -32,16 +32,16 @@ VALUES (1, '치약', 50, 'item1.png'),
 
 -- 5. member_item
 INSERT INTO member_item (member_id, item_id)
-VALUES (101, 1),
-       (101, 2),
-       (101, 3),
-       (102, 2),
-       (102, 4),
-       (103, 1),
-       (103, 5),
-       (104, 3),
-       (104, 4),
-       (105, 5);
+VALUES (1, 1),
+       (1, 2),
+       (1, 3),
+       (2, 2),
+       (2, 4),
+       (3, 1),
+       (3, 5),
+       (4, 3),
+       (4, 4),
+       (5, 5);
 
 -- 6. daily_quiz
 INSERT INTO daily_quiz (daily_quiz_id, quiz_date)
@@ -180,11 +180,11 @@ VALUES (1, 1, 'OX', '양치질은 하루에 한 번만 해도 충분하다.', 'X
 
 -- 8. member_quiz
 INSERT INTO member_quiz (member_quiz_id, member_id, quiz_id, selected_answer, is_correct)
-VALUES (1, 101, 1, 'O', true),
-       (2, 102, 2, '불소', true),
-       (3, 103, 3, 'O', true),
-       (4, 104, 4, '3개월', true),
-       (5, 105, 5, 'O', true);
+VALUES (1, 1, 1, 'O', true),
+       (2, 1, 2, '불소', true),
+       (3, 1, 3, 'O', true),
+       (4, 2, 4, '3개월', true),
+       (5, 2, 5, 'O', true);
 
 -- 9. mission
 # INSERT INTO mission (mission_id, step, point, created_at) VALUES
@@ -204,25 +204,25 @@ VALUES (1, 101, 1, 'O', true),
 
 -- 11. user_point_history
 INSERT INTO user_point_history (user_point_id, member_id, parent_id, amount, type, description, created_at)
-VALUES (1, 101, 1, 10, 'EARN', '퀴즈 정답', '2024-07-07 20:10:00'),
-       (2, 102, 1, 20, 'CONSUME', '아이템 구매', '2024-07-08 21:00:00'),
-       (3, 103, 2, 15, 'EARN', '미션 성공', '2024-07-09 21:10:00'),
-       (4, 104, 3, 30, 'CONSUME', '아이템 구매', '2024-07-10 21:00:00'),
-       (5, 105, 4, 25, 'EARN', '퀴즈 정답', '2024-07-11 20:30:00');
+VALUES (1, 1, 1, 10, 'EARN', '퀴즈 정답', '2024-07-07 20:10:00'),
+       (2, 2, 1, 20, 'CONSUME', '아이템 구매', '2024-07-08 21:00:00'),
+       (3, 3, 2, 15, 'EARN', '미션 성공', '2024-07-09 21:10:00'),
+       (4, 4, 3, 30, 'CONSUME', '아이템 구매', '2024-07-10 21:00:00'),
+       (5, 5, 4, 25, 'EARN', '퀴즈 정답', '2024-07-11 20:30:00');
 
 -- 12. notification_slots
 INSERT INTO notification_slots (slot_id, member_id, slot_type, send_time, next_send_at, is_enabled, title, message,
                                 updated_at)
-VALUES (1, 101, 'MORNING', '08:00:00', '2024-07-08 08:00:00', TRUE, '아침 양치 알림', '아침에 양치하세요!', '2024-07-07 08:00:00'),
-       (2, 102, 'EVENING', '20:00:00', '2024-07-08 20:00:00', TRUE, '저녁 양치 알림', '저녁에 양치하세요!', '2024-07-07 20:00:00'),
-       (3, 103, 'LUNCH', '12:00:00', '2024-07-09 12:00:00', TRUE, '점심 양치 알림', '점심에 양치하세요!', '2024-07-08 12:00:00'),
-       (4, 104, 'MORNING', '08:00:00', '2024-07-10 08:00:00', TRUE, '아침 양치 알림', '아침에 양치하세요!', '2024-07-09 08:00:00'),
-       (5, 105, 'EVENING', '20:00:00', '2024-07-11 20:00:00', TRUE, '저녁 양치 알림', '저녁에 양치하세요!', '2024-07-10 20:00:00');
+VALUES (1, 1, 'MORNING', '08:00:00', '2024-07-08 08:00:00', TRUE, '아침 양치 알림', '아침에 양치하세요!', '2024-07-07 08:00:00'),
+       (2, 2, 'EVENING', '20:00:00', '2024-07-08 20:00:00', TRUE, '저녁 양치 알림', '저녁에 양치하세요!', '2024-07-07 20:00:00'),
+       (3, 3, 'LUNCH', '12:00:00', '2024-07-09 12:00:00', TRUE, '점심 양치 알림', '점심에 양치하세요!', '2024-07-08 12:00:00'),
+       (4, 4, 'MORNING', '08:00:00', '2024-07-10 08:00:00', TRUE, '아침 양치 알림', '아침에 양치하세요!', '2024-07-09 08:00:00'),
+       (5, 5, 'EVENING', '20:00:00', '2024-07-11 20:00:00', TRUE, '저녁 양치 알림', '저녁에 양치하세요!', '2024-07-10 20:00:00');
 
 -- 13. fcm_tokens
 INSERT INTO fcm_tokens (fcm_token_id, member_id, fcm_token, created_at, updated_at)
-VALUES (1, 101, 'token_abc123', '2024-07-01 10:00:00', '2024-07-01 10:00:00'),
-       (2, 102, 'token_def456', '2024-07-02 11:00:00', '2024-07-02 11:00:00'),
-       (3, 103, 'token_ghi789', '2024-07-03 12:00:00', '2024-07-03 12:00:00'),
-       (4, 104, 'token_jkl012', '2024-07-04 13:00:00', '2024-07-04 13:00:00'),
-       (5, 105, 'token_mno345', '2024-07-05 14:00:00', '2024-07-05 14:00:00');
+VALUES (1, 1, 'token_abc123', '2024-07-01 10:00:00', '2024-07-01 10:00:00'),
+       (2, 2, 'token_def456', '2024-07-02 11:00:00', '2024-07-02 11:00:00'),
+       (3, 3, 'token_ghi789', '2024-07-03 12:00:00', '2024-07-03 12:00:00'),
+       (4, 4, 'token_jkl012', '2024-07-04 13:00:00', '2024-07-04 13:00:00'),
+       (5, 5, 'token_mno345', '2024-07-05 14:00:00', '2024-07-05 14:00:00');
