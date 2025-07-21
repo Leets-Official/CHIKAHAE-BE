@@ -19,9 +19,12 @@ import com.leets.chikahae.global.response.ErrorCode;
 public class NotificationSlotService {
 
 	private final NotificationSlotRepository notificationSlotRepo;
+	private final NotificationSlotRepository notificationSlotRepository;
 
-	public NotificationSlotService(NotificationSlotRepository notificationSlotRepo) {
+	public NotificationSlotService(NotificationSlotRepository notificationSlotRepo,
+		NotificationSlotRepository notificationSlotRepository) {
 		this.notificationSlotRepo = notificationSlotRepo;
+		this.notificationSlotRepository = notificationSlotRepository;
 	}
 
 	// 사용자별로, 기본 3개 슬롯 생성
@@ -48,12 +51,9 @@ public class NotificationSlotService {
 	//슬롯 on/off - Long memberId로 수정
 	@Transactional
 	public void toggleSlot(Long memberId, SlotType type, boolean enabled) {
-		NotificationSlot slot = notificationSlotRepo
+		NotificationSlot slot = notificationSlotRepository
 			.findByMember_MemberIdAndSlotType(memberId, type)
-			.orElseThrow(() -> new CustomException(
-				ErrorCode.SLOT_NOT_FOUND,
-				"memberId=" + memberId + ", slotType=" + type
-			));
+			.orElseThrow(() -> new CustomException(ErrorCode.SLOT_NOT_FOUND));
 		slot.changeEnabled(enabled);
 	}
 
@@ -61,12 +61,9 @@ public class NotificationSlotService {
 	@Transactional
 	public void updateSlotTime(Long memberId, SlotType type,
 		LocalTime sendTime, ZoneId zone) {
-		NotificationSlot slot = notificationSlotRepo
+		NotificationSlot slot = notificationSlotRepository
 			.findByMember_MemberIdAndSlotType(memberId, type)
-			.orElseThrow(() -> new CustomException(
-				ErrorCode.SLOT_NOT_FOUND,
-				"memberId=" + memberId + ", slotType=" + type
-			));
+			.orElseThrow(() -> new CustomException(ErrorCode.SLOT_NOT_FOUND));
 		slot.changeSendTime(sendTime, zone);
 	}
 
