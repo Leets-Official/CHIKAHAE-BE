@@ -1,5 +1,6 @@
 package com.leets.chikahae.domain.quiz.entity;
 
+import com.leets.chikahae.domain.BaseEntity;
 import com.leets.chikahae.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Table(name = "member_quiz")
-public class MemberQuiz {
+public class MemberQuiz extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

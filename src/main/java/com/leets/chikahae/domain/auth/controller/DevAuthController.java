@@ -45,7 +45,7 @@ public class DevAuthController {
             throw new RuntimeException("Member 저장 후 ID가 생성되지 않았습니다.");
         }
 
-        var authorities = List.of(new SimpleGrantedAuthority("ROLE_MEMBER"));
+        var authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
         PrincipalDetails principalDetails = PrincipalDetails.of(savedMember, authorities);
 
         SecurityUtil.setAuthentication(principalDetails);

@@ -61,6 +61,7 @@ public enum ErrorCode {
         // 409 Conflict
         // ========================
         DUPLICATE_EMAIL(409_001, HttpStatus.CONFLICT, "이미 사용 중인 이메일입니다."),
+        ALREADY_REWARDED(409_002, HttpStatus.CONFLICT, "이미 오늘의 보상을 받으셨습니다."),
 
 
         // ========================
