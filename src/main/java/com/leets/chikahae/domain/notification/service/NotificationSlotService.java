@@ -57,6 +57,14 @@ public class NotificationSlotService {
 		slot.changeEnabled(enabled);
 	}
 
+	//슬롯 전체 활성화/비활성화
+	@Transactional
+	public void toggleAllSlots(Long memberId, boolean enabled) {
+		List<NotificationSlot> slots = notificationSlotRepository.findByMember_MemberId(memberId);
+		slots.forEach(slot -> slot.changeEnabled(enabled));
+		notificationSlotRepository.saveAll(slots);
+	}
+
 	//슬롯 시간 변경 - Long memberId로 수정
 	@Transactional
 	public void updateSlotTime(Long memberId, SlotType type,
