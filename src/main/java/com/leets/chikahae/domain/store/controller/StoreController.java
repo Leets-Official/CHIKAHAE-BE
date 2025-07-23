@@ -1,5 +1,7 @@
 package com.leets.chikahae.domain.store.controller;
 
+import com.leets.chikahae.security.auth.PrincipalDetails;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import com.leets.chikahae.domain.store.dto.request.PurchaseRequestDto;
 import com.leets.chikahae.domain.store.dto.response.ItemResponseDto;
 import com.leets.chikahae.domain.store.dto.response.PurchaseResponseDto;
@@ -33,12 +35,12 @@ public class StoreController {
 
     /**
      * 사용자 보유 아이템 목록 조회 API
-     * GET /api/store/items/mine?memberId=X
+     * GET /api/store/items/mine
      */
     @Operation(summary = "보유 아이템 조회")
     @GetMapping("/items/mine")
-    public ResponseEntity<List<ItemResponseDto>> getMyItems(@RequestParam Long memberId) {
-        List<ItemResponseDto> myItems = storeService.getMyItems(memberId);
+    public ResponseEntity<List<ItemResponseDto>> getMyItems(@AuthenticationPrincipal PrincipalDetails user) {
+        List<ItemResponseDto> myItems = storeService.getMyItems(user.getId());
         return ResponseEntity.ok(myItems);
     }
 
@@ -48,8 +50,12 @@ public class StoreController {
      */
     @Operation(summary = "아이템 구매")
     @PostMapping("/purchase")
-    public ResponseEntity<PurchaseResponseDto> purchaseItem(@RequestBody PurchaseRequestDto requestDto) {
-        PurchaseResponseDto response = storeService.purchaseItem(requestDto);
+    public ResponseEntity<PurchaseResponseDto> purchaseItem(
+            @AuthenticationPrincipal PrincipalDetails user,
+            @RequestBody PurchaseRequestDto requestDto
+    ) {
+        PurchaseResponseDto response = storeService.purchaseItem(user.getId(), requestDto.getItemId());
         return ResponseEntity.ok(response);
     }
+
 }

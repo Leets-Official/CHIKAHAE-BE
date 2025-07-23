@@ -3,7 +3,6 @@ package com.leets.chikahae.domain.store.service;
 import com.leets.chikahae.domain.member.entity.Member;
 import com.leets.chikahae.domain.member.repository.MemberRepository;
 import com.leets.chikahae.domain.point.service.PointService;
-import com.leets.chikahae.domain.store.dto.request.PurchaseRequestDto;
 import com.leets.chikahae.domain.store.dto.response.PurchaseResponseDto;
 import com.leets.chikahae.domain.store.dto.response.ItemResponseDto;
 import com.leets.chikahae.domain.store.entity.Item;
@@ -50,9 +49,7 @@ public class StoreService {
      * 아이템 구매 처리
      */
     @Transactional
-    public PurchaseResponseDto purchaseItem(PurchaseRequestDto request) {
-        Long memberId = request.getMemberId();
-        Long itemId = request.getItemId();
+    public PurchaseResponseDto purchaseItem(Long memberId, Long itemId) {
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
@@ -88,5 +85,6 @@ public class StoreService {
                 .remainingCoin(currentBalance - price)
                 .build();
     }
+
 
 }
