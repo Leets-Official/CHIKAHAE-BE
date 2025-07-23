@@ -49,7 +49,7 @@ public class StoreController {
     @Operation(summary = "아이템 구매")
     @PostMapping("/purchase")
     public ResponseEntity<PurchaseResponseDto> purchaseItem(@RequestBody PurchaseRequestDto requestDto) {
-        PurchaseResponseDto response = storeService.purchaseItem(requestDto.getMemberId(), requestDto.getItemId());
+        PurchaseResponseDto response = storeService.purchaseItem(requestDto);
         return ResponseEntity.ok(response);
     }
 }
