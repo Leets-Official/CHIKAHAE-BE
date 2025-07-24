@@ -36,22 +36,38 @@ public class AuthService {
         KakaoUserInfo kakaoInfo = kakaoApiClient.getUserInfo(request.getKakaoAccessToken());
         String kakaoId = String.valueOf(kakaoInfo.getId());
 
+        //기본 이메일 처리
         String email = (kakaoInfo.getKakaoAccount().getEmail() != null)
                 ? kakaoInfo.getKakaoAccount().getEmail()
                 : "no-email-" + kakaoId + "@kakao.local";
 
-        Parent parent = parentService.saveOrFind(kakaoId, email, request.getParentName(),request.getParentGender(),request.getParentBirth());
+//        Parent parent = parentService.saveOrFind(kakaoId, email, request.getParentName(),request.getParentGender(),request.getParentBirth());
 
-        Member member = memberService.registerChild(
-                parent.getId(),
+        // 부모 정보: 만 14세 미만일 경우에만 저장
+        Long parentId = null;
+        if (isUnder14(request.getBirth())) {
+            Parent parent = parentService.saveOrFind(
+                    kakaoId,
+                    email,
+                    request.getParentName(),
+                    request.getParentGender(),
+                    request.getParentBirth()
+            );
+            parentId = parent.getId();
+        }
+        
+
+        Member member = memberService.registerMember(
+                parentId,
+                kakaoId,
                 request.getNickname(),
                 request.getBirth(),
                 request.getGender(),
                 request.getProfileImage()
         );
 
-        String accessToken = tokenService.issueAccessToken(member.getId(), ipAddress, userAgent);
-        String refreshToken = tokenService.issueRefreshToken(member.getId());
+        String accessToken = tokenService.issueAccessToken(member, ipAddress, userAgent);
+        String refreshToken = tokenService.issueRefreshToken(member);
 
         // 인증 정보 주입
         PrincipalDetails principalDetails = new PrincipalDetails(
@@ -78,8 +94,8 @@ public class AuthService {
         Member member = memberService.findByKakaoId(kakaoId)
                 .orElseThrow(() -> new RuntimeException("등록된 사용자가 아닙니다."));
 
-        String newAccess = tokenService.issueAccessToken(member.getId(), ipAddress, userAgent);
-        String newRefresh = tokenService.issueRefreshToken(member.getId());
+        String newAccess = tokenService.issueAccessToken(member, ipAddress, userAgent);
+        String newRefresh = tokenService.issueRefreshToken(member);
 
         // 인증 정보 주입
         PrincipalDetails principalDetails = new PrincipalDetails(
@@ -94,4 +110,12 @@ public class AuthService {
                 newRefresh
         );
     }
-}
+    
+    //isUnder 유틸 함수
+    private boolean isUnder14(java.time.LocalDate birth) {
+        return java.time.Period.between(birth, java.time.LocalDate.now()).getYears() < 14;
+    }
+
+    
+    
+}//class

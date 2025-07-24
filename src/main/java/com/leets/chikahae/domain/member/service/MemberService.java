@@ -6,8 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Nullable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.Optional;
 
 @Service
@@ -17,14 +19,18 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     /**
-     * 자녀 등록
+     * 사용자 등록
+     * - 14세 미만일 경우에만 보호자(parentId 저장)
+     * -14세 이상이라면 parentId 없이 등록
      */
     @Transactional
-    public Member registerChild(Long parentId, String nickname,
+    public Member registerMember(@Nullable Long parentId, String kakaoId, String nickname,
                                 LocalDate birth, Boolean gender, String profileImage) {
+
 
         Member member = Member.builder()
                 .parentId(parentId)
+                .kakaoId(kakaoId)
                 .nickname(nickname)
                 .birth(birth)
                 .gender(gender)
@@ -38,17 +44,18 @@ public class MemberService {
     }
 
     /**
-     * 부모 ID로 첫 번째 자녀 조회
+     * 카카오 ID로 사용자 조회
      */
-    public Optional<Member> findFirstChildByParentId(Long parentId) {
-        return memberRepository.findFirstByParentId(parentId);
+    public Optional<Member> findByKakaoId(String kakaoId) {
+        return memberRepository.findByKakaoId(kakaoId);
     }
 
     /**
-     * 카카오 ID로 회원 조회
+     * 만나이 계산
      */
-    public Optional<Member> findByKakaoId(String kakaoId) {
-        return memberRepository.findByParentKakaoId(kakaoId);
+    private boolean isUnder14(LocalDate birth) {
+        return Period.between(birth, LocalDate.now()).getYears() < 14;
     }
 
-}
+
+}//class

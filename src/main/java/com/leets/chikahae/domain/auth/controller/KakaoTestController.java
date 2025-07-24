@@ -4,13 +4,28 @@ import com.leets.chikahae.domain.auth.dto.KakaoCallbackResponse;
 import com.leets.chikahae.domain.auth.dto.KakaoUserInfo;
 import com.leets.chikahae.domain.auth.util.KakaoApiClient;
 import com.leets.chikahae.domain.auth.util.KakaoTokenFetcher;
+import com.leets.chikahae.domain.member.entity.Member;
+import com.leets.chikahae.domain.member.repository.MemberRepository;
+import com.leets.chikahae.domain.member.service.MemberService;
+import com.leets.chikahae.domain.token.entity.AccountToken;
+import com.leets.chikahae.domain.token.repository.AccountTokenRepository;
+import com.leets.chikahae.domain.token.service.TokenService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+
+import static com.leets.chikahae.global.response.ErrorCode.FORBIDDEN;
 
 @Tag(name = "Auth", description = "카카오톡 콜백 함수")
 @RestController
@@ -21,6 +36,11 @@ public class KakaoTestController {
 
     private final KakaoTokenFetcher fetcher;
     private final KakaoApiClient kakaoApiClient;
+    private final MemberService memberService;
+    private final MemberRepository memberRepository;
+    private final TokenService tokenService;
+    private final AccountTokenRepository accountTokenRepository;
+
 
     /**
      * 인가 코드(code)를 받아 access token JSON을 반환하는 테스트용 API
@@ -29,12 +49,47 @@ public class KakaoTestController {
      */
     @GetMapping("/callback")
     public ResponseEntity<KakaoCallbackResponse> getToken(@RequestParam String code) {
+        // 1. 카카오 access token
         String token = fetcher.getAccessToken(code);
-
-        // 부모 이름 반환
+        // 2. 카카오 유저 정보
         KakaoUserInfo user = kakaoApiClient.getUserInfo(token);
-        return ResponseEntity.ok(new KakaoCallbackResponse(token, user.getKakaoAccount().getProfile().getNickname())); // 3. 토큰 + 닉네임 반환
+        String kakaoId = String.valueOf(user.getId());
+        String nickname = user.getKakaoAccount().getProfile().getNickname();
+
+        //--------------------------------------------------------------------------
+
+        // AccountToken → Member 조회
+        Member member = memberService.findByKakaoId(kakaoId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "회원 정보 없음"));
+
+
+        //  kakaoId → AccountToken 조회
+        AccountToken accountToken = accountTokenRepository.findByMemberId(member)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "카카오 계정 없음"));
+
+
+        // 자녀의 생년월일로 만나이 판단
+        if (isUnder14(member.getBirth())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "만 14세 미만은 보호자 동의가 필요합니다.");
+        }
+
+        // 4. access/refresh 토큰 발급
+        String accessToken = tokenService.issueAccessToken(member);
+        String refreshToken = tokenService.issueRefreshToken(member);
+
+        // 5. 응답
+        return ResponseEntity.ok(new KakaoCallbackResponse(accessToken, refreshToken, nickname));
+
+
+
     }
+
+
+    // 만나이 계산 유틸 함수
+    private boolean isUnder14(LocalDate birth) {
+        return Period.between(birth, LocalDate.now()).getYears() < 14;
+    }
+
 
 
 
