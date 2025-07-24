@@ -15,16 +15,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findByKakaoId(String kakaoId);
 
-//    /**
-//     * 부모의 카카오 ID로 회원 조회
-//     */
-//    @Query("SELECT m FROM Member m JOIN Parent p ON m.parentId = p.parentId WHERE p.kakaoId = :kakaoId")
-//    Optional<Member> findByParentKakaoId(@Param("kakaoId") String kakaoId);
-//
-//    /**
-//     * 부모 ID로 첫 번째 자녀 조회 (Optional 반환)
-//     */
-//    Optional<Member> findFirstByParentId(Long parentId);
-
 
 }

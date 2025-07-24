@@ -12,12 +12,14 @@ import java.util.Optional;
 @Repository
 public interface AccountTokenRepository extends JpaRepository<AccountToken, Long> {
 
-    // AccountTokenRepository.java
-//    @Query("SELECT a FROM AccountToken a WHERE a.member.kakaoId = :kakaoId")
-    Optional<AccountToken> findByMemberId(Member member);
+    Optional<AccountToken> findByMemberAndTokenType(Member member, String tokenType);
 
 
-    Optional<AccountToken> findByMember_KakaoId(String kakaoId); // 이건 member.kakaoId 기준
+//    Optional<AccountToken> findByMemberId(Member member);
+
+//    Optional<AccountToken> findByMember(Member member);
+
+//    Optional<AccountToken> findByMember_KakaoId(String kakaoId); // 이건 member.kakaoId 기준
 
 
 }//interface

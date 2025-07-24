@@ -27,6 +27,7 @@ public class TokenService {
         return issueAccessToken(member, null, null);
     }
 
+
     //IP/User-Agent 정보를 기록하며 액세스 토큰 발급
     // PrincipalDetails 없이 발급 (기존용)
     public String issueAccessToken(Member member, String ipAddress, String userAgent) {
@@ -46,8 +47,6 @@ public class TokenService {
 
     //refresh 토큰 발급 및 저장
     public String issueRefreshToken(Member member) {
-     //   String token= jwtProvider.generateRefreshToken(member);
-
         AccountToken refreshToken = AccountToken.builder()
                 .member(member)
                 .tokenType("REFRESH")

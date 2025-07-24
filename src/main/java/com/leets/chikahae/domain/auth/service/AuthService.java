@@ -14,15 +14,19 @@ import com.leets.chikahae.domain.token.service.TokenService;
 import com.leets.chikahae.security.auth.PrincipalDetails;
 import com.leets.chikahae.security.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
+
+
     private final MemberService memberService;
     private final TokenService tokenService;
     private final ParentService parentService;
@@ -33,25 +37,40 @@ public class AuthService {
      */
     @Transactional
     public SignupResponse signup(KakaoSignupRequest request, String ipAddress, String userAgent) {
+
+        //카카오 사용자 정보 호출
         KakaoUserInfo kakaoInfo = kakaoApiClient.getUserInfo(request.getKakaoAccessToken());
+        if (kakaoInfo == null) {
+            throw new RuntimeException("카카오 사용자 정보를 가져오지 못했습니다.");
+        }
+        log.info("✅ 카카오 사용자 정보 조회 성공: kakaoId = {}", kakaoInfo.getId());
         String kakaoId = String.valueOf(kakaoInfo.getId());
 
-        //기본 이메일 처리
-        String email = (kakaoInfo.getKakaoAccount().getEmail() != null)
-                ? kakaoInfo.getKakaoAccount().getEmail()
+
+
+        //카카오 계정 정보 체크
+        KakaoUserInfo.KakaoAccount account = kakaoInfo.getKakaoAccount();
+        if (account == null || account.getProfile() == null) {
+            throw new RuntimeException("카카오 계정 정보가 누락되어 있습니다.");
+        }
+        log.info("📧 email = {}", account.getEmail());
+        log.info("👤 nickname = {}", account.getProfile().getNickname());
+        String email = (account.getEmail() != null)
+                ? account.getEmail()
                 : "no-email-" + kakaoId + "@kakao.local";
 
-//        Parent parent = parentService.saveOrFind(kakaoId, email, request.getParentName(),request.getParentGender(),request.getParentBirth());
 
         // 부모 정보: 만 14세 미만일 경우에만 저장
         Long parentId = null;
         if (isUnder14(request.getBirth())) {
+            log.info("🧒 만 14세 미만이므로 부모 정보 저장 시도");
             Parent parent = parentService.saveOrFind(
                     kakaoId,
                     email,
                     request.getParentName(),
                     request.getParentGender(),
                     request.getParentBirth()
+
             );
             parentId = parent.getId();
         }
@@ -66,6 +85,7 @@ public class AuthService {
                 request.getProfileImage()
         );
 
+
         String accessToken = tokenService.issueAccessToken(member, ipAddress, userAgent);
         String refreshToken = tokenService.issueRefreshToken(member);
 
@@ -75,13 +95,21 @@ public class AuthService {
         );
         SecurityUtil.setAuthentication(principalDetails);
 
+        log.info("🎉 회원가입 완료: memberId = {}, nickname = {}", member.getId(), member.getNickname());
         return new SignupResponse(
                 member.getId(),
                 member.getNickname(),
                 accessToken,
                 refreshToken
         );
+
+
     }
+
+
+
+
+
 
     /**
      * 카카오 로그인 및 토큰 재발급
@@ -116,6 +144,6 @@ public class AuthService {
         return java.time.Period.between(birth, java.time.LocalDate.now()).getYears() < 14;
     }
 
-    
-    
+
+
 }//class
