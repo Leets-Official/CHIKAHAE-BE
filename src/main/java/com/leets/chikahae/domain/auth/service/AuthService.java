@@ -6,6 +6,7 @@ import com.leets.chikahae.domain.auth.dto.KakaoUserInfo;
 import com.leets.chikahae.domain.auth.dto.SignupResponse;
 import com.leets.chikahae.domain.auth.dto.LoginResponse;
 import com.leets.chikahae.domain.auth.util.KakaoApiClient;
+import com.leets.chikahae.domain.notification.service.NotificationSlotService;
 import com.leets.chikahae.domain.parent.entity.Parent;
 import com.leets.chikahae.domain.parent.service.ParentService;
 import com.leets.chikahae.domain.member.entity.Member;
@@ -18,6 +19,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.ZoneId;
 import java.util.List;
 
 @Service
@@ -27,6 +29,7 @@ public class AuthService {
     private final TokenService tokenService;
     private final ParentService parentService;
     private final KakaoApiClient kakaoApiClient;
+    private final NotificationSlotService notificationSlotService;
 
     /**
      * 카카오 회원가입 및 토큰 발급
@@ -58,6 +61,8 @@ public class AuthService {
                 member, List.of(new SimpleGrantedAuthority("ROLE_USER"))
         );
         SecurityUtil.setAuthentication(principalDetails);
+
+        notificationSlotService.createDefaultSlots(member, ZoneId.of("Asia/Seoul"));
 
         return new SignupResponse(
                 member.getId(),

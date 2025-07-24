@@ -127,4 +127,24 @@ public class NotificationSlotController {
 		return ApiResponse.ok(null);
 	}
 
+	/**
+	 * PATCH /api/notifications/slots/enabled
+	 * 전체 슬롯 on/off 토글
+	 * 요청 예시: { "enabled": true }
+	 */
+	@Operation(
+		summary     = "전체 슬롯 on/off 토글",
+		description = "현재 사용자의 모든 알림 슬롯 활성화 상태를 변경합니다."
+	)
+	@PatchMapping("/enabled")
+	public ApiResponse<Void> toggleAllSlots(
+		@AuthenticationPrincipal PrincipalDetails principalDetails,
+		@RequestBody NotificationSlotToggleRequestDto request
+	) {
+		Long memberId = principalDetails.getMember().getMemberId();
+		boolean enabled = NotificationSlotToggleRequestDto.toEnabled(request);
+		notificationSlotService.toggleAllSlots(memberId, enabled);
+		return ApiResponse.ok(null);
+	}
+
 }

@@ -8,6 +8,7 @@ import com.leets.chikahae.domain.quiz.dto.response.QuizResultResponse;
 import com.leets.chikahae.domain.quiz.dto.response.TodayQuizListResponse;
 import com.leets.chikahae.domain.quiz.service.QuizService;
 import com.leets.chikahae.global.response.ApiResponse;
+import com.leets.chikahae.global.response.CustomException;
 import com.leets.chikahae.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -47,9 +48,12 @@ public class QuizController implements QuizControllerSpec {
     // 퀴즈 결과 반환 및 보상 처리
     @GetMapping("/result")
     public ApiResponse<QuizResultResponse> getQuizResult(@AuthenticationPrincipal PrincipalDetails user) {
-        // 퀴즈 결과 반환 및 보상 처리 로직
-        QuizResultResponse quizResult = quizService.getQuizResult(user.getId());
-        return ApiResponse.ok(quizResult);
+        try {
+            QuizResultResponse quizResult = quizService.getQuizResult(user.getId());
+            return ApiResponse.ok(quizResult);
+        } catch (CustomException e) {
+            return ApiResponse.fail(e);  // 예외 발생 시 실패 응답 반환
+        }
     }
 
 }
