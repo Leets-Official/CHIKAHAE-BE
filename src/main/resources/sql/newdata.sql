@@ -1,49 +1,4 @@
--- 1. parent
-INSERT INTO parent (kakao_id, email, name, gender, birth, created_at, updated_at, is_delete)
-VALUES ('kakao_001', 'parent1@example.com', '김민수', TRUE, '1980-01-01', NOW(), NOW(), 'N'),
-       ( 'kakao_002', 'parent2@example.com', '이영희', FALSE, '1982-03-14', NOW(), NOW(), 'N'),
-       ( 'kakao_003', 'parent3@example.com', '박정우', TRUE, '1975-07-28', NOW(), NOW(), 'Y'),
-       ( 'kakao_004', 'parent4@example.com', '최지훈', TRUE, '1987-11-11', NOW(), NOW(), 'N'),
-       ( 'kakao_005', 'parent5@example.com', '정수연', FALSE, '1990-05-09', NOW(), NOW(), 'N');
-
--- 2. member
-INSERT INTO member (parent_id, nickname, birth, profile_image, gender, is_deleted, created_at, updated_at)
-VALUES (1, '치카요정1', '2015-04-12', NULL, TRUE, FALSE, NOW(), NOW()),
-       ( 1, '치카요정2', '2017-08-25', NULL, FALSE, FALSE, NOW(), NOW()),
-       (2, '치카마스터', '2016-12-02', NULL, TRUE, FALSE, NOW(), NOW()),
-       (2, '치카짱', '2014-09-30', NULL, FALSE, FALSE, NOW(), NOW()),
-       (3,  '치카왕', '2013-11-20', NULL, TRUE, FALSE, NOW(), NOW());
-
--- 3. point
-INSERT INTO point (member_id, coin)
-VALUES (1, 100),
-       (2, 200),
-       (3, 150),
-       (4, 170),
-       (5, 90);
-
--- 4. item
-INSERT INTO item (item_id, name, price, image)
-VALUES (1, '치약', 50, 'item1.png'),
-       (2, '칫솔', 30, 'item2.png'),
-       (3, '양치컵', 20, 'item3.png'),
-       (4, '치실', 25, 'item4.png'),
-       (5, '구강청결제', 40, 'item5.png');
-
--- 5. member_item
-INSERT INTO member_item (member_id, item_id)
-VALUES (1, 1),
-       (1, 2),
-       (1, 3),
-       (2, 2),
-       (2, 4),
-       (3, 1),
-       (3, 5),
-       (4, 3),
-       (4, 4),
-       (5, 5);
-
--- 6. daily_quiz
+--  daily_quiz
 INSERT INTO daily_quiz (daily_quiz_id, quiz_date)
 VALUES (1, '2025-07-17'),
        (2, '2025-07-18'),
@@ -69,7 +24,7 @@ VALUES (1, '2025-07-17'),
        (22, '2025-08-07');
 
 
--- 7. quiz
+--  quiz
 INSERT INTO quiz (quiz_id, daily_quiz_id, type, question, answer, answer_description, options)
 VALUES (1, 1, 'OX', '양치질은 하루에 한 번만 해도 충분하다.', 'X', '하루 최소 2번, 특히 자기 전에는 꼭 양치해야 충치 예방에 효과적입니다.', '["O", "X"]'),
        (2, 1, 'OX', '치실이나 치간칫솔을 사용하는 것은 치아 건강에 도움이 된다.', 'O', '칫솔로 닦기 어려운 이 사이의 플라그와 음식물을 제거할 수 있어 예방에 중요합니다.',
@@ -178,49 +133,9 @@ VALUES (1, 1, 'OX', '양치질은 하루에 한 번만 해도 충분하다.', 'X
        (1022, 22, 'MCQ', '건강한 잇몸 색깔은?', '밝은 분홍색', '건강할수록 분홍색, 짙은 붉은색은 염증 신호입니다.', '["하얀색", "밝은 분홍색", "갈색"]');
 
 
--- 8. member_quiz
-INSERT INTO member_quiz (member_quiz_id, member_id, quiz_id, selected_answer, is_correct)
-VALUES (1, 1, 1, 'O', true),
-       (2, 1, 2, '불소', true),
-       (3, 1, 3, 'O', true),
-       (4, 2, 4, '3개월', true),
-       (5, 2, 5, 'O', true);
 
--- 9. mission
+--  mission
 INSERT INTO mission (code, name, description, reward_point)
 VALUES
     ('DAILY_QUIZ', '데일리 퀴즈 풀기', '오늘의 퀴즈를 풀면 포인트를 드려요!', 1),
     ('ANIMATION', '애니메이션 감상', '지정된 애니메이션을 모두 보면 포인트 지급', 3);
-
--- 10. user_mission
-# INSERT INTO user_mission (user_mission_id, member_id, parent_id, mission_id, status, target_date, reward_at) VALUES
-#                                                                                                                  (1, 101, 1, 1, 'COMPLETED', '2024-07-07', '2024-07-07 20:00:00'),
-#                                                                                                                  (2, 102, 1, 2, 'WAITING', '2024-07-08', NULL),
-#                                                                                                                  (3, 103, 2, 3, 'REWARDED', '2024-07-09', '2024-07-09 21:00:00'),
-#                                                                                                                  (4, 104, 3, 4, 'COMPLETED', '2024-07-10', '2024-07-10 20:00:00'),
-#                                                                                                                  (5, 105, 4, 5, 'WAITING', '2024-07-11', NULL);
-
--- 11. user_point_history
-INSERT INTO user_point_history (user_point_id, member_id, parent_id, amount, type, description, created_at)
-VALUES (1, 1, 1, 10, 'EARN', '퀴즈 정답', '2024-07-07 20:10:00'),
-       (2, 2, 1, 20, 'CONSUME', '아이템 구매', '2024-07-08 21:00:00'),
-       (3, 3, 2, 15, 'EARN', '미션 성공', '2024-07-09 21:10:00'),
-       (4, 4, 3, 30, 'CONSUME', '아이템 구매', '2024-07-10 21:00:00'),
-       (5, 5, 4, 25, 'EARN', '퀴즈 정답', '2024-07-11 20:30:00');
-
--- 12. notification_slots
-INSERT INTO notification_slots (slot_id, member_id, slot_type, send_time, next_send_at, is_enabled, title, message,
-                                updated_at)
-VALUES (1, 1, 'MORNING', '08:00:00', '2024-07-08 08:00:00', TRUE, '아침 양치 알림', '아침에 양치하세요!', '2024-07-07 08:00:00'),
-       (2, 2, 'EVENING', '20:00:00', '2024-07-08 20:00:00', TRUE, '저녁 양치 알림', '저녁에 양치하세요!', '2024-07-07 20:00:00'),
-       (3, 3, 'LUNCH', '12:00:00', '2024-07-09 12:00:00', TRUE, '점심 양치 알림', '점심에 양치하세요!', '2024-07-08 12:00:00'),
-       (4, 4, 'MORNING', '08:00:00', '2024-07-10 08:00:00', TRUE, '아침 양치 알림', '아침에 양치하세요!', '2024-07-09 08:00:00'),
-       (5, 5, 'EVENING', '20:00:00', '2024-07-11 20:00:00', TRUE, '저녁 양치 알림', '저녁에 양치하세요!', '2024-07-10 20:00:00');
-
--- 13. fcm_tokens
-INSERT INTO fcm_tokens (fcm_token_id, member_id, fcm_token, created_at, updated_at)
-VALUES (1, 1, 'token_abc123', '2024-07-01 10:00:00', '2024-07-01 10:00:00'),
-       (2, 2, 'token_def456', '2024-07-02 11:00:00', '2024-07-02 11:00:00'),
-       (3, 3, 'token_ghi789', '2024-07-03 12:00:00', '2024-07-03 12:00:00'),
-       (4, 4, 'token_jkl012', '2024-07-04 13:00:00', '2024-07-04 13:00:00'),
-       (5, 5, 'token_mno345', '2024-07-05 14:00:00', '2024-07-05 14:00:00');
