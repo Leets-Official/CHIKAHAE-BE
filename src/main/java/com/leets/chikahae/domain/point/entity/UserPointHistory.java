@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -39,8 +40,16 @@ public class UserPointHistory {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    @Column(nullable = false)
+    private LocalDate date;
+
     // --- enum 정의 ---
     public enum Type {
         EARN, CONSUME
+    }
+
+    @PrePersist
+    public void autoSetDate() {
+        this.date = LocalDate.now();
     }
 }
