@@ -52,8 +52,8 @@ public class SecurityConfig {
             "/resources/**",            // 정적 리소스
             "/index.html",              // 인덱스 페이지
             "/error",                   // 에러 페이지
-            "/**/*.png",               // 모든 PNG 정적 리소스 허용
-            "/**/*.jpg",               // 모든 JPG 이미지 허용
+            "/static/*.png",               // 모든 PNG 정적 리소스 허용
+            "/static/*.jpg",               // 모든 JPG 이미지 허용
 
 
             // Swagger/OpenAPI 관련

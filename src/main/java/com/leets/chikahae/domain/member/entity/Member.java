@@ -1,5 +1,6 @@
 package com.leets.chikahae.domain.member.entity;
 
+import com.leets.chikahae.domain.point.entity.Point;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -46,6 +47,9 @@ public class Member {
 	@UpdateTimestamp
 	private LocalDateTime updatedAt;
 
+	@OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private Point point;
+
 	public static Member of(
 			Long parentId,
 			String nickname,
@@ -69,4 +73,7 @@ public class Member {
 		return this.memberId;
 	}
 
+	public void setPoint(Point point) {
+		this.point=point;
+	}
 }//class
