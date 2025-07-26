@@ -37,6 +37,10 @@ public class GlobalExceptionHandler {
         log.error("[예외 발생] Exception: {}", ex.getMessage());
         return ApiResponse.fail(new CustomException(ErrorCode.INTERNAL_SERVER_ERROR,ex.getMessage()));
     }
+
+
+
+
 //
 //    @ExceptionHandler(NotVerifiedException.class)
 //    @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -44,4 +48,10 @@ public class GlobalExceptionHandler {
 //        log.error("[예외 발생] Exception: {}", ex.getMessage());
 //        return ApiResponse.fail(new CustomException(ErrorCode.BAD_REQUEST,ex.getMessage()));
 //    }
-}
+
+
+
+
+
+
+}// class

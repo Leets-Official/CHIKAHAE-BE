@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +30,7 @@ public class LoginController {
             description = "카카오 access token으로 이미 가입된 사용자를 인증하고 새로운 JWT를 발급합니다."
     )
     @PostMapping
-    public ResponseEntity<ApiResponse<LoginResponse>> loginKakao(
+    public ResponseEntity<Void> loginKakao(
             @RequestBody KakaoLoginRequest request,
             HttpServletRequest servletRequest
     ) {
@@ -39,8 +40,10 @@ public class LoginController {
         LoginResponse result = authService.login(request, ip, ua);
 
         return ResponseEntity
-                .status(ApiResponse.ok(result).httpStatus())
-                .body(ApiResponse.ok(result));
+                .status(HttpStatus.OK)
+                .header("Authorization", "Bearer " + result.getAccessToken())
+                .header("Refresh-Token", result.getRefreshToken())
+                .body(null); // ✅ ResponseEntity<Void> requires explicit null body
     }
 
 

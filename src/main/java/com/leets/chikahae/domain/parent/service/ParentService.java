@@ -42,4 +42,4 @@ public class ParentService {
         return parentRepository.findByKakaoId(kakaoId);
     }
 
-}
+}//class

@@ -38,6 +38,7 @@ CREATE TABLE parent (
 CREATE TABLE member (
                         member_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '고유 ID',
                         parent_id BIGINT NULL COMMENT '부모 ID',
+                        kakao_id VARCHAR(50) NOT NULL COMMENT '카카오 고유 ID',
                         nickname VARCHAR(200) NOT NULL UNIQUE COMMENT '자녀 닉네임',
                         birth DATE NOT NULL COMMENT '생년월일',
                         profile_image VARCHAR(255) NULL COMMENT '프로필 이미지',
@@ -56,7 +57,7 @@ CREATE TABLE member (
 -- 토큰 테이블
 CREATE TABLE account_token (
                                token_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '토큰ID',
-                               member_id BIGINT NOT NULL COMMENT '회원 ID',
+                               member_id BIGINT NOT NULL COMMENT '사용자 ID',
                                token_type ENUM('ACCESS', 'REFRESH') NOT NULL DEFAULT 'ACCESS' COMMENT '토큰 유형',
                                ip_address VARCHAR(200) NULL COMMENT '보안 로그인(고려)',
                                user_agent VARCHAR(200) NULL COMMENT '기기, 브라우저 기록',
