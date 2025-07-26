@@ -6,6 +6,7 @@ import com.leets.chikahae.domain.auth.dto.KakaoUserInfo;
 import com.leets.chikahae.domain.auth.dto.SignupResponse;
 import com.leets.chikahae.domain.auth.dto.LoginResponse;
 import com.leets.chikahae.domain.auth.util.KakaoApiClient;
+import com.leets.chikahae.domain.notification.service.NotificationSlotService;
 import com.leets.chikahae.domain.parent.entity.Parent;
 import com.leets.chikahae.domain.parent.service.ParentService;
 import com.leets.chikahae.domain.member.entity.Member;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
+import java.time.ZoneId;
 import java.util.List;
 
 @Slf4j
@@ -34,6 +36,7 @@ public class AuthService {
     private final TokenService tokenService;
     private final ParentService parentService;
     private final KakaoApiClient kakaoApiClient;
+    private final NotificationSlotService notificationSlotService;
 
     /**
      * 카카오 회원가입 및 토큰 발급
@@ -99,6 +102,9 @@ public class AuthService {
         SecurityUtil.setAuthentication(principalDetails);
 
         log.info("🎉 회원가입 완료: memberId = {}, nickname = {}", member.getId(), member.getNickname());
+        notificationSlotService.createDefaultSlots(member, ZoneId.of("Asia/Seoul"));
+
+
         return new SignupResponse(
                 member.getId(),
                 member.getNickname(),

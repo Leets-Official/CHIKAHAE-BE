@@ -56,12 +56,15 @@ public enum ErrorCode {
         QUIZ_NOT_FOUND(404_008,HttpStatus.NOT_FOUND, "해당 퀴즈를 찾을 수 없습니다."),
         POINT_NOT_FOUND(404_009, HttpStatus.INTERNAL_SERVER_ERROR, "사용자가 포인트 데이터를 가지고 있지 않습니다."),
         SLOT_NOT_FOUND(404_0010, HttpStatus.NOT_FOUND,    "알림 슬롯을 찾을 수 없습니다."),
+        MISSION_NOT_FOUND(404_0011, HttpStatus.NOT_FOUND, "해당 미션을 찾을 수 없습니다."),
 
         // ========================
         // 409 Conflict
         // ========================
         DUPLICATE_EMAIL(409_001, HttpStatus.CONFLICT, "이미 사용 중인 이메일입니다."),
-
+        ALREADY_REWARDED(409_002, HttpStatus.CONFLICT, "이미 오늘의 보상을 받으셨습니다."),
+        ALREADY_COMPLETED_MISSION(409_003, HttpStatus.CONFLICT, "이미 완료된 미션입니다."),
+        MISSION_NOT_COMPLETED(409_004, HttpStatus.CONFLICT, "미션이 완료되지 않았습니다."),
 
         // ========================
         // 500 Internal Server Error

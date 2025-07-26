@@ -28,8 +28,9 @@ jobs:
       - name: firebase json 설정
         run: |
           mkdir -p src/main/resources/firebase
-          echo "${{ secrets.FIREBASE_JSON }}" > ./src/main/resources/firebase/team-chikahae-firebase-adminsdk-fbsvc-c6b2c76cbb.json 
-          
+          cat <<EOF > src/main/resources/firebase/team-chikahae-firebase-adminsdk-fbsvc-c6b2c76cbb.json
+          ${{ secrets.FIREBASE_JSON }}
+          EOF
 
       - name: 3. Gradle Wrapper 권한 부여
         run: chmod +x gradlew

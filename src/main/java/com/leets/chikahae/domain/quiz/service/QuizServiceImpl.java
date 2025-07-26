@@ -3,8 +3,12 @@ package com.leets.chikahae.domain.quiz.service;
 
 import com.leets.chikahae.domain.member.entity.Member;
 import com.leets.chikahae.domain.member.repository.MemberRepository;
-import com.leets.chikahae.domain.point.entity.Point;
+import com.leets.chikahae.domain.mission.entity.Mission;
+import com.leets.chikahae.domain.mission.service.MissionService;
+import com.leets.chikahae.domain.point.entity.UserPointHistory;
 import com.leets.chikahae.domain.point.repository.PointRepository;
+import com.leets.chikahae.domain.point.repository.UserPointHistoryRepository;
+import com.leets.chikahae.domain.point.service.PointService;
 import com.leets.chikahae.domain.quiz.dto.response.CheckQuizResponse;
 import com.leets.chikahae.domain.quiz.dto.response.QuizResponse;
 import com.leets.chikahae.domain.quiz.dto.response.QuizResultResponse;
@@ -24,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.leets.chikahae.global.response.ErrorCode.USER_NOT_FOUND;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
@@ -41,7 +46,9 @@ public class QuizServiceImpl implements QuizService {
     private final QuizRepository quizRepository;
     private final MemberRepository memberRepository;
     private final MemberQuizRepository memberQuizRepository;
-    private final PointRepository pointRepository;
+    private final UserPointHistoryRepository userPointHistoryRepository;
+    private final PointService pointService;
+    private final MissionService missionService;
 
     @Override
     @Transactional(readOnly = true)
@@ -68,9 +75,6 @@ public class QuizServiceImpl implements QuizService {
         // memberId로 회원 조회
         Member member = findMemberById(memberId);
 
-        // 중복 응답(이미 푼 퀴즈) 확인
-        checkDuplicateResponse(quiz, member);
-
         // 퀴즈 응답 기록 저장
         MemberQuiz memberQuiz = MemberQuiz.of(quiz, member, selectedAnswer, isCorrect);
         memberQuizRepository.save(memberQuiz);
@@ -88,43 +92,42 @@ public class QuizServiceImpl implements QuizService {
     // memberId로 회원 조회
     private Member findMemberById(Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
     }
-
-    //이미 해당 퀴즈에 응답했는지 확인 (중복 응답 방지)
-    private void checkDuplicateResponse(Quiz quiz, Member member) {
-        if (memberQuizRepository.existsByQuizAndMember(quiz, member)) {
-            throw new CustomException(ErrorCode.DUPLICATE_RESPONSE);
-        }
-    }
-
 
     @Override
     @Transactional
     public QuizResultResponse getQuizResult(long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        //  포인트 이미 지급된 퀴즈인지 확인
+        if (userPointHistoryRepository.existsByMemberAndDateAndTypeAndDescription(member, LocalDate.now(), UserPointHistory.Type.EARN, "퀴즈 보상")) {
+            throw new CustomException(ErrorCode.ALREADY_REWARDED);
+        }
         // 퀴즈를 3문제 다 풀었는지 확인
-        int solvedCount = memberQuizRepository.countByMember_MemberId(memberId);
+        int solvedCount = memberQuizRepository.countTodaySolved(memberId, LocalDate.now());
         if (solvedCount < QUIZ_COUNT_PER_DAY) {
             throw new CustomException(ErrorCode.NOT_ENOUGH_QUIZ_SOLVED);
         }
 
         // 정답 개수 조회
-        int correctCount = memberQuizRepository.countByMember_MemberIdAndIsCorrectTrue(memberId);
+        int correctCount = memberQuizRepository.countTodayCorrect(memberId, LocalDate.now());
 
         // 보상 계산
-        int coinReward = calculateReward(correctCount); // 예: 3문제 정답 시 30코인
-
-        // 포인트 지급
-        Point point = pointRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.POINT_NOT_FOUND));
-
-        point.addCoin(coinReward);
+        int coinReward = calculateReward(correctCount);
 
         // 퀴즈 응답 조회
         List<MemberQuiz> memberQuizzes = memberQuizRepository.findByMember_MemberId(memberId);
         if (memberQuizzes.isEmpty()) {
             throw new CustomException(ErrorCode.QUIZ_NOT_FOUND);
         }
+
+        // 1. 퀴즈 자체 보상
+        pointService.earnPoint(memberId, coinReward, "퀴즈 보상");
+
+        // 2. 미션 보상
+        missionService.completeRewardedMission(member, Mission.MissionCode.valueOf("DAILY_QUIZ"));
 
         // 응답 정보 생성
         List<CheckQuizResponse> responses = memberQuizzes.stream()

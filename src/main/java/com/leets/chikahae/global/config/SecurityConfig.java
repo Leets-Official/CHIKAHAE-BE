@@ -7,6 +7,7 @@ import com.leets.chikahae.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -21,6 +22,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static com.leets.chikahae.security.util.TokenNameUtil.ACCESS_TOKEN_SUBJECT;
 import static com.leets.chikahae.security.util.TokenNameUtil.REFRESH_TOKEN_SUBJECT;
@@ -44,9 +46,6 @@ public class SecurityConfig {
             "/api/auth/**",                 // 인증 관련 (ex: 카카오 콜백 등)
             "/login/kakao/callback",        // 카카오 로그인 콜백
 
-            // 인증/토큰 관련
-            "/api/v1/auth/reissue",     // 토큰 재발급
-            "/api/v1/auth/logout",      // 로그아웃
 
             // 정적/문서/리소스
             "/docs/**",                 // API 문서
@@ -54,6 +53,9 @@ public class SecurityConfig {
             "/resources/**",            // 정적 리소스
             "/index.html",              // 인덱스 페이지
             "/error",                   // 에러 페이지
+            "/static/*.png",               // 모든 PNG 정적 리소스 허용
+            "/static/*.jpg",               // 모든 JPG 이미지 허용
+
 
             // Swagger/OpenAPI 관련
             "/v3/api-docs/**",          // OpenAPI 문서
@@ -68,13 +70,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.authorizeHttpRequests(auth -> auth
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers(PERMIT_ALL_PATTERNS).permitAll()
                 .anyRequest().authenticated()
         );
@@ -95,17 +98,26 @@ public class SecurityConfig {
         return configuration.getAuthenticationManager();
     }
 
+
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://chika-hae.site"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setExposedHeaders(Arrays.asList(ACCESS_TOKEN_SUBJECT, REFRESH_TOKEN_SUBJECT));
-        configuration.setAllowCredentials(true);
 
-        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
-        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", configuration);
-        return urlBasedCorsConfigurationSource;
+        /// CORS 추가
+        configuration.addAllowedOriginPattern("http://localhost:3000");
+        configuration.addAllowedOriginPattern("https://api.chika-hae.site");
+        configuration.addAllowedOriginPattern("https://chika-hae.site");
+
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        configuration.setAllowCredentials(true);
+        configuration.setExposedHeaders(List.of(ACCESS_TOKEN_SUBJECT, REFRESH_TOKEN_SUBJECT));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
+
+
 }
