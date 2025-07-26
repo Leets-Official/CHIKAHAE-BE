@@ -14,6 +14,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     boolean existsByNickname(String nickname);
 
     Optional<Member> findByKakaoId(String kakaoId);
+    
+    //회원탈퇴
+    boolean existsByParentId(Long parentId);
 
 
 }

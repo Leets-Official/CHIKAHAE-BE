@@ -57,6 +57,12 @@ public class TokenService {
         return jwtProvider.generateRefreshToken(member.getId());
     }
 
+    //회원탈퇴
+    public void deleteByMemberId(Long memberId) {
+        accountTokenRepository.deleteByMemberId(memberId);
+    }
+
+
 
 
 

@@ -15,9 +15,12 @@ import com.leets.chikahae.security.auth.PrincipalDetails;
 import com.leets.chikahae.security.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -107,6 +110,24 @@ public class AuthService {
     }
 
 
+    //회원탈퇴
+    @Transactional
+    public void withdraw(String token) {
+        String accessToken = token.replace("Bearer ", "");
+        KakaoUserInfo userInfo = kakaoApiClient.getUserInfo(accessToken);
+
+        // ✅ Long → String 변환
+        String kakaoId = String.valueOf(userInfo.getId());
+
+        Member member = memberService.findByKakaoId(kakaoId)
+                .orElseThrow(() -> new RuntimeException("회원 정보가 존재하지 않습니다."));
+
+        tokenService.deleteByMemberId(member.getId());
+        memberService.deleteMember(member.getId());
+
+        kakaoApiClient.unlink(accessToken);
+    }
+
 
 
 
@@ -143,6 +164,9 @@ public class AuthService {
     private boolean isUnder14(java.time.LocalDate birth) {
         return java.time.Period.between(birth, java.time.LocalDate.now()).getYears() < 14;
     }
+
+
+
 
 
 

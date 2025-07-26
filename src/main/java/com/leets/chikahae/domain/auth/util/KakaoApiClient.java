@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Component
@@ -44,5 +45,24 @@ public class KakaoApiClient {
     }
 
 
+    //회원탈퇴
+    public void unlink(String accessToken) {
+        webClient.post()
+                .uri("/v1/user/unlink")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .retrieve()
+                .onStatus(
+                        status -> status.is4xxClientError() || status.is5xxServerError(),
+                        clientResponse -> clientResponse.bodyToMono(String.class)
+                                .doOnNext(error -> log.error("카카오 연결 해제 실패: {}", error))
+                                .flatMap(error -> Mono.error(new RuntimeException("카카오 연결 해제 실패: " + error)))
+                )
+                .bodyToMono(String.class)
+                .block();
+    }
 
-}
+
+
+
+
+}//class

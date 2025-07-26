@@ -18,7 +18,7 @@ public class LocalSwaggerConfig {
         Components components = new Components().addSecuritySchemes(jwt, new SecurityScheme()
                 .name(jwt)
                 .type(SecurityScheme.Type.HTTP)
-                .scheme("Bearer")
+                .scheme("bearer") //대문자 -> 소문자로 수정했습니다. (은지)
                 .bearerFormat("JWT")
         );
         return new OpenAPI()

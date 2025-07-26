@@ -6,14 +6,13 @@ import com.leets.chikahae.domain.auth.dto.SignupResponse;
 import com.leets.chikahae.domain.auth.service.AuthService;
 import com.leets.chikahae.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -24,6 +23,7 @@ public class AuthController implements AuthControllerSpec {
     private final AuthService authService;
 
 
+    //회원가입
     @PostMapping("/kakao")
     @Operation(
             summary = "카카오 회원가입",
@@ -68,5 +68,43 @@ public class AuthController implements AuthControllerSpec {
                 .header("Refresh-Token", response.getRefreshToken())
                 .body(null);
     }
+
+//    //회원탈퇴
+//    @Operation(
+//            summary = "회원탈퇴",
+//            description = """
+//        현재 사용자의 회원 정보를 삭제하고, 카카오와의 연결을 해제합니다.
+//
+//        요청 헤더에 아래 형식의 Access Token이 포함되어야 합니다.
+//        - Authorization: Bearer {access_token}
+//        """,
+//            security = @SecurityRequirement(name = "JWT")
+//    )
+//    @DeleteMapping("/withdraw")
+//    public ResponseEntity<Void> withdraw(
+//            @RequestHeader("Authorization") String token) {
+//
+//        authService.withdraw(token);
+//        return ResponseEntity.noContent().build();
+//    }
+@Operation(
+        summary = "회원탈퇴",
+        description = """
+        현재 사용자의 회원 정보를 삭제하고, 카카오와의 연결을 해제합니다.
+
+        요청 헤더에 아래 형식의 Access Token이 포함되어야 합니다.
+        - Authorization: Bearer {access_token}
+        """,
+        security = @SecurityRequirement(name = "JWT") // Swagger 상단 Authorize 토큰 적용
+)
+@DeleteMapping("/withdraw")
+public ResponseEntity<Void> withdraw(
+        @RequestHeader("Authorization") String token) { // ✅ @Parameter 제거!
+    authService.withdraw(token);
+    return ResponseEntity.noContent().build();
+}
+
+
+
 
 }//class
