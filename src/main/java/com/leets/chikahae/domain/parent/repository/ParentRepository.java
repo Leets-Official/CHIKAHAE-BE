@@ -10,4 +10,10 @@ public interface ParentRepository extends JpaRepository<Parent, Long> {
 
     Optional<Parent> findByParentId(Long parentId);
 
-}
+    //회원탈퇴(주석 : 필요할 수도 있음)
+//    @Modifying
+//    @Query("DELETE FROM Parent p WHERE p.memberId = :memberId")
+//    void deleteByMemberId(Long memberId);
+
+
+}//interface

@@ -24,6 +24,9 @@ public class Member {
 	@Column(name = "parent_id")
 	private Long parentId;
 
+	@Column(name = "kakao_id", nullable = false)
+	private String kakaoId;
+
 	@Column(name = "nickname", nullable = false, unique = true)
 	private String nickname;
 

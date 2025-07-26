@@ -12,7 +12,7 @@ public class LoginResponse {
     @Schema(description = "회원 ID", example = "123")
     private Long memberId;
 
-    @Schema(description = "회원 닉네임", example = "초코송이엄마")
+    @Schema(description = "회원 닉네임", example = "체리마루")
     private String nickname;
 
     @Schema(description = "새로운 Access Token")

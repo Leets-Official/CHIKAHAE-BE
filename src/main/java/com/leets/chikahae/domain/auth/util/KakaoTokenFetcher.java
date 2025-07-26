@@ -29,6 +29,15 @@ public class KakaoTokenFetcher {
                 .retrieve()
                 .bodyToMono(TokenResponse.class)
                 .block();
+
+        if (response == null || response.getAccessToken() == null) {
+            throw new RuntimeException("AccessToken 파싱 실패 (response == null 또는 토큰 없음)");
+        }
+
+        log.info("🔑 토큰 응답: {}", response);
+        log.info("✅ 카카오 Access Token 발급 완료: {}", response.getAccessToken());
+        log.info("🔍 카카오 TokenResponse: {}", response);
+        log.info("✅ 카카오 Access Token 발급 완료: {}", response.getAccessToken());
         return response.getAccessToken();
 
     }

@@ -12,6 +12,9 @@ public class KakaoCallbackResponse {
     @Schema(description = "카톡 accessToken", example = "123")
     private String accessToken;
 
-    @Schema(description = "부모 이름", example = "홍길동")
+    @Schema(description = "refresh token", example = "eyJhbGciOiJIUzI1NiIsInR5...")
+    private String refreshToken;
+
+    @Schema(description = "자녀 닉네임 (로그인 사용자)", example = "이지은")
     private String nickname;
 }
