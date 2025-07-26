@@ -69,40 +69,42 @@ public class AuthController implements AuthControllerSpec {
                 .body(null);
     }
 
-//    //회원탈퇴
-//    @Operation(
-//            summary = "회원탈퇴",
-//            description = """
-//        현재 사용자의 회원 정보를 삭제하고, 카카오와의 연결을 해제합니다.
-//
-//        요청 헤더에 아래 형식의 Access Token이 포함되어야 합니다.
-//        - Authorization: Bearer {access_token}
-//        """,
-//            security = @SecurityRequirement(name = "JWT")
-//    )
-//    @DeleteMapping("/withdraw")
-//    public ResponseEntity<Void> withdraw(
-//            @RequestHeader("Authorization") String token) {
-//
-//        authService.withdraw(token);
-//        return ResponseEntity.noContent().build();
-//    }
-@Operation(
-        summary = "회원탈퇴",
-        description = """
-        현재 사용자의 회원 정보를 삭제하고, 카카오와의 연결을 해제합니다.
+   //회원탈퇴
+    @Operation(
+            summary = "회원탈퇴",
+            description = """
+            현재 사용자의 회원 정보를 삭제하고, 카카오와의 연결을 해제합니다.
+    
+            요청 헤더에 아래 형식의 Access Token이 포함되어야 합니다.
+            - Authorization: Bearer {access_token}
+            """,
+            security = @SecurityRequirement(name = "JWT") // Swagger 상단 Authorize 토큰 적용
+    )
+    @DeleteMapping("/withdraw")
+    public ResponseEntity<Void> withdraw(
+            @RequestHeader("Authorization") String token) { // ✅ @Parameter 제거!
+        authService.withdraw(token);
+        return ResponseEntity.noContent().build();
+    }
+
+    //로그아웃
+    @Operation(
+            summary = "로그아웃",
+            description = """
+        현재 사용자의 Access Token을 무효화합니다.  
+        서버 또는 클라이언트에서 저장된 토큰 삭제만 수행하며, 카카오 서버와의 연결은 유지됩니다.
 
         요청 헤더에 아래 형식의 Access Token이 포함되어야 합니다.
         - Authorization: Bearer {access_token}
         """,
-        security = @SecurityRequirement(name = "JWT") // Swagger 상단 Authorize 토큰 적용
-)
-@DeleteMapping("/withdraw")
-public ResponseEntity<Void> withdraw(
-        @RequestHeader("Authorization") String token) { // ✅ @Parameter 제거!
-    authService.withdraw(token);
-    return ResponseEntity.noContent().build();
-}
+            security = @SecurityRequirement(name = "JWT")
+    )
+    @DeleteMapping("/logout")
+    public ResponseEntity<Void> logout(@RequestHeader("Authorization") String token) {
+        authService.logout(token);
+        return ResponseEntity.noContent().build();
+    }
+
 
 
 

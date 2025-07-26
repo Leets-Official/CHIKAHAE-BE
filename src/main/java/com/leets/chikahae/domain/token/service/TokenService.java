@@ -5,12 +5,19 @@ import com.leets.chikahae.domain.auth.util.JwtProvider;
 import com.leets.chikahae.domain.member.entity.Member;
 import com.leets.chikahae.domain.token.entity.AccountToken;
 import com.leets.chikahae.domain.token.repository.AccountTokenRepository;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.security.Key;
+import java.time.Duration;
 import java.time.LocalDateTime;
 
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TokenService {
@@ -61,6 +68,29 @@ public class TokenService {
     public void deleteByMemberId(Long memberId) {
         accountTokenRepository.deleteByMemberId(memberId);
     }
+
+    //로그아웃
+    @Value("${chikahae.jwt.key}")
+    private String jwtKey;
+    public Long extractMemberIdFromAccessToken(String token) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(jwtKey)  // 🔑 JWT 서명 키 (Base64 인코딩된 문자열)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            return Long.valueOf(claims.getSubject()); // subject가 memberId라고 가정
+        } catch (Exception e) {
+            // 예외 발생 시 null 반환
+            log.warn("⚠️ 유효하지 않은 토큰: {}", e.getMessage());
+            return null;
+        }
+    }
+
+
+
+
 
 
 

@@ -128,6 +128,21 @@ public class AuthService {
         kakaoApiClient.unlink(accessToken);
     }
 
+    //로그아웃
+    public void logout(String accessToken) {
+        String pureToken = accessToken.replace("Bearer ", "");
+
+        // 토큰 유효성 검사 or 파싱
+        Long memberId = tokenService.extractMemberIdFromAccessToken(pureToken);
+
+        if (memberId != null) {
+            log.info("✅ 로그아웃 요청 처리 - memberId: {}", memberId);
+        } else {
+            log.warn("🚫 유효하지 않은 토큰으로 로그아웃 시도");
+        }
+    }
+
+
 
 
 
