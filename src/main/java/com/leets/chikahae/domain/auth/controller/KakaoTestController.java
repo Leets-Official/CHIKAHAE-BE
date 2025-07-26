@@ -67,56 +67,13 @@ public class KakaoTestController {
         String serviceRefreshToken = tokenService.issueRefreshToken(member);
 
         // 5. 응답 반환
-        return ResponseEntity.ok(new KakaoCallbackResponse(serviceAccessToken, serviceRefreshToken, nickname));
+        return ResponseEntity
+                .ok()
+                .header("Authorization", "Bearer " + serviceAccessToken)
+                .header("Refresh-Token", serviceRefreshToken)
+                .build();
+
     }
 
-//    @GetMapping("/callback")
-//    public ResponseEntity<KakaoCallbackResponse> getToken(@RequestParam String code) {
-//        // 1. 카카오 access token
-//        String token = fetcher.getAccessToken(code);
-//        // 2. 카카오 유저 정보
-//        KakaoUserInfo user = kakaoApiClient.getUserInfo(token);
-//        String kakaoId = String.valueOf(user.getId());
-//        String nickname = user.getKakaoAccount().getProfile().getNickname();
-//
-//
-//        //--------------------------------------------------------------------------
-//
-//        // AccountToken → Member 조회
-//        Member member = memberService.findByKakaoId(kakaoId)
-//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "회원 정보 없음"));
-//
-//
-//        //  kakaoId → AccountToken 조회
-//        AccountToken accountToken = accountTokenRepository.findByMemberAndTokenType(member, "ACCESS")
-//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "카카오 계정 없음"));
-//
-//        String serviceAccessToken = tokenService.issueAccessToken(member);
-//        String serviceRefreshToken = tokenService.issueRefreshToken(member);
-//
-//        return ResponseEntity.ok(new KakaoCallbackResponse(serviceAccessToken, serviceRefreshToken, nickname));
-//
-//
-//
-////        // 자녀의 생년월일로 만나이 판단
-////        if (isUnder14(member.getBirth())) {
-////            System.out.println("생년월일: " + member.getBirth());
-////            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "만 14세 미만은 보호자 동의가 필요합니다.");
-////        }
-//
-//        // 5. 응답
-////        return ResponseEntity.ok(new KakaoCallbackResponse(accessToken, refreshToken, nickname));
-//
-//    }
-//
-//
-////    // 만나이 계산 유틸 함수
-////    private boolean isUnder14(LocalDate birth) {
-////        return Period.between(birth, LocalDate.now()).getYears() < 14;
-////    }
-////
-////
-//
-//
-//
+
 }//class
