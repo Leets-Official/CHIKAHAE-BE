@@ -15,10 +15,10 @@ public class SignupResponse {
     @Schema(description = "닉네임", example = "초코송이")
     private String nickname;
 
-    @Schema(description = "Access Token", example = "eyJhbGciOiJIUzI1NiJ9...")
+    @Schema(description = "Access Token", example = "빌드 터미널에 있는 토큰을 사용하세요")
     private String accessToken;
 
-    @Schema(description = "Refresh Token", example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...")
+    @Schema(description = "Refresh Token", example = "빌드 터미널에 있는 토큰을 사용하세요")
     private String refreshToken;
 
 

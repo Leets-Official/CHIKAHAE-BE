@@ -74,6 +74,7 @@ public enum ErrorCode {
         NOT_ENOUGH_QUIZ_SOLVED(500_002, HttpStatus.INTERNAL_SERVER_ERROR, "해당 퀴즈를 풀지 않았습니다."),
         FCM_PUSH_ERROR(500_003, HttpStatus.INTERNAL_SERVER_ERROR, "FCM 푸시 전송에 실패했습니다.");
 
+
         // 기타 공통
 
         private final int code;
