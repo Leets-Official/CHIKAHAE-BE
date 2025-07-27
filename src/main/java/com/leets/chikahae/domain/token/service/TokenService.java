@@ -53,16 +53,29 @@ public class TokenService {
 
 
     //refresh 토큰 발급 및 저장
+
     public String issueRefreshToken(Member member) {
+        // 1. refresh 토큰 문자열 생성
+        String refreshTokenString = jwtProvider.generateRefreshToken(member.getId());
+
+        // 2. refresh 토큰 DB에 저장
         AccountToken refreshToken = AccountToken.builder()
                 .member(member)
                 .tokenType("REFRESH")
+                .refreshToken(refreshTokenString)  // ✅ 여기서 전달해야 함
                 .expiresAt(LocalDateTime.now().plusDays(14))
                 .build();
 
         accountTokenRepository.save(refreshToken);
-        return jwtProvider.generateRefreshToken(member.getId());
+        return refreshTokenString;
     }
+
+    public void logoutByRefreshToken(String refreshToken) {
+        log.info("🔐 로그아웃 요청된 refreshToken: {}", refreshToken);
+        accountTokenRepository.deleteByRefreshToken(refreshToken);
+    }
+
+
 
     //회원탈퇴
     public void deleteByMemberId(Long memberId) {
