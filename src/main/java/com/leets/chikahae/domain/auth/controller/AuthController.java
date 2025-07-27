@@ -4,7 +4,9 @@ import com.leets.chikahae.domain.auth.controller.spec.AuthControllerSpec;
 import com.leets.chikahae.domain.auth.dto.KakaoLogoutRequst;
 import com.leets.chikahae.domain.auth.dto.KakaoSignupRequest;
 import com.leets.chikahae.domain.auth.dto.SignupResponse;
+import com.leets.chikahae.domain.auth.dto.TokenResponse;
 import com.leets.chikahae.domain.auth.service.AuthService;
+import com.leets.chikahae.domain.token.service.TokenService;
 import com.leets.chikahae.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController implements AuthControllerSpec {
 
     private final AuthService authService;
+    private final TokenService tokenService;
 
 
     //회원가입
@@ -108,22 +111,15 @@ public class AuthController implements AuthControllerSpec {
         return ResponseEntity.noContent().build();
     }
 
-    //    @Operation(
-    //            summary = "로그아웃",
-    //            description = """
-    //        현재 사용자의 Access Token을 무효화합니다.
-    //        서버 또는 클라이언트에서 저장된 토큰 삭제만 수행하며, 카카오 서버와의 연결은 유지됩니다.
-    //
-    //        요청 헤더에 아래 형식의 Access Token이 포함되어야 합니다.
-    //        - Authorization: Bearer {access_token}
-    //        """,
-    //            security = @SecurityRequirement(name = "JWT")
-    //    )
-    //    @DeleteMapping("/logout")
-    //    public ResponseEntity<Void> logout(@RequestHeader("Authorization") String token) {
-    //        authService.logout(token);
-    //        return ResponseEntity.noContent().build();
-    //    }
+    //Access Token 재발급
+    @PostMapping("/auth/reissue")
+    public ResponseEntity<TokenResponse> reissueAccessToken(@RequestHeader("Authorization") String refreshToken) {
+        TokenResponse response = tokenService.reissueAccessToken(refreshToken);
+        return ResponseEntity.ok(response);
+    }
+
+
+
 
 
 
