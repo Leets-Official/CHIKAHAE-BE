@@ -32,13 +32,14 @@ public class MemberService {
      */
     @Transactional
     public Member registerMember(@Nullable Long parentId, String kakaoId, String nickname,
-                                LocalDate birth, Boolean gender, String profileImage) {
+                                String name,LocalDate birth, Boolean gender, String profileImage) {
 
 
         Member member = Member.builder()
                 .parentId(parentId)
                 .kakaoId(kakaoId)
                 .nickname(nickname)
+                .name(name) // 매개변수 추가 - 석준
                 .birth(birth)
                 .gender(gender)
                 .profileImage(profileImage)
