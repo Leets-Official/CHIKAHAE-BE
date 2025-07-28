@@ -45,6 +45,7 @@ public class DevAuthController {
         Member member = Member.of(
                 1L,                                  // parentId (DB에 존재하는 값인지 확인)
                 "개발자",
+            "홍길동",                                     // 멤버엔티티에 name 필드 추가로인한 임의 추가 -석준
                 LocalDate.of(2021, 7, 14),
                 true,
                 "https://example.com/profile.jpg"
@@ -65,7 +66,7 @@ public class DevAuthController {
 
         SecurityUtil.setAuthentication(principalDetails);
 
-        String accessToken = tokenService.issueAccessToken(savedMember.getId(), null, null);
+        String accessToken = tokenService.issueAccessToken(savedMember, null, null);
 
         return ApiResponse.ok(accessToken);
     }
