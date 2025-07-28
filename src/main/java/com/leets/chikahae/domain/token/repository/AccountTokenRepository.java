@@ -14,11 +14,14 @@ public interface AccountTokenRepository extends JpaRepository<AccountToken, Long
 
     Optional<AccountToken> findByMemberAndTokenType(Member member, String tokenType);
 
-
     //회원탈퇴 (주석: 필요할 수도 있음)
-//    @Modifying
-//    @Query("DELETE FROM AccountToken t WHERE t.member.id = :memberId")
+    //    @Modifying
+    //    @Query("DELETE FROM AccountToken t WHERE t.member.id = :memberId")
     void deleteByMemberId(Long memberId);
+
+    //로그아웃
+    void deleteByRefreshToken(String refreshToken);
+
 
 
 }//interface
