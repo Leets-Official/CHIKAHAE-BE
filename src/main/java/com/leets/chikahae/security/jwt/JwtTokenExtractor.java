@@ -157,8 +157,8 @@ public class JwtTokenExtractor {
             .orElseThrow(() -> new NoSuchElementException(ErrorCode.USER_NOT_FOUND.getMessage()));
 
         // Member의 parentId로 Parent 조회
-        Parent parent = parentRepository.findById(member.getParentId())
-            .orElseThrow(() -> new NoSuchElementException("부모를 찾을 수 없습니다."));
+        // Parent parent = parentRepository.findById(member.getParentId())
+        //    .orElseThrow(() -> new NoSuchElementException("부모를 찾을 수 없습니다."));
 
         // PrincipalDetails 생성
         PrincipalDetails details = PrincipalDetails.of(
