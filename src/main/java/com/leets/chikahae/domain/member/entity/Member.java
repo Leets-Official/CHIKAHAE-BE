@@ -85,4 +85,13 @@ public class Member {
 	public void setPoint(Point point) {
 		this.point=point;
 	}
+
+	public void changeNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	public void changeProfileImage(String profileImage) {
+		this.profileImage = profileImage;
+	}
+
 }//class
