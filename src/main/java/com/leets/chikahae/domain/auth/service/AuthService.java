@@ -135,18 +135,22 @@ public class AuthService {
     }
 
     //로그아웃
-    public void logout(String accessToken) {
-        String pureToken = accessToken.replace("Bearer ", "");
-
-        // 토큰 유효성 검사 or 파싱
-        Long memberId = tokenService.extractMemberIdFromAccessToken(pureToken);
-
-        if (memberId != null) {
-            log.info("✅ 로그아웃 요청 처리 - memberId: {}", memberId);
-        } else {
-            log.warn("🚫 유효하지 않은 토큰으로 로그아웃 시도");
-        }
+    // RefreshToken을 기준으로 DB에서 삭제
+    public void logout(String refreshToken) {
+        tokenService.logoutByRefreshToken(refreshToken);
     }
+    //    public void logout(String accessToken) {
+    //        String pureToken = accessToken.replace("Bearer ", "");
+    //
+    //        // 토큰 유효성 검사 or 파싱
+    //        Long memberId = tokenService.extractMemberIdFromAccessToken(pureToken);
+    //
+    //        if (memberId != null) {
+    //            log.info("✅ 로그아웃 요청 처리 - memberId: {}", memberId);
+    //        } else {
+    //            log.warn("🚫 유효하지 않은 토큰으로 로그아웃 시도");
+    //        }
+    //    }
 
 
 

@@ -59,6 +59,7 @@ CREATE TABLE account_token (
                                token_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '토큰ID',
                                member_id BIGINT NOT NULL COMMENT '사용자 ID',
                                token_type ENUM('ACCESS', 'REFRESH') NOT NULL DEFAULT 'ACCESS' COMMENT '토큰 유형',
+                               refresh_token TEXT NULL COMMENT '리프레시 토큰 원문',
                                ip_address VARCHAR(200) NULL COMMENT '보안 로그인(고려)',
                                user_agent VARCHAR(200) NULL COMMENT '기기, 브라우저 기록',
                                expires_at DATETIME NULL COMMENT '만료일',

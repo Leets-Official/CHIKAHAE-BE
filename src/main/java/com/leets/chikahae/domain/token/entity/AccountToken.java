@@ -31,6 +31,10 @@ public class AccountToken {
     @Column(nullable = false)
     private String tokenType;
 
+    // ✅ refreshToken 저장 (ACCESS는 null 가능)
+    @Column(columnDefinition = "TEXT")
+    private String refreshToken;
+
     private String ipAddress;
     private String userAgent;
 
