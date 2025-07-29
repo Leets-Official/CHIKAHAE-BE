@@ -27,6 +27,7 @@ public class MyPageService {
 			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
 		return new MemberProfileResponse(
+			member.getProfileImage(),
 			member.getNickname(),
 			member.getName(),
 			member.getGender(),
