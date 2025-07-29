@@ -44,16 +44,16 @@ public class MyPageService {
 		String nickname = request.nickname();
 		String profileImage = request.profileImage();
 
-		if (nickname == null || nickname.isBlank()) {
-			throw new CustomException(ErrorCode.INVALID_NICKNAME);
+		if (nickname != null) {
+			if (nickname.isBlank()) {
+				throw new CustomException(ErrorCode.INVALID_NICKNAME);
+			}
+			if (!member.getNickname().equals(nickname) &&
+				memberRepository.existsByNickname(nickname)) {
+				throw new CustomException(ErrorCode.DUPLICATED_NICKNAME);
+			}
+			member.changeNickname(nickname);
 		}
-
-		if (!member.getNickname().equals(nickname) &&
-			memberRepository.existsByNickname(nickname)) {
-			throw new CustomException(ErrorCode.DUPLICATED_NICKNAME);
-		}
-
-		member.changeNickname(nickname);
 
 		if (profileImage != null && !profileImage.isBlank()) {
 			member.changeProfileImage(profileImage);
