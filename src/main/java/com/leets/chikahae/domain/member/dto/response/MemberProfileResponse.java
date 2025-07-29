@@ -6,7 +6,7 @@ public record MemberProfileResponse(
 	String profileImage,
 	String nickname,
 	String name,
-	Boolean gender,
+	boolean gender,
 	LocalDate birth
 ) {}
 
