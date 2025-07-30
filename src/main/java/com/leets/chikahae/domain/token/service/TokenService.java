@@ -60,6 +60,7 @@ public class TokenService {
     public String issueRefreshToken(Member member) {
         // 1. refresh 토큰 문자열 생성
         String refreshTokenString = jwtProvider.generateRefreshToken(member.getId());
+        log.info("🔥 발급된 refreshToken = {}", refreshTokenString);
 
         // 2. refresh 토큰 DB에 저장
         AccountToken refreshToken = AccountToken.builder()

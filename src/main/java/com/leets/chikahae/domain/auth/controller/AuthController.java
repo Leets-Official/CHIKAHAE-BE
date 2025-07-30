@@ -1,6 +1,7 @@
 package com.leets.chikahae.domain.auth.controller;
 
 import com.leets.chikahae.domain.auth.controller.spec.AuthControllerSpec;
+import com.leets.chikahae.domain.auth.dto.KakaoReissueRequest;
 import com.leets.chikahae.domain.auth.dto.KakaoSignupRequest;
 import com.leets.chikahae.domain.auth.dto.SignupResponse;
 import com.leets.chikahae.domain.auth.dto.TokenResponse;
@@ -8,7 +9,6 @@ import com.leets.chikahae.domain.auth.service.AuthService;
 import com.leets.chikahae.domain.token.service.TokenService;
 import com.leets.chikahae.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -57,6 +57,8 @@ public class AuthController implements AuthControllerSpec {
                             implementation = com.leets.chikahae.global.response.ApiResponse.class))
             )
     })
+
+
     public ResponseEntity<ApiResponse<SignupResponse>> signupKakao(
             @RequestBody KakaoSignupRequest request,
             HttpServletRequest servletRequest) {
@@ -110,12 +112,39 @@ public class AuthController implements AuthControllerSpec {
         return ResponseEntity.noContent().build();
     }
 
-    //Access Token 재발급
+
+
+    @Operation(
+            summary = "Access Token 재발급",
+            description = """
+        저장된 Refresh Token을 기반으로 Access Token을 새로 발급합니다.  
+        요청 바디에 아래 형식의 JSON을 포함시켜야 합니다.
+
+        {
+            "refreshToken": "xxx.yyy.zzz"
+        }
+        """,
+            security = @SecurityRequirement(name = "JWT")
+    )
+    @io.swagger.v3.oas.annotations.responses.ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "Access Token 발급 성공"
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "401",
+                    description = "유효하지 않은 Refresh Token",
+                    content = @io.swagger.v3.oas.annotations.media.Content(schema =
+                    @io.swagger.v3.oas.annotations.media.Schema(implementation = ApiResponse.class))
+            )
+    })
+    // Access Token 재발급
     @PostMapping("/auth/reissue")
-    public ResponseEntity<TokenResponse> reissueAccessToken(@RequestHeader("Authorization") String refreshToken) {
-        TokenResponse response = tokenService.reissueAccessToken(refreshToken);
+    public ResponseEntity<TokenResponse> reissueAccessToken(@RequestBody KakaoReissueRequest request) {
+        TokenResponse response = tokenService.reissueAccessToken(request.getRefreshToken());
         return ResponseEntity.ok(response);
     }
+
 
 
 
