@@ -32,7 +32,7 @@ public class MemberService {
      */
     @Transactional
     public Member registerMember(@Nullable Long parentId, String kakaoId, String nickname,
-                                String name,LocalDate birth, Boolean gender, String profileImage) {
+                                String name,String email, LocalDate birth, Boolean gender, String profileImage) {
 
 
         Member member = Member.builder()
@@ -40,6 +40,7 @@ public class MemberService {
                 .kakaoId(kakaoId)
                 .nickname(nickname)
                 .name(name) // 매개변수 추가 - 석준
+                .kakaoEmail(email) // 7/30 카카오이메일추가
                 .birth(birth)
                 .gender(gender)
                 .profileImage(profileImage)
