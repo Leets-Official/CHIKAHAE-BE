@@ -22,6 +22,8 @@ public interface AccountTokenRepository extends JpaRepository<AccountToken, Long
     //로그아웃
     void deleteByRefreshToken(String refreshToken);
 
+    //토큰 재발급
+    Optional<AccountToken> findByRefreshToken(String refreshToken);
 
 
 }//interface

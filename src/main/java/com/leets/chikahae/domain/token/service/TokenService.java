@@ -1,10 +1,13 @@
 package com.leets.chikahae.domain.token.service;
 
 
+import com.leets.chikahae.domain.auth.dto.TokenResponse;
 import com.leets.chikahae.domain.auth.util.JwtProvider;
 import com.leets.chikahae.domain.member.entity.Member;
 import com.leets.chikahae.domain.token.entity.AccountToken;
 import com.leets.chikahae.domain.token.repository.AccountTokenRepository;
+import com.leets.chikahae.global.response.CustomException;
+import com.leets.chikahae.global.response.ErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -101,7 +104,31 @@ public class TokenService {
         }
     }
 
+    //토큰 재발급
+    public TokenResponse reissueAccessToken(String rawRefreshToken) {
+        String refreshToken = rawRefreshToken.replace("Bearer ", "");
 
+        AccountToken token = accountTokenRepository.findByRefreshToken(refreshToken)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_REFRESH_TOKEN));
+
+        if (token.getExpiresAt().isBefore(LocalDateTime.now())) {
+            accountTokenRepository.delete(token); // 만료된 토큰 제거
+            throw new CustomException(ErrorCode.EXPIRED_REFRESH_TOKEN);
+        }
+
+        Member member = token.getMember();
+        String newAccessToken = jwtProvider.generateAccessToken(member.getId());
+
+        return new TokenResponse(
+                newAccessToken,                            // access_token
+                token.getRefreshToken(),                  // refresh_token
+                "Bearer",                                 // token_type
+                jwtProvider.getAccessTokenExpiryInSeconds(),     // expires_in
+                "profile_nickname",                       // scope (원하는 경우 수정 가능)
+                jwtProvider.getRefreshTokenExpiryInSeconds()     // refresh_token_expires_in
+        );
+
+    }
 
 
 

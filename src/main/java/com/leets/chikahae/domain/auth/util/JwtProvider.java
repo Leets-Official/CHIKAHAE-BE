@@ -101,5 +101,14 @@ public class JwtProvider {
                 .compact();
     }
 
+    public int getAccessTokenExpiryInSeconds() {
+        return Math.toIntExact(accessTokenExpiration / 1000);
+    }
+
+    public int getRefreshTokenExpiryInSeconds() {
+        return Math.toIntExact(refreshTokenExpiration / 1000);
+    }
+
+
 
 }//class
