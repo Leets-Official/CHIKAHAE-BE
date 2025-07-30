@@ -1,7 +1,6 @@
 package com.leets.chikahae.domain.auth.controller;
 
 import com.leets.chikahae.domain.auth.controller.spec.AuthControllerSpec;
-import com.leets.chikahae.domain.auth.dto.KakaoLogoutRequst;
 import com.leets.chikahae.domain.auth.dto.KakaoSignupRequest;
 import com.leets.chikahae.domain.auth.dto.SignupResponse;
 import com.leets.chikahae.domain.auth.dto.TokenResponse;
@@ -106,8 +105,8 @@ public class AuthController implements AuthControllerSpec {
             security = @SecurityRequirement(name = "JWT")
     )
     @DeleteMapping("/logout")
-    public ResponseEntity<Void> logout(@RequestBody KakaoLogoutRequst request) {
-        authService.logout(request.getRefreshToken());
+    public ResponseEntity<Void> logout(@RequestHeader("Authorization") String refreshToken) {
+        authService.logout(refreshToken.replace("Bearer ", ""));
         return ResponseEntity.noContent().build();
     }
 
