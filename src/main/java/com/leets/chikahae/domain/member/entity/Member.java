@@ -33,6 +33,9 @@ public class Member {
 	@Column(name = "name", nullable = false)
 	private String name;
 
+	@Column(name = "kakao_email", length = 100)
+	private String kakaoEmail;
+
 	@Column(name = "birth", nullable = false)
 	private LocalDate birth;
 
@@ -57,10 +60,12 @@ public class Member {
 	private Point point;
 
 	//name 필드추가 7/29 -석준
+	//카카오 이메일 필드 추가 7/30 - 석준
 	public static Member of(
 			Long parentId,
 			String nickname,
 			String name,
+			String kakaoEmail,
 			LocalDate birth,
 			Boolean gender,
 			String profileImage
@@ -69,6 +74,7 @@ public class Member {
 				.parentId(parentId)
 				.nickname(nickname)
 			    .name(name)
+				.kakaoEmail(kakaoEmail)
 				.birth(birth)
 				.gender(gender)
 				.profileImage(profileImage)

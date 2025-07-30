@@ -79,13 +79,14 @@ public class AuthService {
             );
             parentId = parent.getId();
         }
-        
+
 
         Member member = memberService.registerMember(
                 parentId,
                 kakaoId,
                 request.getNickname(),
                 request.getName(),   //매개변수 일치 -석준(07/29)
+                email,
                 request.getBirth(),
                 request.getGender(),
                 request.getProfileImage()
