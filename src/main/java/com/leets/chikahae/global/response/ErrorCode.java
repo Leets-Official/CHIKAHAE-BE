@@ -15,6 +15,8 @@ public enum ErrorCode {
         INVALID_INPUT(400_002, HttpStatus.BAD_REQUEST, "입력값이 올바르지 않습니다."),
         NULL_VALUE(400_003, HttpStatus.BAD_REQUEST, "Null 값이 들어왔습니다."),
         TEST_ERROR(400_004, HttpStatus.BAD_REQUEST, "테스트 에러입니다."),
+        INVALID_NICKNAME(400_005, HttpStatus.BAD_REQUEST, "닉네임은 필수입니다."),
+
 
 
         // ========================
@@ -65,6 +67,8 @@ public enum ErrorCode {
         ALREADY_REWARDED(409_002, HttpStatus.CONFLICT, "이미 오늘의 보상을 받으셨습니다."),
         ALREADY_COMPLETED_MISSION(409_003, HttpStatus.CONFLICT, "이미 완료된 미션입니다."),
         MISSION_NOT_COMPLETED(409_004, HttpStatus.CONFLICT, "미션이 완료되지 않았습니다."),
+        DUPLICATED_NICKNAME(409_005, HttpStatus.CONFLICT, "이미 사용 중인 닉네임입니다."),
+
 
         // ========================
         // 500 Internal Server Error

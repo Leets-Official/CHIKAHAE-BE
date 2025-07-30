@@ -18,5 +18,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     //회원탈퇴
     boolean existsByParentId(Long parentId);
 
+    //탈퇴되지 않은 회원 상대로 조회
+    Optional<Member> findByIdAndIsDeletedFalse(Long memberId);
 
 }

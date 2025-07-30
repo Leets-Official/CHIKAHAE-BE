@@ -145,13 +145,20 @@ public class JwtTokenExtractor {
             authoritiesList.stream().map(SimpleGrantedAuthority::new).toList();
 
         // Member ID로 Member 조회
-        Long claimMemberId = claims.get(ID_CLAIM, Long.class);
+
+        //Long claimMemberId = claims.get(ID_CLAIM, Long.class); 여기서 null 발생 -석준
+        Object rawId = claims.get(ID_CLAIM);
+        if (rawId == null) {
+            throw new JwtAuthenticationException("JWT에 member_id가 없습니다.");
+        }
+        Long claimMemberId = Long.valueOf(rawId.toString());
+
         Member member = memberRepository.findById(claimMemberId)
             .orElseThrow(() -> new NoSuchElementException(ErrorCode.USER_NOT_FOUND.getMessage()));
 
         // Member의 parentId로 Parent 조회
-        Parent parent = parentRepository.findById(member.getParentId())
-            .orElseThrow(() -> new NoSuchElementException("부모를 찾을 수 없습니다."));
+        // Parent parent = parentRepository.findById(member.getParentId())
+        //    .orElseThrow(() -> new NoSuchElementException("부모를 찾을 수 없습니다."));
 
         // PrincipalDetails 생성
         PrincipalDetails details = PrincipalDetails.of(
