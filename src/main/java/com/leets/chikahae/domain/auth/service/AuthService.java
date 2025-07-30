@@ -36,7 +36,6 @@ public class AuthService {
     private final TokenService tokenService;
     private final ParentService parentService;
     private final KakaoApiClient kakaoApiClient;
-    private final NotificationSlotService notificationSlotService;
 
     /**
      * 카카오 회원가입 및 토큰 발급
@@ -86,6 +85,7 @@ public class AuthService {
                 parentId,
                 kakaoId,
                 request.getNickname(),
+                request.getName(),   //매개변수 일치 -석준(07/29)
                 request.getBirth(),
                 request.getGender(),
                 request.getProfileImage()
@@ -102,7 +102,7 @@ public class AuthService {
         SecurityUtil.setAuthentication(principalDetails);
 
         log.info("🎉 회원가입 완료: memberId = {}, nickname = {}", member.getId(), member.getNickname());
-        notificationSlotService.createDefaultSlots(member, ZoneId.of("Asia/Seoul"));
+
 
 
         return new SignupResponse(

@@ -30,6 +30,9 @@ public class Member {
 	@Column(name = "nickname", nullable = false, unique = true)
 	private String nickname;
 
+	@Column(name = "name", nullable = false)
+	private String name;
+
 	@Column(name = "birth", nullable = false)
 	private LocalDate birth;
 
@@ -53,9 +56,11 @@ public class Member {
 	@OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private Point point;
 
+	//name 필드추가 7/29 -석준
 	public static Member of(
 			Long parentId,
 			String nickname,
+			String name,
 			LocalDate birth,
 			Boolean gender,
 			String profileImage
@@ -63,6 +68,7 @@ public class Member {
 		return Member.builder()
 				.parentId(parentId)
 				.nickname(nickname)
+			    .name(name)
 				.birth(birth)
 				.gender(gender)
 				.profileImage(profileImage)
@@ -79,4 +85,13 @@ public class Member {
 	public void setPoint(Point point) {
 		this.point=point;
 	}
+
+	public void changeNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	public void changeProfileImage(String profileImage) {
+		this.profileImage = profileImage;
+	}
+
 }//class
