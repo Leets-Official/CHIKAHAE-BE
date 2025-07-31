@@ -32,7 +32,11 @@ public class Mission {
 
     public enum MissionCode {
         DAILY_QUIZ(1),
-        ANIMATION(3);
+        MORNING_ANIMATION(3),
+        LUNCH_ANIMATION(3),
+        EVENING_ANIMATION(3);
+
+
 
         private final int rewardPoint;
 
