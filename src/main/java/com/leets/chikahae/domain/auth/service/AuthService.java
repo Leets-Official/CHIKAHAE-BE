@@ -155,7 +155,6 @@ public class AuthService {
         SecurityUtil.setAuthentication(principalDetails);
 
         return new LoginResponse(
-                member.getId(),
                 member.getNickname(),
                 newAccess,
                 newRefresh

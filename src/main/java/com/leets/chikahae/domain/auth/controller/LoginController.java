@@ -2,6 +2,7 @@ package com.leets.chikahae.domain.auth.controller;
 import com.leets.chikahae.domain.auth.dto.KakaoLoginRequest;
 import com.leets.chikahae.domain.auth.dto.LoginResponse;
 import com.leets.chikahae.domain.auth.service.AuthService;
+import com.leets.chikahae.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,7 +30,7 @@ public class LoginController {
             description = "카카오 access token으로 이미 가입된 사용자를 인증하고 새로운 JWT를 발급합니다."
     )
     @PostMapping
-    public ResponseEntity<Void> loginKakao(
+    public ApiResponse<LoginResponse> loginKakao(
             @RequestBody KakaoLoginRequest request,
             HttpServletRequest servletRequest
     ) {
@@ -38,11 +39,12 @@ public class LoginController {
 
         LoginResponse result = authService.login(request, ip, ua);
 
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .header("Authorization", "Bearer " + result.getAccessToken())
-                .header("Refresh-Token", result.getRefreshToken())
-                .body(null);
+        return ApiResponse.ok(result);
+//        return ResponseEntity
+//                .status(HttpStatus.OK)
+//                .header("Authorization", "Bearer " + result.getAccessToken())
+//                .header("Refresh-Token", result.getRefreshToken())
+//                .body(null);
     }
 
 
