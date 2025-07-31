@@ -24,14 +24,11 @@ public class Member {
 	@Column(name = "parent_id")
 	private Long parentId;
 
-	@Column(name = "kakao_id", nullable = false)
+	@Column(name = "kakao_id")
 	private String kakaoId;
 
 	@Column(name = "nickname", nullable = false, unique = true)
 	private String nickname;
-
-	@Column(name = "name", nullable = false)
-	private String name;
 
 	@Column(name = "kakao_email", length = 100)
 	private String kakaoEmail;
@@ -42,11 +39,9 @@ public class Member {
 	@Column(name = "profile_image")
 	private String profileImage;
 
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, length = 10)
-	private String gender;
-
-	@Column(length = 50)
-	private String phoneNumber;
+	private Gender gender;
 
 	@Column(name = "is_deleted", nullable = false)
 	private Boolean isDeleted;
@@ -67,25 +62,26 @@ public class Member {
 	public static Member of(
 			Long parentId,
 			String nickname,
-			String name,
-			String kakaoEmail,
+			String kakaoId,       // kakaoId 추가
+			String kakaoEmail,    // kakaoEmail 추가
 			LocalDate birth,
-			String gender,
+			Gender gender,
 			String phoneNumber,
 			String profileImage
 	) {
 		return Member.builder()
 				.parentId(parentId)
 				.nickname(nickname)
-			    .name(name)
+				.nickname(nickname)
+				.kakaoId(kakaoId)          // 반드시 builder에도 추가
 				.kakaoEmail(kakaoEmail)
 				.birth(birth)
 				.gender(gender)
-				.phoneNumber(phoneNumber)
 				.profileImage(profileImage)
 				.isDeleted(false)
 				.build();
 	}
+
 
 
 	// ✔️ AuthService에서 사용할 수 있도록 추가

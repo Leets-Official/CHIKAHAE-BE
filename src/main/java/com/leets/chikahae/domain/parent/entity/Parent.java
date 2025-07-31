@@ -1,9 +1,7 @@
 package com.leets.chikahae.domain.parent.entity;
+import com.leets.chikahae.domain.member.entity.Gender;
+import jakarta.persistence.*;
 import jakarta.persistence.Id;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -32,8 +30,9 @@ public class Parent {
     @Column(nullable = false)
     private String name; // 카톡에서 받은 이름
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
-    private String parentGender;
+    private Gender parentGender;
 
     @Column(length = 50)
     private String parentPhoneNumber;
@@ -57,16 +56,14 @@ public class Parent {
     }
 
     public static Parent of(
-            Long parentId,
             String kakaoId,
             String email,
             String name,
-            String parentGender,
+            Gender parentGender,
             String parentPhoneNumber,
             LocalDate parentBirth
     ) {
         return Parent.builder()
-                .parentId(parentId)
                 .kakaoId(kakaoId)
                 .email(email)
                 .name(name)
