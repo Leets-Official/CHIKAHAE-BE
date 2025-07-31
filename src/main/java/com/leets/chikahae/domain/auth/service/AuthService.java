@@ -6,7 +6,6 @@ import com.leets.chikahae.domain.auth.dto.KakaoUserInfo;
 import com.leets.chikahae.domain.auth.dto.SignupResponse;
 import com.leets.chikahae.domain.auth.dto.LoginResponse;
 import com.leets.chikahae.domain.auth.util.KakaoApiClient;
-import com.leets.chikahae.domain.notification.service.NotificationSlotService;
 import com.leets.chikahae.domain.parent.entity.Parent;
 import com.leets.chikahae.domain.parent.service.ParentService;
 import com.leets.chikahae.domain.member.entity.Member;
@@ -16,14 +15,10 @@ import com.leets.chikahae.security.auth.PrincipalDetails;
 import com.leets.chikahae.security.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Mono;
 
-import java.time.ZoneId;
 import java.util.List;
 
 @Slf4j
@@ -50,8 +45,6 @@ public class AuthService {
         }
         log.info("✅ 카카오 사용자 정보 조회 성공: kakaoId = {}", kakaoInfo.getId());
         String kakaoId = String.valueOf(kakaoInfo.getId());
-
-
 
         //카카오 계정 정보 체크
         KakaoUserInfo.KakaoAccount account = kakaoInfo.getKakaoAccount();
@@ -86,12 +79,9 @@ public class AuthService {
                 parentId,
                 kakaoId,
                 request.getNickname(),
-                request.getName(),   //매개변수 일치 -석준(07/29)
                 email,
                 request.getBirth(),
-                request.getGender(),
-                request.getPhoneNumber(),   // ✔ 전화번호
-                request.getProfileImage()   // ✔ 프로필 이미지
+                request.getGender()
         );
 
 
@@ -109,7 +99,6 @@ public class AuthService {
 
 
         return new SignupResponse(
-                member.getId(),
                 member.getNickname(),
                 accessToken,
                 refreshToken

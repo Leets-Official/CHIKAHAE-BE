@@ -2,7 +2,6 @@ package com.leets.chikahae.domain.auth.controller;
 import com.leets.chikahae.domain.auth.dto.KakaoLoginRequest;
 import com.leets.chikahae.domain.auth.dto.LoginResponse;
 import com.leets.chikahae.domain.auth.service.AuthService;
-import com.leets.chikahae.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,7 +42,7 @@ public class LoginController {
                 .status(HttpStatus.OK)
                 .header("Authorization", "Bearer " + result.getAccessToken())
                 .header("Refresh-Token", result.getRefreshToken())
-                .body(null); // ✅ ResponseEntity<Void> requires explicit null body
+                .body(null);
     }
 
 

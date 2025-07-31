@@ -18,7 +18,7 @@ public class KakaoTokenFetcher {
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
             .build();
 
-    public String getAccessToken(String code) {
+    public TokenResponse getTokenResponse(String code) {
         TokenResponse response = webClient.post()
                 .uri("/oauth/token")
                 .body(BodyInserters.fromFormData("grant_type", "authorization_code")
@@ -31,16 +31,16 @@ public class KakaoTokenFetcher {
                 .block();
 
         if (response == null || response.getAccessToken() == null) {
-            throw new RuntimeException("AccessToken 파싱 실패 (response == null 또는 토큰 없음)");
+            throw new RuntimeException("토큰 응답 파싱 실패");
         }
 
         log.info("🔑 토큰 응답: {}", response);
         log.info("✅ 카카오 Access Token 발급 완료: {}", response.getAccessToken());
         log.info("🔍 카카오 TokenResponse: {}", response);
         log.info("✅ 카카오 Access Token 발급 완료: {}", response.getAccessToken());
-        return response.getAccessToken();
-
+        return response;
     }
+
 
 
 

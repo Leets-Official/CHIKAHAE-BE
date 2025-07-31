@@ -29,7 +29,6 @@ public class MyPageService {
 		return new MemberProfileResponse(
 			member.getProfileImage(),
 			member.getNickname(),
-			member.getName(),
 			member.getKakaoEmail(),
 			member.getGender(),
 			member.getBirth()

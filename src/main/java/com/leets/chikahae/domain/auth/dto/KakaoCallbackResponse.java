@@ -17,4 +17,8 @@ public class KakaoCallbackResponse {
 
     @Schema(description = "자녀 닉네임 (로그인 사용자)", example = "이지은")
     private String nickname;
+
+    public static KakaoCallbackResponse of(String accessToken, String refreshToken, String nickname) {
+        return new KakaoCallbackResponse(accessToken, refreshToken, nickname);
+    }
 }

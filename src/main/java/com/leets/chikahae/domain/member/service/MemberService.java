@@ -1,8 +1,8 @@
 package com.leets.chikahae.domain.member.service;
 
+import com.leets.chikahae.domain.member.entity.Gender;
 import com.leets.chikahae.domain.member.entity.Member;
 import com.leets.chikahae.domain.member.repository.MemberRepository;
-import com.leets.chikahae.domain.parent.entity.Parent;
 import com.leets.chikahae.domain.parent.repository.ParentRepository;
 import com.leets.chikahae.domain.notification.service.NotificationSlotService;
 import com.leets.chikahae.domain.point.entity.Point;
@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Nullable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.ZoneId;
 import java.util.Optional;
 
@@ -31,26 +30,23 @@ public class MemberService {
      * -14세 이상이라면 parentId 없이 등록
      */
     @Transactional
-    public Member registerMember(@Nullable Long parentId, String kakaoId, String nickname,
-                                LocalDate birth, String gender,   String phoneNumber,  String profileImage) {
+    public Member registerMember(@Nullable Long parentId, String kakaoId, String nickname, String email,
+                                 LocalDate birth, Gender gender) {
 
 
 
         Member member = Member.builder()
                 .parentId(parentId)
                 .kakaoId(kakaoId)
-                .nickname(nickname)
-                .name(name) // 매개변수 추가 - 석준
+                .nickname(nickname) // 매개변수 추가 - 석준
                 .kakaoEmail(email) // 7/30 카카오이메일추가
                 .birth(birth)
                 .gender(gender)
-                .phoneNumber(phoneNumber)
-                .profileImage(profileImage)
                 .isDeleted(false)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
-        Member savedMember=memberRepository.saveAndFlush(member);
+        Member savedMember = memberRepository.saveAndFlush(member);
 
         //  Point 엔티티 생성 및 저장
         Point point = Point.of(member);
@@ -65,13 +61,6 @@ public class MemberService {
      */
     public Optional<Member> findByKakaoId(String kakaoId) {
         return memberRepository.findByKakaoId(kakaoId);
-    }
-
-    /**
-     * 만나이 계산
-     */
-    private boolean isUnder14(LocalDate birth) {
-        return Period.between(birth, LocalDate.now()).getYears() < 14;
     }
 
     @Transactional
@@ -93,11 +82,6 @@ public class MemberService {
             }
         }
     }
-
-
-
-
-
 
 
 }//class
