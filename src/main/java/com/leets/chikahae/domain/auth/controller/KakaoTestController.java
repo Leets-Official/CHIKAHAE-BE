@@ -58,7 +58,7 @@ public class KakaoTestController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "회원 정보 없음"));
 
         // 4. 응답 반환
-        return ApiResponse.ok(KakaoCallbackResponse.of(kakaoAccessToken,kakaoRefreshToken,nickname));
+        return ApiResponse.ok(KakaoCallbackResponse.of(member.getMemberId(),kakaoAccessToken,kakaoRefreshToken,nickname));
 
     }
 

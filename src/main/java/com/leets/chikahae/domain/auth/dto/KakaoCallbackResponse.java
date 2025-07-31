@@ -9,6 +9,9 @@ import lombok.Getter;
 @Schema(description = "카카오 콜백 응답 DTO")
 public class KakaoCallbackResponse {
 
+    @Schema(description = "멤버 ID", example = "1L")
+    private Long memberId;
+
     @Schema(description = "카톡 accessToken", example = "123")
     private String accessToken;
 
@@ -18,7 +21,8 @@ public class KakaoCallbackResponse {
     @Schema(description = "자녀 닉네임 (로그인 사용자)", example = "이지은")
     private String nickname;
 
-    public static KakaoCallbackResponse of(String accessToken, String refreshToken, String nickname) {
-        return new KakaoCallbackResponse(accessToken, refreshToken, nickname);
+
+    public static KakaoCallbackResponse of(Long memberId,String accessToken, String refreshToken, String nickname) {
+        return new KakaoCallbackResponse(memberId,accessToken, refreshToken, nickname);
     }
 }
