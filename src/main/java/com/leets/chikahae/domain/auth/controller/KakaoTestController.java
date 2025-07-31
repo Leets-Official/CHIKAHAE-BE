@@ -13,6 +13,7 @@ import com.leets.chikahae.domain.token.service.TokenService;
 import com.leets.chikahae.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,10 +21,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Optional;
+
 @Tag(name = "Auth", description = "카카오톡 콜백 함수")
 @RestController
 @RequestMapping("/login/kakao")
 @RequiredArgsConstructor
+@Slf4j
 public class KakaoTestController {
 
 
@@ -47,19 +51,34 @@ public class KakaoTestController {
         TokenResponse tokenResponse = fetcher.getTokenResponse(code);
         String kakaoAccessToken = tokenResponse.getAccessToken();
         String kakaoRefreshToken = tokenResponse.getRefreshToken();
+        log.info("카카오 access token: {}", kakaoAccessToken);
+        log.info("카카오 refresh token: {}", kakaoRefreshToken);
 
         // 2. 카카오 유저 정보 조회
         KakaoUserInfo user = kakaoApiClient.getUserInfo(kakaoAccessToken);
         String kakaoId = String.valueOf(user.getId());
         String nickname = user.getKakaoAccount().getProfile().getNickname();
+        log.info("카카오 ID: {}", kakaoId);
+        log.info("닉네임: {}", nickname);
 
-        // 3. 회원 조회
-        Member member = memberService.findByKakaoId(kakaoId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "회원 정보 없음"));
+        Optional<Member> optionalMember = memberService.findByKakaoId(kakaoId);
+        Member member = optionalMember.orElse(null);
 
-        // 4. 응답 반환
-        return ApiResponse.ok(KakaoCallbackResponse.of(member.getMemberId(),kakaoAccessToken,kakaoRefreshToken,nickname));
+        log.info("카카오 ID: " + kakaoId +
+                " 멤버 ID: " + (member != null ? member.getMemberId() : "null") +
+                " 카카오 access: " + kakaoAccessToken +
+                " 카카오 refresh: " + kakaoRefreshToken +
+                " 닉네임: " + nickname);
 
+// 응답을 member가 null인 경우도 허용하도록 변경
+        return ApiResponse.ok(
+                KakaoCallbackResponse.of(
+                        member != null ? member.getMemberId() : null,
+                        kakaoAccessToken,
+                        kakaoRefreshToken,
+                        nickname
+                )
+        );
     }
 
 
