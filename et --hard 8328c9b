@@ -1,0 +1,135 @@
+[33m2e4b00f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfix/#54[m[33m, [m[1;31morigin/fix/#54[m[33m, [m[1;31morigin/fix/#47[m[33m, [m[1;32mfix/#47[m[33m)[m refactor: Refresh Token 요청을 바디 기반으로 수정
+[33m8328c9b[m refactor: 로그아웃 API 요청 형식을 Header 방식으로 변경
+[33meac3ee8[m refactor: DB컬럼 타입 변환
+[33m85b53bd[m fix: Refresh Token 기반 Access Token 재발급 로직 수정
+[33m7528ec5[m[33m ([m[1;31morigin/fix/#45[m[33m, [m[1;32mfix/#45[m[33m, [m[1;32mfeat/#47[m[33m)[m fix: 로그아웃 시 RefreshToken으로 DB 무효화 처리
+[33m7834ac7[m[33m ([m[1;31morigin/refactor/#43[m[33m, [m[1;32mrefactor/#43[m[33m)[m feat: 로그아웃 기능 구현 #43
+[33m680013d[m feat: 회원탈퇴 API Swagger 헤더 적용 및 테스트 완료 #43
+[33m5789c6e[m refactor: 회원가입 기능 해더 구현 #43
+[33m261a55f[m[33m ([m[1;31morigin/refactor/#35[m[33m, [m[1;32mrefactor/#35[m[33m)[m fix: kakao 로그인 중복 회원 예외 처리 및 쿼리 오류 해결
+[33m3b5361f[m refactor: 회원가입 리펙터링 성공
+[33m6bbf36f[m refactor: 로그인 로직 및 토큰 로직 리팩토링
+[33m3f09b59[m[33m ([m[1;31morigin/develop[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mdevelop[m[33m)[m Merge pull request #31 from Leets-Official/feat/#20
+[33m8e8d777[m feat: store 도메인 엔티티 생성(2)
+[33mbe3268d[m feat: store 도메인 엔티티 생성
+[33m14f3c90[m fix: store 도메인 엔티티 생성
+[33meb2510f[m fix: schema 사용 X, entity 수정
+[33m0b8b003[m fix: dev-cicd.yml 수정 (4)
+[33m5b4a6e4[m fix: dev-cicd.yml 수정 (3)
+[33mf76f88f[m Merge pull request #30 from Leets-Official/feat/#20
+[33mb8a7b93[m fix: dev-cicd.yml 수정 (2)
+[33mef964c4[m Merge pull request #29 from Leets-Official/feat/#20
+[33ma598d3c[m fix: dev-cicd.yml 수정
+[33mce1dfac[m Merge pull request #28 from Leets-Official/feat/#20
+[33mf8c6ba5[m refactor: application.yml 생성 로직 추가
+[33m528bc2a[m refactor: api 통일 및 PrincipalDetail에서 유저 정보 가져오도록 수정
+[33m6b6302b[m fix: 스키마 수정
+[33mf6db613[m fix: 인증 정보 주입
+[33m6f1b84c[m fix: 인증 기준을 Parent에서 Member 기반으로 전환 - JWT 파싱 후 PrincipalDetails 생성 시 실제 Member 객체 주입
+[33mfe91312[m fix: 부모 이름을 callback 응답에 포함
+[33me60e3b7[m fix: Parent, Member 필드 추가 및 수정 - Parent 엔티티에 name, gender, birth 필드 추가 - 해당 필드를 포함하도록 수정
+[33m55ff778[m fix: 코드 충돌 수정 & 폴더 구조 변경 (2)
+[33md9353f5[m fix: 코드 충돌 수정 & 폴더 구조 변경
+[33m7737c90[m Merge branch 'feat/#12' of https://github.com/Leets-Official/CHIKAHAE-BE into feat/#20
+[33m1d184c1[m Merge pull request #24 from Leets-Official/feat/#23
+[33mdf55bdd[m Merge branch 'feat/#20' into feat/#23
+[33m3888f11[m Merge pull request #22 from Leets-Official/feat/#19
+[33m5eed358[m Merge pull request #21 from Leets-Official/feat/#11
+[33m0ffe279[m Merge branch 'feat/#20' into feat/#11
+[33md81c0a2[m refactor: 공통예외 컨벤션 리팩토링
+[33m9983b46[m add: 에러코드 추가
+[33mbbe0dcb[m refactor: dto 타입 record로 변경
+[33m86eefdd[m add: 스웨거 어노테이션 추가
+[33m7556959[m[33m ([m[1;31morigin/feat/#23[m[33m)[m feat: 로그인 기능 구현
+[33mde7f5c9[m fix: 빈칸 삭제
+[33m98b78bb[m fix: getAuthentication 수정 클레임 ID = 자식(Member) ID로 수정 (이상 시 수정 가능 )
+[33m22f8aa2[m refactor: SecurityContext 파라미터 변경
+[33mb74a902[m refactor: SecurityContext 파라미터 변경
+[33m537b972[m refactor: 메소드 매개변수 멤버 객체 -> memberId 로 변경
+[33m768c5e7[m add: memberId 불러오는 메소드 추가
+[33mc955959[m fix: fcm 환경설정 수정
+[33m8d35153[m fix: 리다이렉트 포트변경 8282 -> 8080
+[33m03eaad3[m add: 빠진 메소드 추가 (ParentId 찾기)
+[33m25fd7a4[m fix: pull과정에서 빠뜨린 의존성 추가
+[33m40e7c11[m add: 회원가입 시, 알림슬롯 자동생성 로직 추가
+[33m8157270[m fix: 누각된 패키지 추가
+[33m92af352[m feat: swaager 추가
+[33m10563b6[m chore: 변경사항 적용 + 충돌해결
+[33m6a3eeb1[m chore: stop tracking application.yml
+[33ma1deb0a[m chore: application-yml 트래킹 해제
+[33m829c6e9[m add: 시간 데이터 타입 변환을 위한 zone 필드 추가
+[33md554d26[m add: 테스트용 임시멤버 import
+[33md5459ec[m add : 테스트용 임시멤버 import
+[33mb013ce9[m add: table 어노테이션추가(중복 테이블 생성 방지)
+[33m4589962[m del: 중복어노테이션 제거
+[33m9a7598c[m add: 어노테이션 추가
+[33m472171c[m feat: 토큰 관리 컨트롤러 임시 구현
+[33mecab489[m feat: 알림 슬롯 컨트롤러 임시 구현
+[33m7d9bd99[m  feat: 슬롯 조회 응답dto 추가
+[33m49bad28[m feat: 토큰 조회 응답dto 구현
+[33mb437193[m feat: 알림(슬롯) 시간 변경 요청 dto 구현
+[33mdc3ed61[m feat: 알림슬롯 on/off 요청 dto구현
+[33m3b88bf3[m feat: 토큰 등록/갱신 요청dto 구현
+[33m51a373f[m add: BaseEntity 상속 추가
+[33m44ab3e2[m feat: 스케줄러 구현
+[33m83c31ea[m add: Getter 어노테이션 추가
+[33m8bf6056[m feat: 토큰 관리 서비스로직 구현
+[33md255f31[m add: JPA리포지토리 상속추가
+[33mb19be1b[m feat: 알림푸쉬 서비스로직 구현
+[33m5804e31[m fix: 생성자 매개변수 타입 수정
+[33m20b8333[m fix: 연관관계 설정 (member)
+[33ma8497c3[m add: Setter 대신, change메소드 정의
+[33m19d8088[m feat: 알림슬롯 서비스 로직 임시구현
+[33mab4cb15[m add: JPA레포지토리 상속
+[33mb10808b[m feat: 알림 관련 리포지토리 인터페이스 구현
+[33m2976ec5[m feat: fcm토큰 리포지토리 인터페이스 구현
+[33m46478f3[m add: 어노테이션 추가
+[33mb9757e9[m feat: Firebase 초기 세팅
+[33m4f3433c[m feat: 알림 관련 설정파일 임시 추가
+[33md9e26b9[m feat: fcm 디바이스 토큰 엔티티 생성
+[33me7e65e4[m feat: 알림슬롯 엔티티 생성
+[33m6282bc6[m feat: 슬롯타입 정의
+[33m24f5df9[m add: FCM의존성 추가
+[33m4ed3ccd[m add: gitignore 파일 추가
+[33m6a7fb80[m feat: swagger 문서 추가 - 메서드명 변경
+[33m69a63fb[m feat: point 도메인 개발
+[33m7b1c5bd[m feat: point 도메인 엔티티 설계
+[33md7166d2[m Merge pull request #18 from Leets-Official/feat/#17
+[33me15670e[m Merge branch 'develop' into feat/#17
+[33m448ee29[m fix: 카카오 회원가입 api 수정 및 개발자용 로그인 api 구현
+[33m9fad6f9[m feat: SecurityConfig 구현
+[33m1a4aac0[m feat: 로그인 인증 정보 PrincipalDetails에 등록하는 로직 구현
+[33m7f2e1bd[m feat: jwt util 및 필터 생성
+[33ma24ab9c[m feat: MemberQuiz 정답 여부 확인 메서드 추가
+[33m5c01146[m feat: 카카오 회원가입 기능 구현
+[33mb87b1d1[m feat: 카카오 회원가입 기능 구현
+[33m721f343[m[33m ([m[1;31morigin/feat/#11[m[33m)[m feat: 퀴즈 api 구현
+[33m3d3de13[m Merge pull request #14 from Leets-Official/feat/#9
+[33m0e11154[m[33m ([m[1;31morigin/feat/#9[m[33m)[m fix: 필드명 오류 수정
+[33m5aabe53[m fix: 필드명 오류 수정
+[33m69238fd[m Merge pull request #10 from Leets-Official/feat/#9
+[33mb169389[m fix: 스키마 변경 반영 (퀴즈, 멤버)
+[33m101c242[m Merge branch 'develop' into feat/#9
+[33mecb948c[m feat: 퀴즈 정답 확인 기능 구현
+[33me682536[m fix: 컬럼명 오류 수정
+[33m9e1c33f[m feat: 오류 코드 추가
+[33m5b956c6[m feat: 퀴즈 조회 기능 구현
+[33me6fcd67[m feat: 퀴즈 list 반환 dto 구현
+[33m398e18a[m fix: sql 퀴즈 도메인 수정
+[33m77ee643[m feat: 퀴즈 도메인 엔티티 생성 - member의 경우 임의 생성
+[33mbb799ea[m fix: schema,data.sql 퀴즈 부분 수정
+[33m27a89f7[m feat: 공통 엔티티 추가, 스웨거 config 설정
+[33md12616d[m feat: schema sql 추가, data 삽입
+[33m54656f4[m[33m ([m[1;31morigin/feat/#13[m[33m)[m fix: prod-cicd 수정
+[33mb7d1181[m fix: dev-cicd 파이프 라인 수정
+[33m97fd0d5[m fix: docker-compose 수정
+[33m2c9ebbe[m fix: env 충돌 해결 (3)
+[33m3eb4a54[m fix: env 충돌 해결 (2)
+[33m1f187a4[m fix: env 충돌 해결
+[33mb5c6e61[m chore: cicd 세팅 (1)
+[33m6f82330[m[33m ([m[1;31morigin/chore/#1[m[33m)[m chore: 초기 세팅 (4)
+[33m8a31f2f[m chore: 초기 세팅 (3) - pr 템플릿, issue 템플릿 세팅
+[33m31ab75c[m chore: 초기 세팅 (2) - 공통 응답 객체 - 공통 예외 처리
+[33m9d8a7fa[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m)[m Merge branch 'main' of https://github.com/Leets-Official/CHIKAHAE-BE
+[33mba99823[m chore: 초기 세팅 (1)
+[33m539c8f9[m Initial commit

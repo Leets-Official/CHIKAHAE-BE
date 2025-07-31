@@ -74,21 +74,24 @@ public class AuthService {
                     email,
                     request.getParentName(),
                     request.getParentGender(),
+                    request.getParentPhoneNumber(),
                     request.getParentBirth()
 
             );
             parentId = parent.getId();
         }
-        
+
 
         Member member = memberService.registerMember(
                 parentId,
                 kakaoId,
                 request.getNickname(),
                 request.getName(),   //매개변수 일치 -석준(07/29)
+                email,
                 request.getBirth(),
                 request.getGender(),
-                request.getProfileImage()
+                request.getPhoneNumber(),   // ✔ 전화번호
+                request.getProfileImage()   // ✔ 프로필 이미지
         );
 
 
@@ -139,21 +142,6 @@ public class AuthService {
     public void logout(String refreshToken) {
         tokenService.logoutByRefreshToken(refreshToken);
     }
-    //    public void logout(String accessToken) {
-    //        String pureToken = accessToken.replace("Bearer ", "");
-    //
-    //        // 토큰 유효성 검사 or 파싱
-    //        Long memberId = tokenService.extractMemberIdFromAccessToken(pureToken);
-    //
-    //        if (memberId != null) {
-    //            log.info("✅ 로그아웃 요청 처리 - memberId: {}", memberId);
-    //        } else {
-    //            log.warn("🚫 유효하지 않은 토큰으로 로그아웃 시도");
-    //        }
-    //    }
-
-
-
 
 
 

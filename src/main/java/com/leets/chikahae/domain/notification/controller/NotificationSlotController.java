@@ -57,7 +57,7 @@ public class NotificationSlotController {
 	/**
 	 * PATCH /api/notifications/slots/{slotType}/time
 	 * 슬롯 시간대 변경
-	 * 요청 예시: { "sendTime": "HH:mm:ss" }
+	 * 요청 예시: { "sendTime": "HH:mm" }
 	 */
 	@Operation(
 		summary     = "슬롯 시간대 변경",
@@ -70,7 +70,7 @@ public class NotificationSlotController {
 				schema    = @Schema(implementation = NotificationSlotUpdateTimeRequestDto.class),
 				examples  = @ExampleObject(
 					name  = "요청 예시",
-					value = "{\"sendTime\": \"HH:mm:ss\"}"
+					value = "{\"sendTime\": \"HH:mm\"}"
 				)
 			)
 		)

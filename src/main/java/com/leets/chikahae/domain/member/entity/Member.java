@@ -33,14 +33,20 @@ public class Member {
 	@Column(name = "name", nullable = false)
 	private String name;
 
+	@Column(name = "kakao_email", length = 100)
+	private String kakaoEmail;
+
 	@Column(name = "birth", nullable = false)
 	private LocalDate birth;
 
 	@Column(name = "profile_image")
 	private String profileImage;
 
-	@Column(name = "gender", nullable = false)
-	private Boolean gender;
+	@Column(nullable = false, length = 10)
+	private String gender;
+
+	@Column(length = 50)
+	private String phoneNumber;
 
 	@Column(name = "is_deleted", nullable = false)
 	private Boolean isDeleted;
@@ -57,20 +63,25 @@ public class Member {
 	private Point point;
 
 	//name 필드추가 7/29 -석준
+	//카카오 이메일 필드 추가 7/30 - 석준
 	public static Member of(
 			Long parentId,
 			String nickname,
 			String name,
+			String kakaoEmail,
 			LocalDate birth,
-			Boolean gender,
+			String gender,
+			String phoneNumber,
 			String profileImage
 	) {
 		return Member.builder()
 				.parentId(parentId)
 				.nickname(nickname)
 			    .name(name)
+				.kakaoEmail(kakaoEmail)
 				.birth(birth)
 				.gender(gender)
+				.phoneNumber(phoneNumber)
 				.profileImage(profileImage)
 				.isDeleted(false)
 				.build();

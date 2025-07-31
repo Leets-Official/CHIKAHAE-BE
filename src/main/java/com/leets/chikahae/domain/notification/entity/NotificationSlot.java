@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 
 import com.leets.chikahae.domain.BaseEntity;
 
@@ -79,11 +80,13 @@ public class NotificationSlot extends BaseEntity {
 		this.sendTime = sendTime;
 		ZonedDateTime now      = Instant.now().atZone(zone);
 		LocalDateTime target   = LocalDateTime.of(now.toLocalDate(), sendTime);
-		ZonedDateTime sendDate = target.atZone(zone);
-		if ( now.isAfter(sendDate) ) {
-			sendDate = sendDate.plusDays(1);
-		}
+		ZonedDateTime sendDate = target.atZone(zone).plusDays(1);
+
 		this.nextSendAt = sendDate.toInstant();
+	}
+
+	public void scheduleNextSend() {
+		this.nextSendAt = this.nextSendAt.plus(1, ChronoUnit.DAYS);
 	}
 
 }

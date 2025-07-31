@@ -30,6 +30,7 @@ public class MyPageService {
 			member.getProfileImage(),
 			member.getNickname(),
 			member.getName(),
+			member.getKakaoEmail(),
 			member.getGender(),
 			member.getBirth()
 		);

@@ -3,11 +3,13 @@ package com.leets.chikahae.domain.auth.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
-@Schema(description = "로그아웃 요청 DTO")
-public class KakaoLogoutRequst {
+@NoArgsConstructor
+@Schema(description = "Access Token 재발급 요청 DTO")
+public class KakaoReissueRequest {
 
     @Schema(description = "리프레시 토큰", example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...")
     private String refreshToken;
