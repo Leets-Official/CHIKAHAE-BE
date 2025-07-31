@@ -32,7 +32,7 @@ public class AccountToken {
     private String tokenType;
 
     // ✅ refreshToken 저장 (ACCESS는 null 가능)
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "refresh_token")
     private String refreshToken;
 
     private String ipAddress;
