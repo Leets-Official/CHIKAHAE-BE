@@ -69,6 +69,10 @@ public class KakaoTestController {
         response.put("nickname", nickname);
         response.put("memberId", member != null ? member.getMemberId() : null);
 
+        System.out.println("🍀 Kakao Access Token: " + kakaoAccessToken);
+        System.out.println("🍀 Kakao Refresh Token: " + kakaoRefreshToken);
+        System.out.println("🍀 Kakao User ID: " + kakaoId);
+        System.out.println("🍀 Kakao Nickname: " + nickname);
         return ApiResponse.ok(response);
     }
 
