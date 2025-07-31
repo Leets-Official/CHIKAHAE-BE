@@ -1,5 +1,6 @@
 package com.leets.chikahae.domain.member.entity;
 
+import com.leets.chikahae.domain.point.entity.Point;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -29,6 +30,12 @@ public class Member {
 	@Column(name = "nickname", nullable = false, unique = true)
 	private String nickname;
 
+	@Column(name = "name", nullable = false)
+	private String name;
+
+	@Column(name = "kakao_email", length = 100)
+	private String kakaoEmail;
+
 	@Column(name = "birth", nullable = false)
 	private LocalDate birth;
 
@@ -52,9 +59,16 @@ public class Member {
 	@UpdateTimestamp
 	private LocalDateTime updatedAt;
 
+	@OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private Point point;
+
+	//name 필드추가 7/29 -석준
+	//카카오 이메일 필드 추가 7/30 - 석준
 	public static Member of(
 			Long parentId,
 			String nickname,
+			String name,
+			String kakaoEmail,
 			LocalDate birth,
 			String gender,
 			String phoneNumber,
@@ -63,6 +77,8 @@ public class Member {
 		return Member.builder()
 				.parentId(parentId)
 				.nickname(nickname)
+			    .name(name)
+				.kakaoEmail(kakaoEmail)
 				.birth(birth)
 				.gender(gender)
 				.phoneNumber(phoneNumber)
@@ -75,6 +91,18 @@ public class Member {
 	// ✔️ AuthService에서 사용할 수 있도록 추가
 	public Long getId() {
 		return this.memberId;
+	}
+
+	public void setPoint(Point point) {
+		this.point=point;
+	}
+
+	public void changeNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	public void changeProfileImage(String profileImage) {
+		this.profileImage = profileImage;
 	}
 
 }//class

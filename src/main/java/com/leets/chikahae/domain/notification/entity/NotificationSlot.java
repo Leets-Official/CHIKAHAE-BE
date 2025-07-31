@@ -1,8 +1,11 @@
 package com.leets.chikahae.domain.notification.entity;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 
 import com.leets.chikahae.domain.BaseEntity;
 
@@ -58,15 +61,16 @@ public class NotificationSlot extends BaseEntity {
 	protected NotificationSlot() {
 	}
 
-	public NotificationSlot(Member member, SlotType slotType, LocalTime sendTime,
-		Instant nextSendAt, String title, String message) {
-		this.member = member;
+	public NotificationSlot(Member member, SlotType slotType,
+		LocalTime sendTime, ZoneId zone, String title, String message) {
+		this.member   = member;
 		this.slotType = slotType;
-		this.sendTime = sendTime;
-		this.nextSendAt = nextSendAt;
-		this.title = title;
-		this.message = message;
+		this.title    = title;
+		this.message  = message;
+		this.enabled  = true;
+		changeSendTime(sendTime, zone);
 	}
+
 
 	public void changeEnabled(boolean enabled) {
 		this.enabled = enabled;
@@ -74,9 +78,15 @@ public class NotificationSlot extends BaseEntity {
 
 	public void changeSendTime(LocalTime sendTime, ZoneId zone) {
 		this.sendTime = sendTime;
-		this.nextSendAt = sendTime.atDate(
-			Instant.now().atZone(zone).toLocalDate()
-		).atZone(zone).toInstant();
+		ZonedDateTime now      = Instant.now().atZone(zone);
+		LocalDateTime target   = LocalDateTime.of(now.toLocalDate(), sendTime);
+		ZonedDateTime sendDate = target.atZone(zone).plusDays(1);
+
+		this.nextSendAt = sendDate.toInstant();
+	}
+
+	public void scheduleNextSend() {
+		this.nextSendAt = this.nextSendAt.plus(1, ChronoUnit.DAYS);
 	}
 
 }

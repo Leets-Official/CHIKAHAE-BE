@@ -15,6 +15,9 @@ public class KakaoSignupRequest {
     @Schema(description = "자녀 닉네임", example = "나는치카요정")
     private String nickname;        // 자녀 닉네임
 
+    @Schema(description = "자녀 이름", example = "홍길동") // 7/29 추가-석준
+    private String name;
+
     @Schema(description = "생년월일", example = "2017-08-25")
     private LocalDate birth;        // 생년월일
 

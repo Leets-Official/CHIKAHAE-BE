@@ -27,10 +27,7 @@ public class FcmTokenService {
 	@Transactional
 	public FcmToken upsertToken(Long memberId, String tokenStr) {
 		Member member = memberRepo.findById(memberId)
-			.orElseThrow(() -> new CustomException(
-				ErrorCode.USER_NOT_FOUND,
-				"memberId=" + memberId
-			));
+			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 		return fcmTokenRepo.findByFcmToken(tokenStr)
 			.orElseGet(() -> fcmTokenRepo.save(new FcmToken(member, tokenStr)));
 	}
@@ -43,10 +40,8 @@ public class FcmTokenService {
 	//여기도 매개변수때매 조회수정
 	public List<FcmToken> getTokens(Long memberId) {
 		Member member = memberRepo.findById(memberId)
-			.orElseThrow(() -> new CustomException(
-				ErrorCode.USER_NOT_FOUND,
-				"memberId=" + memberId
-			));
+			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 		return fcmTokenRepo.findByMember(member);
+
 	}
 }

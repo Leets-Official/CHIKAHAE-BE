@@ -19,9 +19,12 @@ import com.leets.chikahae.global.response.ErrorCode;
 public class NotificationSlotService {
 
 	private final NotificationSlotRepository notificationSlotRepo;
+	private final NotificationSlotRepository notificationSlotRepository;
 
-	public NotificationSlotService(NotificationSlotRepository notificationSlotRepo) {
+	public NotificationSlotService(NotificationSlotRepository notificationSlotRepo,
+		NotificationSlotRepository notificationSlotRepository) {
 		this.notificationSlotRepo = notificationSlotRepo;
+		this.notificationSlotRepository = notificationSlotRepository;
 	}
 
 	// 사용자별로, 기본 3개 슬롯 생성
@@ -30,11 +33,11 @@ public class NotificationSlotService {
 		Instant nowUtc = Instant.now();
 		List<NotificationSlot> slots = List.of(
 			new NotificationSlot(member, SlotType.MORNING, LocalTime.of(7, 30),
-				nowUtc, "아침 알림", "상쾌한 아침을 위한 양치 시간입니다!"),
+				zone, "아침 알림", "상쾌한 아침을 위한 양치 시간입니다!"),
 			new NotificationSlot(member, SlotType.LUNCH,   LocalTime.of(12, 30),
-				nowUtc, "점심 알림", "점심 식사 후 상쾌함을 위해 양치하세요!"),
+				zone, "점심 알림", "점심 식사 후 상쾌함을 위해 양치하세요!"),
 			new NotificationSlot(member, SlotType.EVENING, LocalTime.of(21, 0),
-				nowUtc, "저녁 알림", "하루 마무리 전, 잊지 말고 양치합시다!" )
+				zone, "저녁 알림", "하루 마무리 전, 잊지 말고 양치합시다!" )
 		);
 		notificationSlotRepo.saveAll(slots);
 	}
@@ -48,25 +51,27 @@ public class NotificationSlotService {
 	//슬롯 on/off - Long memberId로 수정
 	@Transactional
 	public void toggleSlot(Long memberId, SlotType type, boolean enabled) {
-		NotificationSlot slot = notificationSlotRepo
+		NotificationSlot slot = notificationSlotRepository
 			.findByMember_MemberIdAndSlotType(memberId, type)
-			.orElseThrow(() -> new CustomException(
-				ErrorCode.SLOT_NOT_FOUND,
-				"memberId=" + memberId + ", slotType=" + type
-			));
+			.orElseThrow(() -> new CustomException(ErrorCode.SLOT_NOT_FOUND));
 		slot.changeEnabled(enabled);
+	}
+
+	//슬롯 전체 활성화/비활성화
+	@Transactional
+	public void toggleAllSlots(Long memberId, boolean enabled) {
+		List<NotificationSlot> slots = notificationSlotRepository.findByMember_MemberId(memberId);
+		slots.forEach(slot -> slot.changeEnabled(enabled));
+		notificationSlotRepository.saveAll(slots);
 	}
 
 	//슬롯 시간 변경 - Long memberId로 수정
 	@Transactional
 	public void updateSlotTime(Long memberId, SlotType type,
 		LocalTime sendTime, ZoneId zone) {
-		NotificationSlot slot = notificationSlotRepo
+		NotificationSlot slot = notificationSlotRepository
 			.findByMember_MemberIdAndSlotType(memberId, type)
-			.orElseThrow(() -> new CustomException(
-				ErrorCode.SLOT_NOT_FOUND,
-				"memberId=" + memberId + ", slotType=" + type
-			));
+			.orElseThrow(() -> new CustomException(ErrorCode.SLOT_NOT_FOUND));
 		slot.changeSendTime(sendTime, zone);
 	}
 

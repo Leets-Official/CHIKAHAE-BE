@@ -4,6 +4,8 @@ import com.leets.chikahae.domain.member.entity.Member;
 import com.leets.chikahae.domain.member.repository.MemberRepository;
 import com.leets.chikahae.domain.parent.entity.Parent;
 import com.leets.chikahae.domain.parent.repository.ParentRepository;
+import com.leets.chikahae.domain.notification.service.NotificationSlotService;
+import com.leets.chikahae.domain.point.entity.Point;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +14,7 @@ import javax.annotation.Nullable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.time.ZoneId;
 import java.util.Optional;
 
 @Service
@@ -20,6 +23,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final ParentRepository parentRepository;
+    private final NotificationSlotService notificationSlotService;
 
     /**
      * 사용자 등록
@@ -31,10 +35,13 @@ public class MemberService {
                                 LocalDate birth, String gender,   String phoneNumber,  String profileImage) {
 
 
+
         Member member = Member.builder()
                 .parentId(parentId)
                 .kakaoId(kakaoId)
                 .nickname(nickname)
+                .name(name) // 매개변수 추가 - 석준
+                .kakaoEmail(email) // 7/30 카카오이메일추가
                 .birth(birth)
                 .gender(gender)
                 .phoneNumber(phoneNumber)
@@ -43,8 +50,14 @@ public class MemberService {
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
+        Member savedMember=memberRepository.saveAndFlush(member);
 
-        return memberRepository.saveAndFlush(member);
+        //  Point 엔티티 생성 및 저장
+        Point point = Point.of(member);
+        member.setPoint(point); // 연관 관계 편의 메서드
+
+        notificationSlotService.createDefaultSlots(member, ZoneId.of("Asia/Seoul"));
+        return savedMember;
     }
 
     /**

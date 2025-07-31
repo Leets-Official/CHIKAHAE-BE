@@ -44,10 +44,12 @@ public class NotificationScheduler {
 
 			if (!tokens.isEmpty()) {
 				// 푸시 전송: 인스턴스 메서드 호출
-				fcmPushService.sendMulticast(tokens, slot.getTitle(), slot.getMessage());
+				fcmPushService.sendToEach(tokens, slot.getTitle(), slot.getMessage());
+				// fcmPushService.sendMulticast(tokens, slot.getTitle(), slot.getMessage());
 			}
 			// 다음 전송 시각 재계산: 오늘 sendTime 기준 +1일
-			slot.changeSendTime(slot.getSendTime(), zone);
+			slot.scheduleNextSend();
+			//slot.changeSendTime(slot.getSendTime(), zone);
 		}
 	}
 }

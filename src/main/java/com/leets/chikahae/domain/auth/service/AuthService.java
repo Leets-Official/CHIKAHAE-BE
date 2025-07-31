@@ -6,6 +6,7 @@ import com.leets.chikahae.domain.auth.dto.KakaoUserInfo;
 import com.leets.chikahae.domain.auth.dto.SignupResponse;
 import com.leets.chikahae.domain.auth.dto.LoginResponse;
 import com.leets.chikahae.domain.auth.util.KakaoApiClient;
+import com.leets.chikahae.domain.notification.service.NotificationSlotService;
 import com.leets.chikahae.domain.parent.entity.Parent;
 import com.leets.chikahae.domain.parent.service.ParentService;
 import com.leets.chikahae.domain.member.entity.Member;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
+import java.time.ZoneId;
 import java.util.List;
 
 @Slf4j
@@ -78,12 +80,14 @@ public class AuthService {
             );
             parentId = parent.getId();
         }
-        
+
 
         Member member = memberService.registerMember(
                 parentId,
                 kakaoId,
                 request.getNickname(),
+                request.getName(),   //매개변수 일치 -석준(07/29)
+                email,
                 request.getBirth(),
                 request.getGender(),
                 request.getPhoneNumber(),   // ✔ 전화번호
@@ -101,6 +105,9 @@ public class AuthService {
         SecurityUtil.setAuthentication(principalDetails);
 
         log.info("🎉 회원가입 완료: memberId = {}, nickname = {}", member.getId(), member.getNickname());
+
+
+
         return new SignupResponse(
                 member.getId(),
                 member.getNickname(),

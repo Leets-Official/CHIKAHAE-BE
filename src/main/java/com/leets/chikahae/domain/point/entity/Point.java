@@ -23,6 +23,14 @@ public class Point {
     @Column(nullable = false)
     private int coin;
 
+    public static Point of(Member member) {
+        return Point.builder()
+                .memberId(member.getId())
+                .member(member)
+                .coin(0) // 초기 포인트는 0으로 설정
+                .build();
+    }
+
     // --- 비즈니스 메서드 ---
 
     public void increase(int amount) {
