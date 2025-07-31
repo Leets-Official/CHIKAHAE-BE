@@ -72,6 +72,7 @@ public class AuthService {
                     email,
                     request.getParentName(),
                     request.getParentGender(),
+                    request.getParentPhoneNumber(),
                     request.getParentBirth()
 
             );
@@ -85,7 +86,8 @@ public class AuthService {
                 request.getNickname(),
                 request.getBirth(),
                 request.getGender(),
-                request.getProfileImage()
+                request.getPhoneNumber(),   // ✔ 전화번호
+                request.getProfileImage()   // ✔ 프로필 이미지
         );
 
 

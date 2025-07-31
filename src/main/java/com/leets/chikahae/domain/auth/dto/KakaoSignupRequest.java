@@ -18,8 +18,11 @@ public class KakaoSignupRequest {
     @Schema(description = "생년월일", example = "2017-08-25")
     private LocalDate birth;        // 생년월일
 
-    @Schema(description = "성별 (true: 남자, false: 여자)", example = "false")
-    private Boolean gender;         // true: 남, false: 여
+    @Schema(description = "성별 (male: 남자, female: 여자, other: 기타)", example = "female")
+    private String gender;
+
+    @Schema(description = "자녀 전화번호", example = "010-1234-5678")
+    private String phoneNumber;
 
     @Schema(description = "프로필 이미지 URL", example = "https://example.com/profile.png")
     private String profileImage;    // 프로필 이미지 (nullable)
@@ -27,9 +30,12 @@ public class KakaoSignupRequest {
     @Schema(description = "카톡 로그인에서 받아온 부모 이름", example = "홍길동")
     private String parentName;      // 카톡 로그인에서 받아온 부모 이름
 
-    @Schema(description = "성별 (true: 남자, false: 여자)", example = "false")
-    private Boolean parentGender;         // true: 남, false: 여
+    @Schema(description = "부모 성별 (male: 남자, female: 여자, other: 기타)", example = "male")
+    private String parentGender; // ✅ Boolean → String        
 
+    @Schema(description = "부모 전화번호", example = "010-1111-2222")
+    private String parentPhoneNumber; // 부모 번호
+    
     @Schema(description = "부모 생년월일", example = "1987-08-25")
     private LocalDate parentBirth;        // 생년월일
 

@@ -28,7 +28,7 @@ public class MemberService {
      */
     @Transactional
     public Member registerMember(@Nullable Long parentId, String kakaoId, String nickname,
-                                LocalDate birth, Boolean gender, String profileImage) {
+                                LocalDate birth, String gender,   String phoneNumber,  String profileImage) {
 
 
         Member member = Member.builder()
@@ -37,6 +37,7 @@ public class MemberService {
                 .nickname(nickname)
                 .birth(birth)
                 .gender(gender)
+                .phoneNumber(phoneNumber)
                 .profileImage(profileImage)
                 .isDeleted(false)
                 .createdAt(LocalDateTime.now())

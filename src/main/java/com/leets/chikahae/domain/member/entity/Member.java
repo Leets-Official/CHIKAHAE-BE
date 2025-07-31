@@ -35,8 +35,11 @@ public class Member {
 	@Column(name = "profile_image")
 	private String profileImage;
 
-	@Column(name = "gender", nullable = false)
-	private Boolean gender;
+	@Column(nullable = false, length = 10)
+	private String gender;
+
+	@Column(length = 50)
+	private String phoneNumber;
 
 	@Column(name = "is_deleted", nullable = false)
 	private Boolean isDeleted;
@@ -53,7 +56,8 @@ public class Member {
 			Long parentId,
 			String nickname,
 			LocalDate birth,
-			Boolean gender,
+			String gender,
+			String phoneNumber,
 			String profileImage
 	) {
 		return Member.builder()
@@ -61,6 +65,7 @@ public class Member {
 				.nickname(nickname)
 				.birth(birth)
 				.gender(gender)
+				.phoneNumber(phoneNumber)
 				.profileImage(profileImage)
 				.isDeleted(false)
 				.build();

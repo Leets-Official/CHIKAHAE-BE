@@ -26,7 +26,8 @@ CREATE TABLE parent (
                         kakao_id VARCHAR(50) NOT NULL COMMENT '카카오 고유 ID',
                         email VARCHAR(100) NOT NULL COMMENT '카카오 이메일',
                         name VARCHAR(50) NOT NULL COMMENT '부모 이름(카톡에서 가져옴)',
-                        gender BOOLEAN NOT NULL COMMENT '성별 (true: 남, false: 여)',
+                        gender VARCHAR(10) NOT NULL COMMENT '성별 (male | female | other 등)',
+                        phone_number VARCHAR(100) NULL COMMENT '전화번호',
                         birth DATE NOT NULL COMMENT '부모 생년월일',
                         created_at DATETIME NOT NULL COMMENT '가입일시',
                         updated_at DATETIME NOT NULL COMMENT '정보수정일시',
@@ -34,7 +35,7 @@ CREATE TABLE parent (
 );
 
 
--- 자녀 테이블
+-- 사용자(자녀) 테이블
 CREATE TABLE member (
                         member_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '고유 ID',
                         parent_id BIGINT NULL COMMENT '부모 ID',
@@ -43,6 +44,7 @@ CREATE TABLE member (
                         birth DATE NOT NULL COMMENT '생년월일',
                         profile_image VARCHAR(255) NULL COMMENT '프로필 이미지',
                         gender VARCHAR(10) NOT NULL COMMENT '성별 (male | female | other 등)',
+                        phone_number VARCHAR(100) NULL COMMENT '전화번호',
                         is_deleted BOOLEAN NOT NULL DEFAULT FALSE COMMENT '계정탈퇴 여부',
                         created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '회원가입 일',
                         updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정일 (마이페이지)',
