@@ -6,10 +6,13 @@ import com.leets.chikahae.domain.auth.dto.KakaoUserInfo;
 import com.leets.chikahae.domain.auth.dto.SignupResponse;
 import com.leets.chikahae.domain.auth.dto.LoginResponse;
 import com.leets.chikahae.domain.auth.util.KakaoApiClient;
+import com.leets.chikahae.domain.notification.repository.NotificationSlotRepository;
 import com.leets.chikahae.domain.parent.entity.Parent;
 import com.leets.chikahae.domain.parent.service.ParentService;
 import com.leets.chikahae.domain.member.entity.Member;
 import com.leets.chikahae.domain.member.service.MemberService;
+import com.leets.chikahae.domain.token.entity.AccountToken;
+import com.leets.chikahae.domain.token.repository.AccountTokenRepository;
 import com.leets.chikahae.domain.token.service.TokenService;
 import com.leets.chikahae.security.auth.PrincipalDetails;
 import com.leets.chikahae.security.util.SecurityUtil;
@@ -31,7 +34,8 @@ public class AuthService {
     private final TokenService tokenService;
     private final ParentService parentService;
     private final KakaoApiClient kakaoApiClient;
-
+    private final AccountTokenRepository accountTokenRepository;
+    private final NotificationSlotRepository notificationSlotsRepository;
     /**
      * 카카오 회원가입 및 토큰 발급
      */
@@ -113,13 +117,29 @@ public class AuthService {
 
     //회원탈퇴
     @Transactional
-    public void withdraw(Member member) {
+    public void withdraw(String refreshToken) {
+        String changedRefreshToken = refreshToken.replace("Bearer ", "");
 
+        // changedRefreshToken으로 AccountToken 조회
+        AccountToken accountToken = accountTokenRepository.findByToken(changedRefreshToken)
+                .orElseThrow(() -> new RuntimeException("유효하지 않은 리프레시 토큰입니다."));
+
+        // AccountToken에서 Member 가져오기
+        Member member = accountToken.getMember();
+
+        // 같은 Member의 tokenType이 KAKAO_ACCESS인 AccountToken 조회
+        AccountToken kakaoAccessToken = accountTokenRepository.findByMemberAndTokenType(member, "KAKAO_ACCESS")
+                .orElseThrow(() -> new RuntimeException("카카오 액세스 토큰을 찾을 수 없습니다."));
+
+        //  토큰 및 회원 삭제
+        notificationSlotsRepository.deleteByMember(member);
         tokenService.deleteByMemberId(member.getId());
         memberService.deleteMember(member.getId());
 
-        String accessToken = tokenService.getKakaoAccessToken(member.getKakaoId());
-        kakaoApiClient.unlink(accessToken);
+        // 8. 카카오 연결 해제 요청
+        log.info("[회원탈퇴] 카카오 연결 해제(unlink) 요청 시작");
+        kakaoApiClient.unlink( kakaoAccessToken.getToken());
+        log.info("[회원탈퇴] 카카오 연결 해제 성공");
     }
 
     //로그아웃

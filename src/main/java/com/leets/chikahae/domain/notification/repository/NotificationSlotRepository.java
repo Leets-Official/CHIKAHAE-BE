@@ -37,5 +37,7 @@ public interface NotificationSlotRepository extends JpaRepository<NotificationSl
 	List<NotificationSlot> findByMember_MemberId(Long memberId);
 
 	Optional<NotificationSlot> findByMember_MemberIdAndSlotType(Long memberId, SlotType slotType);
+
+	void deleteByMember(Member member);
 }
 
