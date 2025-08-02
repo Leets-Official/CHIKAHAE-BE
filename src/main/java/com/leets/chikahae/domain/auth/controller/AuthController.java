@@ -7,12 +7,13 @@ import com.leets.chikahae.domain.auth.dto.TokenResponse;
 import com.leets.chikahae.domain.auth.service.AuthService;
 import com.leets.chikahae.domain.token.service.TokenService;
 import com.leets.chikahae.global.response.ApiResponse;
+import com.leets.chikahae.security.auth.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -55,9 +56,8 @@ public class AuthController {
             security = @SecurityRequirement(name = "JWT") // Swagger 상단 Authorize 토큰 적용
     )
     @DeleteMapping("/withdraw")
-    public ResponseEntity<Void> withdraw(
-            @RequestHeader("Authorization") String token) { // ✅ @Parameter 제거!
-        authService.withdraw(token);
+    public ResponseEntity<Void> withdraw(@AuthenticationPrincipal PrincipalDetails user) { // ✅ @Parameter 제거!
+        authService.withdraw(user.getMember());
         return ResponseEntity.noContent().build();
     }
 

@@ -110,19 +110,12 @@ public class AuthService {
 
     //회원탈퇴
     @Transactional
-    public void withdraw(String token) {
-        String accessToken = token.replace("Bearer ", "");
-        KakaoUserInfo userInfo = kakaoApiClient.getUserInfo(accessToken);
-
-        // ✅ Long → String 변환
-        String kakaoId = String.valueOf(userInfo.getId());
-
-        Member member = memberService.findByKakaoId(kakaoId)
-                .orElseThrow(() -> new RuntimeException("회원 정보가 존재하지 않습니다."));
+    public void withdraw(Member member) {
 
         tokenService.deleteByMemberId(member.getId());
         memberService.deleteMember(member.getId());
 
+        String accessToken = tokenService.getKakaoAccessToken(member.getKakaoId());
         kakaoApiClient.unlink(accessToken);
     }
 
