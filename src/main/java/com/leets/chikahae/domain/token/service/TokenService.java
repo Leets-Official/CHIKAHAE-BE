@@ -66,7 +66,7 @@ public class TokenService {
         AccountToken refreshToken = AccountToken.builder()
                 .member(member)
                 .tokenType("REFRESH")
-                .refreshToken(refreshTokenString)  // ✅ 여기서 전달해야 함
+                .token(refreshTokenString)  // ✅ 여기서 전달해야 함
                 .expiresAt(LocalDateTime.now().plusDays(14))
                 .build();
 
@@ -76,7 +76,7 @@ public class TokenService {
 
     public void logoutByRefreshToken(String refreshToken) {
         log.info("🔐 로그아웃 요청된 refreshToken: {}", refreshToken);
-        accountTokenRepository.deleteByRefreshToken(refreshToken);
+        accountTokenRepository.deleteByToken(refreshToken);
     }
 
 
@@ -109,7 +109,7 @@ public class TokenService {
     public TokenResponse reissueAccessToken(String rawRefreshToken) {
         String refreshToken = rawRefreshToken.replace("Bearer ", "");
 
-        AccountToken token = accountTokenRepository.findByRefreshToken(refreshToken)
+        AccountToken token = accountTokenRepository.findByToken(refreshToken)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_REFRESH_TOKEN));
 
         if (token.getExpiresAt().isBefore(LocalDateTime.now())) {
@@ -122,7 +122,7 @@ public class TokenService {
 
         return new TokenResponse(
                 newAccessToken,                            // access_token
-                token.getRefreshToken(),                  // refresh_token
+                token.getToken(),                  // refresh_token
                 "Bearer",                                 // token_type
                 jwtProvider.getAccessTokenExpiryInSeconds(),     // expires_in
                 "profile_nickname",                       // scope (원하는 경우 수정 가능)
@@ -131,15 +131,20 @@ public class TokenService {
 
     }
 
+    public void saveKakaoTokens(Member member, String kakaoAccessToken) {
+        AccountToken accessToken = AccountToken.builder()
+                .member(member)
+                .tokenType("KAKAO_ACCESS")
+                .token(kakaoAccessToken)
+                .build();
+        accountTokenRepository.save(accessToken);
+    }
 
 
+    public String getKakaoAccessToken(String kakaoId) {
+        AccountToken token = accountTokenRepository.findByMemberKakaoId(kakaoId)
+                .orElseThrow(() -> new CustomException(ErrorCode.TOKEN_NOT_FOUND));
 
-
-
-
-
-
-
-
-
+        return token.getToken();
+    }
 }//class

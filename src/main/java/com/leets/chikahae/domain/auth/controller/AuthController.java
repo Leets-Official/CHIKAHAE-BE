@@ -1,8 +1,8 @@
 package com.leets.chikahae.domain.auth.controller;
 
-import com.leets.chikahae.domain.auth.dto.KakaoReissueRequest;
 import com.leets.chikahae.domain.auth.dto.KakaoSignupRequest;
 import com.leets.chikahae.domain.auth.dto.SignupResponse;
+import com.leets.chikahae.domain.auth.dto.TokenRequest;
 import com.leets.chikahae.domain.auth.dto.TokenResponse;
 import com.leets.chikahae.domain.auth.service.AuthService;
 import com.leets.chikahae.domain.token.service.TokenService;
@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,10 +54,9 @@ public class AuthController {
             """,
             security = @SecurityRequirement(name = "JWT") // Swagger 상단 Authorize 토큰 적용
     )
-    @DeleteMapping("/withdraw")
-    public ResponseEntity<Void> withdraw(
-            @RequestHeader("Authorization") String token) { // ✅ @Parameter 제거!
-        authService.withdraw(token);
+    @PostMapping("/withdraw")
+    public ResponseEntity<Void> withdraw(@RequestBody TokenRequest refreshToken) {
+        authService.withdraw(refreshToken.getRefreshToken());
         return ResponseEntity.noContent().build();
     }
 
@@ -109,7 +108,7 @@ public class AuthController {
     })
     // Access Token 재발급
     @PostMapping("/auth/reissue")
-    public ResponseEntity<TokenResponse> reissueAccessToken(@RequestBody KakaoReissueRequest request) {
+    public ResponseEntity<TokenResponse> reissueAccessToken(@RequestBody TokenRequest request) {
         TokenResponse response = tokenService.reissueAccessToken(request.getRefreshToken());
         return ResponseEntity.ok(response);
     }

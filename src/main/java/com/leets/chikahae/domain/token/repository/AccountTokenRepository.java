@@ -3,8 +3,6 @@ package com.leets.chikahae.domain.token.repository;
 import com.leets.chikahae.domain.member.entity.Member;
 import com.leets.chikahae.domain.token.entity.AccountToken;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -20,10 +18,11 @@ public interface AccountTokenRepository extends JpaRepository<AccountToken, Long
     void deleteByMemberId(Long memberId);
 
     //로그아웃
-    void deleteByRefreshToken(String refreshToken);
+    void deleteByToken(String token);
 
     //토큰 재발급
-    Optional<AccountToken> findByRefreshToken(String refreshToken);
+    Optional<AccountToken> findByToken(String token);
 
-
+    //카카오 Id로 token 검색
+    Optional<AccountToken> findByMemberKakaoId(String kakaoId);
 }//interface

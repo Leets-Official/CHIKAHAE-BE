@@ -38,13 +38,14 @@ public class PointService {
      * 포인트 적립
      */
     @Transactional
-    public void earnPoint(Long memberId, int amount, String description) {
+    public int earnPoint(Long memberId, int amount, String description) {
         Point point = getOrCreatePoint(memberId);
         point.increase(amount);
 
         saveHistory(memberId, amount, UserPointHistory.Type.EARN, description);
-
         log.info("[PointService] memberId={} {}포인트 적립 완료", memberId, amount);
+
+        return point.getCoin();
     }
 
     /**
@@ -96,7 +97,6 @@ public class PointService {
 
         UserPointHistory history = UserPointHistory.builder()
                 .member(member)
-                .parentId(member.getParentId())
                 .amount(amount)
                 .type(type)
                 .description(description)

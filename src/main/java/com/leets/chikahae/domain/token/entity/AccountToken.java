@@ -31,9 +31,8 @@ public class AccountToken {
     @Column(nullable = false)
     private String tokenType;
 
-    // ✅ refreshToken 저장 (ACCESS는 null 가능)
-    @Column(name = "refresh_token")
-    private String refreshToken;
+    @Column(name = "token")
+    private String token;
 
     private String ipAddress;
     private String userAgent;

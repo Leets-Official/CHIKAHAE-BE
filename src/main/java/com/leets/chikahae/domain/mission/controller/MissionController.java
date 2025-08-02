@@ -1,6 +1,7 @@
 package com.leets.chikahae.domain.mission.controller;
 
 import com.leets.chikahae.domain.mission.dto.MissionResponse;
+import com.leets.chikahae.domain.mission.entity.Mission;
 import com.leets.chikahae.domain.mission.service.MissionService;
 import com.leets.chikahae.global.response.ApiResponse;
 import com.leets.chikahae.security.auth.PrincipalDetails;
@@ -24,6 +25,16 @@ public class MissionController {
     public ApiResponse<List<MissionResponse>> getTodayMissions(@AuthenticationPrincipal PrincipalDetails user) {
         List<MissionResponse> responses = missionService.getAllMissions(user.getId());
         return ApiResponse.ok(responses);
+    }
+
+    // 미션 수행 완료
+    @PostMapping("/complete/{missionCode}")
+    public ApiResponse<Integer> completeMission(
+            @AuthenticationPrincipal PrincipalDetails user,
+            @PathVariable String missionCode) {
+        // 획득 포인트 수 전송
+        int point=missionService.completeMission(user.getMember(), Mission.MissionCode.valueOf(missionCode));
+        return ApiResponse.ok(point);
     }
 
 

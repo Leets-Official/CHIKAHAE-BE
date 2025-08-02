@@ -137,5 +137,7 @@ VALUES (1, 1, 'OX', '양치질은 하루에 한 번만 해도 충분하다.', 'X
 --  mission
 INSERT INTO mission (code, name, description, reward_point)
 VALUES
-    ('DAILY_QUIZ', '데일리 퀴즈 풀기', '오늘의 퀴즈를 풀면 포인트를 드려요!', 1),
-    ('ANIMATION', '애니메이션 감상', '지정된 애니메이션을 모두 보면 포인트 지급', 3);
+    ('DAILY_QUIZ', '오늘의 퀴즈', '도전해볼까요 !?', 1),
+    ('MORNING_ANIMATION', '아침 양치하기', '하루를 상쾌하게', 3),
+    ('LUNCH_ANIMATION', '점심 양치하기', '점심먹고 땡 !', 3),
+    ('EVENING_ANIMATION', '저녁 양치하기', '하루를 마무리', 3);
