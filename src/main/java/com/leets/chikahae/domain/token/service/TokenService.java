@@ -131,13 +131,14 @@ public class TokenService {
 
     }
 
-    public void saveKakaoTokens(Member member, String kakaoAccessToken, String kakaoRefreshToken) {
+    public void saveKakaoTokens(Member member, String kakaoAccessToken) {
         AccountToken accessToken = AccountToken.builder()
                 .member(member)
                 .tokenType("KAKAO_ACCESS")
                 .token(kakaoAccessToken)
                 .build();
-        accountTokenRepository.save(accessToken);    }
+        accountTokenRepository.save(accessToken);
+    }
 
 
     public String getKakaoAccessToken(String kakaoId) {

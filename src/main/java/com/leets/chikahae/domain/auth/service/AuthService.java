@@ -87,6 +87,9 @@ public class AuthService {
 
         String accessToken = tokenService.issueAccessToken(member, ipAddress, userAgent);
         String refreshToken = tokenService.issueRefreshToken(member);
+        
+        // 카카오 accessToken을 저장해야 회원탈퇴할때 사용가능
+        tokenService.saveKakaoTokens(member,request.getKakaoAccessToken());
 
         // 인증 정보 주입
         PrincipalDetails principalDetails = new PrincipalDetails(

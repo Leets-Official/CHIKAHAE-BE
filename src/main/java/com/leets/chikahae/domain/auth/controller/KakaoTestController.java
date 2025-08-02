@@ -63,9 +63,6 @@ public class KakaoTestController {
         Optional<Member> optionalMember = memberService.findByKakaoId(kakaoId);
         Member member = optionalMember.orElse(null);
 
-        // 카카오 accessToken을 저장해야 회원탈퇴할때 사용가능
-        tokenService.saveKakaoTokens(member, kakaoAccessToken, kakaoRefreshToken);
-
         Map<String, Object> response = new HashMap<>();
         response.put("accessToken", kakaoAccessToken);
         response.put("refreshToken", kakaoRefreshToken);
