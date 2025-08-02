@@ -81,15 +81,6 @@ public class MissionService {
     }
 
 
-    @Transactional
-    public void completeRewardedMission(Member member, Mission.MissionCode missionCode) {
-
-        missionRepository.findByCode(missionCode)
-                .orElseThrow(() -> new CustomException(ErrorCode.MISSION_NOT_FOUND));
-
-        completeMission(member, missionCode);
-    }
-
 
 
 }

@@ -127,7 +127,7 @@ public class QuizServiceImpl implements QuizService {
         pointService.earnPoint(memberId, coinReward, "퀴즈 보상");
 
         // 2. 미션 보상
-        missionService.completeRewardedMission(member, Mission.MissionCode.valueOf("DAILY_QUIZ"));
+//        missionService.completeRewardedMission(member, Mission.MissionCode.valueOf("DAILY_QUIZ"));
 
         // 응답 정보 생성
         List<CheckQuizResponse> responses = memberQuizzes.stream()
