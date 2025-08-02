@@ -1,7 +1,10 @@
 package com.leets.chikahae.domain.notification.scheduler;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.leets.chikahae.domain.notification.entity.NotificationSlot;
+import com.leets.chikahae.domain.notification.repository.NotificationSlotRepository;
 import com.leets.chikahae.domain.notification.service.FcmPushService;
 import com.leets.chikahae.domain.notification.service.FcmTokenService;
 import com.leets.chikahae.domain.notification.service.NotificationSlotService;
@@ -17,39 +21,45 @@ import com.leets.chikahae.domain.notification.service.NotificationSlotService;
 @Component
 public class NotificationScheduler {
 
-	private final NotificationSlotService notificationSlotService;
 	private final FcmPushService fcmPushService;
 	private final FcmTokenService fcmTokenService;
+	private final NotificationSlotRepository notificationSlotRepository;
 	private final ZoneId zone = ZoneId.systemDefault();
 
-	public NotificationScheduler(NotificationSlotService notificationSlotService, FcmPushService fcmPushService,
-		FcmTokenService fcmTokenService) {
-		this.notificationSlotService = notificationSlotService;
+	public NotificationScheduler( FcmPushService fcmPushService,
+		NotificationSlotRepository notificationSlotRepository ,FcmTokenService fcmTokenService) {
 		this.fcmPushService = fcmPushService;
+		this.notificationSlotRepository = notificationSlotRepository;
 		this.fcmTokenService = fcmTokenService;
 	}
 
-	@Scheduled(cron = "0 0/1 * * * *") // 매 분마다 실행 예시
+	@Scheduled(cron = "0 0/1 * * * *")  // 매 분 0초에 실행
 	@Transactional
-	public void runScheduler() throws Exception {
-		Instant now = Instant.now();
-		// 인스턴스 메서드 호출로 수정: findDueSlots
-		List<NotificationSlot> dueSlots = notificationSlotService.findDueSlot(now);
+	public void runScheduler() {
+		// 1) 현재 KST 시:분
+		LocalTime nowTime = LocalDateTime
+			.now(zone)
+			.truncatedTo(ChronoUnit.MINUTES)
+			.toLocalTime();
 
+		// 2) sendTime == nowTime && enabled인 슬롯만 조회
+		List<NotificationSlot> dueSlots =
+			notificationSlotRepository.findBySendTimeAndEnabled(nowTime, true);
+
+		// 3) 푸시 전송 & 다음 예약 재계산
 		for (NotificationSlot slot : dueSlots) {
-			// 토큰 조회: 인스턴스 메서드 호출 (멤버아이디까지 가져오게끔 수정 07/12)
-			List<String> tokens = fcmTokenService.getTokens(slot.getMember().getMemberId()).stream()
+			List<String> tokens = fcmTokenService
+				.getTokens(slot.getMember().getMemberId())
+				.stream()
 				.map(t -> t.getFcmToken())
-				.collect(Collectors.toList());
+				.toList();
 
 			if (!tokens.isEmpty()) {
-				// 푸시 전송: 인스턴스 메서드 호출
 				fcmPushService.sendToEach(tokens, slot.getTitle(), slot.getMessage());
-				// fcmPushService.sendMulticast(tokens, slot.getTitle(), slot.getMessage());
 			}
-			// 다음 전송 시각 재계산: 오늘 sendTime 기준 +1일
+
+			// sendTime 기반으로 내일 같은 시각으로 nextSendAt 재설정
 			slot.scheduleNextSend();
-			//slot.changeSendTime(slot.getSendTime(), zone);
 		}
 	}
 }

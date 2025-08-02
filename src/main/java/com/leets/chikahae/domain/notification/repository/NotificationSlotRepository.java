@@ -1,6 +1,7 @@
 package com.leets.chikahae.domain.notification.repository;
 
 import java.time.Instant;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +39,11 @@ public interface NotificationSlotRepository extends JpaRepository<NotificationSl
 
 	Optional<NotificationSlot> findByMember_MemberIdAndSlotType(Long memberId, SlotType slotType);
 
+
+	List<NotificationSlot> findBySendTimeAndEnabled(LocalTime sendTime, boolean enabled);
+
 	void deleteByMember(Member member);
+
 }
+
 
