@@ -54,7 +54,7 @@ public class MissionService {
 
     // 미션 완료시 처리 로직
     @Transactional
-    public void completeMission(Member member, Mission.MissionCode missionCode) {
+    public int completeMission(Member member, Mission.MissionCode missionCode) {
         Mission mission = missionRepository.findByCode(missionCode)
                 .orElseThrow(() -> new CustomException(ErrorCode.MISSION_NOT_FOUND));
 
@@ -73,11 +73,12 @@ public class MissionService {
         }
 
         // 미션 포인트 지급
-        pointService.earnPoint(member.getId(), mission.getRewardPoint(), "미션 보상: " + mission.getName());
+        int point=pointService.earnPoint(member.getId(), mission.getRewardPoint(), "미션 보상: " + mission.getName());
 
         // 완료 처리 (날짜, 상태 변경)
         memberMission.markRewarded();
         memberMissionRepository.save(memberMission);
+        return point;
     }
 
 

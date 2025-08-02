@@ -29,11 +29,12 @@ public class MissionController {
 
     // 미션 수행 완료
     @PostMapping("/complete/{missionCode}")
-    public ApiResponse<String> completeMission(
+    public ApiResponse<Integer> completeMission(
             @AuthenticationPrincipal PrincipalDetails user,
             @PathVariable String missionCode) {
-        missionService.completeMission(user.getMember(), Mission.MissionCode.valueOf(missionCode));
-        return ApiResponse.ok("미션 완료!");
+        // 획득 포인트 수 전송
+        int point=missionService.completeMission(user.getMember(), Mission.MissionCode.valueOf(missionCode));
+        return ApiResponse.ok(point);
     }
 
 

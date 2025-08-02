@@ -24,7 +24,7 @@ public class UserPointHistory {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Long parentId;
 
     @Column(nullable = false)
