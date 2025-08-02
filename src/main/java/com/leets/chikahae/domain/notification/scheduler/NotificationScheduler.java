@@ -18,6 +18,9 @@ import com.leets.chikahae.domain.notification.service.FcmPushService;
 import com.leets.chikahae.domain.notification.service.FcmTokenService;
 import com.leets.chikahae.domain.notification.service.NotificationSlotService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 public class NotificationScheduler {
 
@@ -41,10 +44,13 @@ public class NotificationScheduler {
 			.now(zone)
 			.truncatedTo(ChronoUnit.MINUTES)
 			.toLocalTime();
+		log.info(" runScheduler 진입 — JVM zone={}, nowTime={}",
+			ZoneId.systemDefault(), nowTime);
 
 		// 2) sendTime == nowTime && enabled인 슬롯만 조회
 		List<NotificationSlot> dueSlots =
 			notificationSlotRepository.findBySendTimeAndEnabled(nowTime, true);
+		log.info(" dueSlots 조회 — sendTime={}인 슬롯 개수={}", nowTime, dueSlots.size());
 
 		// 3) 푸시 전송 & 다음 예약 재계산
 		for (NotificationSlot slot : dueSlots) {
