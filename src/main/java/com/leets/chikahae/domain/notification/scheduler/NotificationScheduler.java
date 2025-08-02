@@ -27,7 +27,8 @@ public class NotificationScheduler {
 	private final FcmPushService fcmPushService;
 	private final FcmTokenService fcmTokenService;
 	private final NotificationSlotRepository notificationSlotRepository;
-	private final ZoneId zone = ZoneId.systemDefault();
+	private static final ZoneId KST = ZoneId.of("Asia/Seoul");
+
 
 	public NotificationScheduler( FcmPushService fcmPushService,
 		NotificationSlotRepository notificationSlotRepository ,FcmTokenService fcmTokenService) {
@@ -36,16 +37,16 @@ public class NotificationScheduler {
 		this.fcmTokenService = fcmTokenService;
 	}
 
-	@Scheduled(cron = "0 0/1 * * * *")  // 매 분 0초에 실행
+	@Scheduled(cron = "0 0/1 * * * *", zone= "Asia/Seoul")  // 매 분 0초에 실행
 	@Transactional
 	public void runScheduler() {
 		// 1) 현재 KST 시:분
 		LocalTime nowTime = LocalDateTime
-			.now(zone)
+			.now(KST)
 			.truncatedTo(ChronoUnit.MINUTES)
 			.toLocalTime();
-		log.info(" runScheduler 진입 — JVM zone={}, nowTime={}",
-			ZoneId.systemDefault(), nowTime);
+
+		log.info("▶ runScheduler — nowTime={}", nowTime);
 
 		// 2) sendTime == nowTime && enabled인 슬롯만 조회
 		List<NotificationSlot> dueSlots =
