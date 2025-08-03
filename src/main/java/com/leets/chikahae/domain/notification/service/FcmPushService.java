@@ -27,10 +27,10 @@ public class FcmPushService {
 					.putData("title", title)
 					.putData("body", body)
 					// notification 페이로드 추가
-					/*.setNotification(Notification.builder()
+					.setNotification(Notification.builder()
 							.setTitle(title)
 							.setBody(body)
-							.build())*/
+							.build())
 					.build();
 
 			log.info("Sending FCM | token={} | title='{}' | body='{}'", token, title, body);
