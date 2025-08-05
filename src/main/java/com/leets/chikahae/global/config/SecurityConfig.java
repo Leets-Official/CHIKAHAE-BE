@@ -107,7 +107,7 @@ public class SecurityConfig {
         /// CORS 추가
         configuration.addAllowedOriginPattern("http://localhost:3000");
         configuration.addAllowedOriginPattern("https://api.chika-hae.site");
-        configuration.addAllowedOriginPattern("https://chika-hae.site");
+        configuration.addAllowedOriginPattern("https://www.chika-hae.site");
 
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
