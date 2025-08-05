@@ -9,6 +9,8 @@ import com.leets.chikahae.domain.store.entity.Item;
 import com.leets.chikahae.domain.store.entity.MemberItem;
 import com.leets.chikahae.domain.store.repository.ItemRepository;
 import com.leets.chikahae.domain.store.repository.MemberItemRepository;
+import com.leets.chikahae.global.response.CustomException;
+import com.leets.chikahae.global.response.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,21 +53,20 @@ public class StoreService {
     @Transactional
     public PurchaseResponseDto purchaseItem(Long memberId, Long itemId) {
 
+        // 회원 존재 여부 확인
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, "존재하지 않는 회원입니다."));
 
+        // 아이템 존재 여부 확인
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이템입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.ITEM_NOT_FOUND, "존재하지 않는 아이템입니다."));
 
         int price = item.getPrice();
         int currentBalance = pointService.getPoint(memberId);
 
+        // 포인트 부족 여부 확인
         if (currentBalance < price) {
-            return PurchaseResponseDto.builder()
-                    .success(false)
-                    .message("포인트가 부족합니다.")
-                    .remainingCoin(currentBalance)
-                    .build();
+            throw new CustomException(ErrorCode.INSUFFICIENT_COIN, "포인트가 부족합니다.");
         }
 
         // 포인트 차감
@@ -85,6 +86,5 @@ public class StoreService {
                 .remainingCoin(currentBalance - price)
                 .build();
     }
-
 
 }
