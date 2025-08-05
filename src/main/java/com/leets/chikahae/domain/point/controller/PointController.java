@@ -19,12 +19,20 @@ public class PointController implements PointControllerSpec {
 
     private final PointService pointService;
 
+    /**
+     * 현재 잔액 반환 API
+     * GET /api/points/balance?memberId=X
+     */
     @GetMapping("/balance")
     public ApiResponse<Integer> getBalance(@AuthenticationPrincipal PrincipalDetails user) {
         int balance = pointService.getPoint(user.getId());
         return ApiResponse.ok(balance);
     }
 
+    /**
+     * 포인트 적립 API
+     * POST /api/points/earn
+     */
     @PostMapping("/earn")
     public ApiResponse<Void> earnPoint(@AuthenticationPrincipal PrincipalDetails user,
                                        @RequestBody PointRequestDto request) {
@@ -32,6 +40,10 @@ public class PointController implements PointControllerSpec {
         return ApiResponse.ok(null);
     }
 
+    /**
+     * 포인트 소비 API
+     * POST /api/points/consume
+     */
     @PostMapping("/consume")
     public ApiResponse<Void> consumePoint(@AuthenticationPrincipal PrincipalDetails user,
                                           @RequestBody PointRequestDto request) {
@@ -39,6 +51,10 @@ public class PointController implements PointControllerSpec {
         return ApiResponse.ok(null);
     }
 
+    /**
+     * 포인트 이력 조회 API
+     * GET /api/points/history?memberId=X
+     */
     @GetMapping("/history")
     public ApiResponse<List<PointHistoryResponseDto>> getHistory(@AuthenticationPrincipal PrincipalDetails user) {
         try {
