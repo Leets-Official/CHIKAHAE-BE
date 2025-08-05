@@ -16,6 +16,8 @@ public enum ErrorCode {
         NULL_VALUE(400_003, HttpStatus.BAD_REQUEST, "Null 값이 들어왔습니다."),
         TEST_ERROR(400_004, HttpStatus.BAD_REQUEST, "테스트 에러입니다."),
         INVALID_NICKNAME(400_005, HttpStatus.BAD_REQUEST, "닉네임은 필수입니다."),
+        NEGATIVE_COIN_AMOUNT(400_006, HttpStatus.BAD_REQUEST, "코인은 음수로 설정할 수 없습니다."),
+        INSUFFICIENT_COIN(400_007, HttpStatus.BAD_REQUEST, "포인트가 부족합니다."),
 
 
 
