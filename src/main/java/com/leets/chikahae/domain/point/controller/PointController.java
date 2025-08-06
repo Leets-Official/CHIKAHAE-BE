@@ -1,5 +1,6 @@
 package com.leets.chikahae.domain.point.controller;
 
+import com.leets.chikahae.domain.point.controller.spec.PointControllerSpec;
 import com.leets.chikahae.domain.point.dto.request.PointRequestDto;
 import com.leets.chikahae.domain.point.dto.response.PointHistoryResponseDto;
 import com.leets.chikahae.domain.point.service.PointService;
@@ -14,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/points")
 @RequiredArgsConstructor
-public class PointController implements PointControllerSpec{
+public class PointController implements PointControllerSpec {
 
     private final PointService pointService;
 

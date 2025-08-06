@@ -1,4 +1,4 @@
-package com.leets.chikahae.domain.point.controller;
+package com.leets.chikahae.domain.point.controller.spec;
 
 import com.leets.chikahae.domain.point.dto.request.PointRequestDto;
 import com.leets.chikahae.domain.point.dto.response.PointHistoryResponseDto;
@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;

@@ -1,41 +1,31 @@
 package com.leets.chikahae.domain.mission.controller;
 
+import com.leets.chikahae.domain.mission.controller.spec.MissionControllerSpec;
 import com.leets.chikahae.domain.mission.dto.MissionResponse;
 import com.leets.chikahae.domain.mission.entity.Mission;
 import com.leets.chikahae.domain.mission.service.MissionService;
 import com.leets.chikahae.global.response.ApiResponse;
 import com.leets.chikahae.security.auth.PrincipalDetails;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Tag(name = "Mission", description = "미션 조회, 상태 변경 API")
 @RestController
-@RequestMapping("/api/mission")
 @RequiredArgsConstructor
-public class MissionController {
+public class MissionController implements MissionControllerSpec {
 
     private final MissionService missionService;
 
-    // 오늘의 미션 목록 조회
-    @GetMapping("/today")
-    public ApiResponse<List<MissionResponse>> getTodayMissions(@AuthenticationPrincipal PrincipalDetails user) {
+    @Override
+    public ApiResponse<List<MissionResponse>> getTodayMissions(PrincipalDetails user) {
         List<MissionResponse> responses = missionService.getAllMissions(user.getId());
         return ApiResponse.ok(responses);
     }
 
-    // 미션 수행 완료
-    @PostMapping("/complete/{missionCode}")
-    public ApiResponse<Integer> completeMission(
-            @AuthenticationPrincipal PrincipalDetails user,
-            @PathVariable String missionCode) {
-        // 획득 포인트 수 전송
-        int point=missionService.completeMission(user.getMember(), Mission.MissionCode.valueOf(missionCode));
+    @Override
+    public ApiResponse<Integer> completeMission(PrincipalDetails user, String missionCode) {
+        int point = missionService.completeMission(user.getMember(), Mission.MissionCode.valueOf(missionCode));
         return ApiResponse.ok(point);
     }
-
-
 }
