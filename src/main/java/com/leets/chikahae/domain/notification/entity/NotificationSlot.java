@@ -8,6 +8,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.leets.chikahae.domain.BaseEntity;
 
 import com.leets.chikahae.domain.member.entity.Member;
@@ -36,6 +37,7 @@ public class NotificationSlot extends BaseEntity {
 	@Column(name = "slot_id" )
 	private Long slotId;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id", nullable = false)
 	private Member member;
