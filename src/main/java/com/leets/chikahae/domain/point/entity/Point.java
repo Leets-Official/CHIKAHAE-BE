@@ -37,24 +37,24 @@ public class Point {
 
     public void increase(int amount) {
         if (amount < 0) {
-            throw new CustomException(ErrorCode.NEGATIVE_COIN_AMOUNT, "포인트는 음수로 증가할 수 없습니다.");
+            throw new CustomException(ErrorCode.NEGATIVE_COIN_AMOUNT);
         }
         this.coin += amount;
     }
 
     public void decrease(int amount) {
         if (amount < 0) {
-            throw new CustomException(ErrorCode.NEGATIVE_COIN_AMOUNT, "포인트는 음수로 차감할 수 없습니다.");
+            throw new CustomException(ErrorCode.NEGATIVE_COIN_AMOUNT);
         }
         if (this.coin < amount) {
-            throw new CustomException(ErrorCode.INSUFFICIENT_COIN, "포인트가 부족합니다.");
+            throw new CustomException(ErrorCode.INSUFFICIENT_COIN);
         }
         this.coin -= amount;
     }
 
     public void addCoin(int coinReward) {
         if (coinReward < 0) {
-            throw new CustomException(ErrorCode.NEGATIVE_COIN_AMOUNT, "포인트는 음수로 추가할 수 없습니다.");
+            throw new CustomException(ErrorCode.NEGATIVE_COIN_AMOUNT);
         }
         this.coin += coinReward;
     }
