@@ -4,7 +4,6 @@ import com.leets.chikahae.domain.point.dto.request.PointRequestDto;
 import com.leets.chikahae.domain.point.dto.response.PointHistoryResponseDto;
 import com.leets.chikahae.domain.point.service.PointService;
 import com.leets.chikahae.global.response.ApiResponse;
-import com.leets.chikahae.global.response.CustomException;
 import com.leets.chikahae.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -57,11 +56,7 @@ public class PointController implements PointControllerSpec {
      */
     @GetMapping("/history")
     public ApiResponse<List<PointHistoryResponseDto>> getHistory(@AuthenticationPrincipal PrincipalDetails user) {
-        try {
-            List<PointHistoryResponseDto> history = pointService.getHistory(user.getId());
-            return ApiResponse.ok(history);
-        } catch (CustomException e) {
-            return ApiResponse.fail(e);
-        }
+        List<PointHistoryResponseDto> history = pointService.getHistory(user.getId());
+        return ApiResponse.ok(history);
     }
 }
