@@ -5,6 +5,8 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.List;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,6 +69,7 @@ public class NotificationSlotService {
 
 	//슬롯 시간 변경 - Long memberId로 수정
 	@Transactional
+	@CacheEvict(value="notificationSlots" , key="#memberId")
 	public void updateSlotTime(Long memberId, SlotType type,
 		LocalTime sendTime, ZoneId zone) {
 		NotificationSlot slot = notificationSlotRepository
@@ -76,6 +79,7 @@ public class NotificationSlotService {
 	}
 
 	// Member ID로 조회하도록 수정
+	@Cacheable(value = "notificationSlots" , key="#memberId")
 	public List<NotificationSlot> getSlots(Long memberId) {
 		return notificationSlotRepo.findByMember_MemberId(memberId);
 	}
