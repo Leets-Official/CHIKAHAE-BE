@@ -64,6 +64,9 @@ public class SecurityConfig {
             "/webjars/**",              // Swagger의 정적 리소스
             "/swagger-ui.html",         // Swagger UI HTML
 
+            //모니터링 관련
+            "/actuator/**",
+
     };
 
 
