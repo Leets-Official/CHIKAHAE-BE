@@ -1,12 +1,11 @@
 package com.leets.chikahae.domain.point.entity;
 
+import com.leets.chikahae.domain.BaseEntity;
 import com.leets.chikahae.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user_point_history")
@@ -14,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class UserPointHistory {
+public class UserPointHistory extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,9 +35,6 @@ public class UserPointHistory {
 
     @Column(length = 255)
     private String description;
-
-    @CreationTimestamp
-    private LocalDateTime createdAt;
 
     @Column(nullable = false)
     private LocalDate date;

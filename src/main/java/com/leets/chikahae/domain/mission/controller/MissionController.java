@@ -1,5 +1,6 @@
 package com.leets.chikahae.domain.mission.controller;
 
+import com.leets.chikahae.domain.mission.controller.spec.MissionControllerSpec;
 import com.leets.chikahae.domain.mission.dto.MissionResponse;
 import com.leets.chikahae.domain.mission.entity.Mission;
 import com.leets.chikahae.domain.mission.service.MissionService;
@@ -16,7 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/mission")
 @RequiredArgsConstructor
-public class MissionController {
+public class MissionController implements MissionControllerSpec {
 
     private final MissionService missionService;
 

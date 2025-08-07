@@ -1,6 +1,7 @@
 package com.leets.chikahae.domain.quiz.controller;
 
 
+import com.leets.chikahae.domain.quiz.controller.spec.QuizControllerSpec;
 import com.leets.chikahae.domain.quiz.dto.request.CheckQuizRequest;
 import com.leets.chikahae.domain.quiz.dto.response.CheckQuizResponse;
 import com.leets.chikahae.domain.quiz.dto.response.QuizResponse;
