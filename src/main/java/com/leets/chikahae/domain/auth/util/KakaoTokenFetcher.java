@@ -18,20 +18,29 @@ public class KakaoTokenFetcher {
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
             .build();
 
-    public String getAccessToken(String code) {
+    public TokenResponse getTokenResponse(String code) {
         TokenResponse response = webClient.post()
                 .uri("/oauth/token")
                 .body(BodyInserters.fromFormData("grant_type", "authorization_code")
                         .with("client_id", "8091dd6876b5a059fcdaa26661ea384e")
-                        .with("redirect_uri", "http://localhost:8080/login/kakao/callback")
+                        .with("redirect_uri", "https://www.chika-hae.site/login/kakao/callback")//https://api.chika-hae.site/login/kakao/callback
                         .with("code", code)
                         .with("client_secret", "d5rRncLu76hVHZMaFtjZ3kB7XE3zRwvW"))
                 .retrieve()
                 .bodyToMono(TokenResponse.class)
                 .block();
-        return response.getAccessToken();
 
+        if (response == null || response.getAccessToken() == null) {
+            throw new RuntimeException("토큰 응답 파싱 실패");
+        }
+
+        log.info("🔑 토큰 응답: {}", response);
+        log.info("✅ 카카오 Access Token 발급 완료: {}", response.getAccessToken());
+        log.info("🔍 카카오 TokenResponse: {}", response);
+        log.info("✅ 카카오 Access Token 발급 완료: {}", response.getAccessToken());
+        return response;
     }
+
 
 
 

@@ -1,5 +1,6 @@
 package com.leets.chikahae.domain.parent.service;
 
+import com.leets.chikahae.domain.member.entity.Gender;
 import com.leets.chikahae.domain.parent.entity.Parent;
 import com.leets.chikahae.domain.parent.repository.ParentRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,15 +19,16 @@ public class ParentService {
     /**
      * 카카오 ID로 부모 조회, 없으면 저장
      */
-    public Parent saveOrFind(String kakaoId, String email, String name, Boolean gender, LocalDate birth) {
+    public Parent saveOrFind(String kakaoId, String email, String name, Gender gender, String phoneNumber, LocalDate birth) {
         return parentRepository.findByKakaoId(kakaoId)
                 .orElseGet(() -> {
                     Parent parent = Parent.builder()
                             .kakaoId(kakaoId)
                             .email(email)
                             .name(name)
-                            .gender(gender)
-                            .birth(birth)
+                            .parentGender(gender)
+                            .parentPhoneNumber(phoneNumber)
+                            .parentBirth(birth)
                             .createdAt(LocalDateTime.now())
                             .updatedAt(LocalDateTime.now())
                             .isDelete("N")
@@ -42,4 +44,4 @@ public class ParentService {
         return parentRepository.findByKakaoId(kakaoId);
     }
 
-}
+}//class

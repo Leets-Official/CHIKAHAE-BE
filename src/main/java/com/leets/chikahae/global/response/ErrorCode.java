@@ -15,6 +15,10 @@ public enum ErrorCode {
         INVALID_INPUT(400_002, HttpStatus.BAD_REQUEST, "입력값이 올바르지 않습니다."),
         NULL_VALUE(400_003, HttpStatus.BAD_REQUEST, "Null 값이 들어왔습니다."),
         TEST_ERROR(400_004, HttpStatus.BAD_REQUEST, "테스트 에러입니다."),
+        INVALID_NICKNAME(400_005, HttpStatus.BAD_REQUEST, "닉네임은 필수입니다."),
+        NEGATIVE_COIN_AMOUNT(400_006, HttpStatus.BAD_REQUEST, "코인은 음수로 설정할 수 없습니다."),
+        INSUFFICIENT_COIN(400_007, HttpStatus.BAD_REQUEST, "포인트가 부족합니다."),
+
 
 
         // ========================
@@ -57,6 +61,7 @@ public enum ErrorCode {
         POINT_NOT_FOUND(404_009, HttpStatus.INTERNAL_SERVER_ERROR, "사용자가 포인트 데이터를 가지고 있지 않습니다."),
         SLOT_NOT_FOUND(404_0010, HttpStatus.NOT_FOUND,    "알림 슬롯을 찾을 수 없습니다."),
         MISSION_NOT_FOUND(404_0011, HttpStatus.NOT_FOUND, "해당 미션을 찾을 수 없습니다."),
+        ITEM_NOT_FOUND(404_012, HttpStatus.NOT_FOUND, "해당 아이템을 찾을 수 없습니다."),
 
         // ========================
         // 409 Conflict
@@ -65,6 +70,8 @@ public enum ErrorCode {
         ALREADY_REWARDED(409_002, HttpStatus.CONFLICT, "이미 오늘의 보상을 받으셨습니다."),
         ALREADY_COMPLETED_MISSION(409_003, HttpStatus.CONFLICT, "이미 완료된 미션입니다."),
         MISSION_NOT_COMPLETED(409_004, HttpStatus.CONFLICT, "미션이 완료되지 않았습니다."),
+        DUPLICATED_NICKNAME(409_005, HttpStatus.CONFLICT, "이미 사용 중인 닉네임입니다."),
+
 
         // ========================
         // 500 Internal Server Error
@@ -73,6 +80,7 @@ public enum ErrorCode {
         DUPLICATE_RESPONSE(500_001, HttpStatus.INTERNAL_SERVER_ERROR, "이미 해당 퀴즈에 응답하셨습니다."),
         NOT_ENOUGH_QUIZ_SOLVED(500_002, HttpStatus.INTERNAL_SERVER_ERROR, "해당 퀴즈를 풀지 않았습니다."),
         FCM_PUSH_ERROR(500_003, HttpStatus.INTERNAL_SERVER_ERROR, "FCM 푸시 전송에 실패했습니다.");
+
 
         // 기타 공통
 

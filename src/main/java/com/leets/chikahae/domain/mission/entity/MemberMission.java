@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 @Entity
 @Getter
@@ -33,6 +34,10 @@ public class MemberMission {
 
     @Column
     private LocalDateTime completedAt;
+
+    @Column(nullable = false)
+    private LocalDate missionDate;
+
 
     public enum Status {
         IN_PROGRESS,

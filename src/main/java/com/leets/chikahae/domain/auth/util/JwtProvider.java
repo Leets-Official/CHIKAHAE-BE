@@ -38,41 +38,30 @@ public class JwtProvider {
         secretKey = Keys.hmacShaKeyFor(key.getBytes());
     }
 
-
-    // Access token 발급 - PrincipalDetails 기반
-    public String generateAccessToken(PrincipalDetails principalDetails, Long memberId) {
-        return generateToken(principalDetails, memberId, accessTokenExpiration);
-    }
-
-    // Refresh token 발급 - PrincipalDetails 기반
-    public String generateRefreshToken(PrincipalDetails principalDetails, Long memberId) {
-        return generateToken(principalDetails, memberId, refreshTokenExpiration);
-    }
-
     // 권한 없이 발급하는 기본 버전
     public String generateAccessToken(Long memberId) {
-        return generateToken(memberId, accessTokenExpiration);
+        return generateToken(memberId, accessTokenExpiration, "access");
     }
 
     public String generateRefreshToken(Long memberId) {
-        return generateToken(memberId, refreshTokenExpiration);
+        return generateToken(memberId, refreshTokenExpiration, "refresh");
     }
 
 
-
     //토큰 생성 함수
-    public String generateToken(PrincipalDetails principalDetails, Long memberId, long expireTime) {
+    public String generateToken(Long memberId, long expireTime, String type) {
         // 권한 리스트 추출
-        Collection<? extends GrantedAuthority> collection = principalDetails.getAuthorities();
-        List<String> authorities = collection == null ? List.of() :
-                collection.stream().map(GrantedAuthority::getAuthority).toList();
+//        Collection<? extends GrantedAuthority> collection = principalDetails.getAuthorities();
+//        List<String> authorities = collection == null ? List.of() :
+//                collection.stream().map(GrantedAuthority::getAuthority).toList();
 
         Date now = new Date();
         Date expiredDate = new Date(now.getTime() + expireTime);
 
         Map<String, Object> claims = new HashMap<>();
         claims.put(ID_CLAIM, memberId);
-        claims.put("authorities", authorities);
+        claims.put("authorities", List.of());
+        claims.put("token_type", type);   // "access" 또는 "refresh"
 
         return Jwts.builder()
                 .setSubject(String.valueOf(memberId))
@@ -100,6 +89,15 @@ public class JwtProvider {
                 .signWith(secretKey, SignatureAlgorithm.HS512)
                 .compact();
     }
+
+    public int getAccessTokenExpiryInSeconds() {
+        return Math.toIntExact(accessTokenExpiration / 1000);
+    }
+
+    public int getRefreshTokenExpiryInSeconds() {
+        return Math.toIntExact(refreshTokenExpiration / 1000);
+    }
+
 
 
 }//class

@@ -1,19 +1,21 @@
 package com.leets.chikahae.domain.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class TokenResponse {
 
     @JsonProperty("access_token")
     private String accessToken;
 
-    @JsonProperty("token_type")
-    private String tokenType;
-
     @JsonProperty("refresh_token")
     private String refreshToken;
+
+    @JsonProperty("token_type")
+    private String tokenType;
 
     @JsonProperty("expires_in")
     private int expiresIn;
@@ -23,6 +25,7 @@ public class TokenResponse {
 
     @JsonProperty("refresh_token_expires_in")
     private int refreshTokenExpiresIn;
+
 
 
 

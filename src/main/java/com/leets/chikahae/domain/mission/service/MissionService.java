@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,17 +55,20 @@ public class MissionService {
 
     // 미션 완료시 처리 로직
     @Transactional
-    public void completeMission(Member member, Mission.MissionCode missionCode) {
+    public int completeMission(Member member, Mission.MissionCode missionCode) {
         Mission mission = missionRepository.findByCode(missionCode)
                 .orElseThrow(() -> new CustomException(ErrorCode.MISSION_NOT_FOUND));
 
+        LocalDate today = LocalDate.now();
+
         // 미션 기록이 있으면 조회, 없으면 새로 생성해서 저장
         MemberMission memberMission = memberMissionRepository
-                .findByMemberAndMission(member, mission)
+                .findByMemberAndMissionAndMissionDate(member, mission,today)
                 .orElseGet(() -> MemberMission.builder()
                         .member(member)
                         .mission(mission)
                         .status(MemberMission.Status.IN_PROGRESS)
+                        .missionDate(today)
                         .build());
 
         // 미션이 이미 완료되었거나 보상 처리된 경우 예외 발생
@@ -73,22 +77,14 @@ public class MissionService {
         }
 
         // 미션 포인트 지급
-        pointService.earnPoint(member.getId(), mission.getRewardPoint(), "미션 보상: " + mission.getName());
+        int point=pointService.earnPoint(member.getId(), mission.getRewardPoint(), "미션 보상: " + mission.getName());
 
         // 완료 처리 (날짜, 상태 변경)
         memberMission.markRewarded();
         memberMissionRepository.save(memberMission);
+        return point;
     }
 
-
-    @Transactional
-    public void completeRewardedMission(Member member, Mission.MissionCode missionCode) {
-
-        missionRepository.findByCode(missionCode)
-                .orElseThrow(() -> new CustomException(ErrorCode.MISSION_NOT_FOUND));
-
-        completeMission(member, missionCode);
-    }
 
 
 

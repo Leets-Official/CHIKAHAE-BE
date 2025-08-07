@@ -1,9 +1,7 @@
 package com.leets.chikahae.domain.parent.entity;
+import com.leets.chikahae.domain.member.entity.Gender;
+import jakarta.persistence.*;
 import jakarta.persistence.Id;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -32,11 +30,15 @@ public class Parent {
     @Column(nullable = false)
     private String name; // 카톡에서 받은 이름
 
-    @Column(nullable = false)
-    private Boolean gender; // true: 남성, false: 여성
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 10)
+    private Gender parentGender;
+
+    @Column(length = 50)
+    private String parentPhoneNumber;
 
     @Column(name = "birth", nullable = false)
-    private LocalDate birth; // 생년월일 (예: 1990-01-01)
+    private LocalDate parentBirth; // 생년월일 (예: 1990-01-01)
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
@@ -53,15 +55,23 @@ public class Parent {
         return this.parentId;
     }
 
-    public static Parent of(Long parentId,String kakaoId, String email, String name) {
+    public static Parent of(
+            String kakaoId,
+            String email,
+            String name,
+            Gender parentGender,
+            String parentPhoneNumber,
+            LocalDate parentBirth
+    ) {
         return Parent.builder()
-                .parentId(parentId)
                 .kakaoId(kakaoId)
                 .email(email)
                 .name(name)
-                .isDelete("N") // 기본값은 "N"
+                .parentGender(parentGender)
+                .parentPhoneNumber(parentPhoneNumber)
+                .parentBirth(parentBirth)
+                .isDelete("N")
                 .build();
-
     }
 
 

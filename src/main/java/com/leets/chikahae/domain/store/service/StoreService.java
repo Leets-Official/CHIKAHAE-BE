@@ -1,9 +1,90 @@
 package com.leets.chikahae.domain.store.service;
 
+import com.leets.chikahae.domain.member.entity.Member;
+import com.leets.chikahae.domain.member.repository.MemberRepository;
+import com.leets.chikahae.domain.point.service.PointService;
+import com.leets.chikahae.domain.store.dto.response.PurchaseResponseDto;
+import com.leets.chikahae.domain.store.dto.response.ItemResponseDto;
+import com.leets.chikahae.domain.store.entity.Item;
+import com.leets.chikahae.domain.store.entity.MemberItem;
+import com.leets.chikahae.domain.store.repository.ItemRepository;
+import com.leets.chikahae.domain.store.repository.MemberItemRepository;
+import com.leets.chikahae.global.response.CustomException;
+import com.leets.chikahae.global.response.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class StoreService {
+
+    private final ItemRepository itemRepository;
+    private final MemberItemRepository memberItemRepository;
+    private final MemberRepository memberRepository;
+    private final PointService pointService;
+
+    /**
+     * 아이템 전체 목록 조회
+     */
+    @Transactional(readOnly = true)
+    public List<ItemResponseDto> getAllItems() {
+        return itemRepository.findAll().stream()
+                .map(ItemResponseDto::from)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 사용자 보유 아이템 목록 조회
+     */
+    @Transactional(readOnly = true)
+    public List<ItemResponseDto> getMyItems(Long memberId) {
+        return memberItemRepository.findByMember_MemberId(memberId).stream()
+                .map(memberItem -> ItemResponseDto.from(memberItem.getItem()))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 아이템 구매 처리
+     */
+    @Transactional
+    public PurchaseResponseDto purchaseItem(Long memberId, Long itemId) {
+
+        // 회원 존재 여부 확인
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        // 아이템 존재 여부 확인
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ITEM_NOT_FOUND));
+
+        int price = item.getPrice();
+        int currentBalance = pointService.getPoint(memberId);
+
+        // 포인트 부족 여부 확인
+        if (currentBalance < price) {
+            throw new CustomException(ErrorCode.INSUFFICIENT_COIN);
+        }
+
+        // 포인트 차감
+        pointService.consumePoint(memberId, price, "아이템 구매 - " + item.getName());
+
+        // 구매 내역 저장
+        MemberItem memberItem = MemberItem.builder()
+                .member(member)
+                .item(item)
+                .build();
+
+        memberItemRepository.save(memberItem);
+
+        return PurchaseResponseDto.builder()
+                .success(true)
+                .message("아이템 구매 성공")
+                .remainingCoin(currentBalance - price)
+                .build();
+    }
+
 }

@@ -1,10 +1,7 @@
 package com.leets.chikahae.domain.token.entity;
 
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import com.leets.chikahae.domain.member.entity.Member;
+import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,11 +23,16 @@ public class AccountToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tokenId;
 
-    @Column(nullable = false)
-    private Long memberId;
+    //memberId → Member 객체로 변경 (연관관계 설정)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
     @Column(nullable = false)
     private String tokenType;
+
+    @Column(name = "token")
+    private String token;
 
     private String ipAddress;
     private String userAgent;

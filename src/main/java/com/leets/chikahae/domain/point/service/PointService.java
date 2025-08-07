@@ -7,6 +7,8 @@ import com.leets.chikahae.domain.point.entity.Point;
 import com.leets.chikahae.domain.point.entity.UserPointHistory;
 import com.leets.chikahae.domain.point.repository.PointRepository;
 import com.leets.chikahae.domain.point.repository.UserPointHistoryRepository;
+import com.leets.chikahae.global.response.CustomException;
+import com.leets.chikahae.global.response.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,7 +32,7 @@ public class PointService {
     @Transactional(readOnly = true)
     public int getPoint(Long memberId) {
         Point point = pointRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("Point record not found for memberId: " + memberId));
+                .orElseThrow(() -> new CustomException(ErrorCode.POINT_NOT_FOUND));
         return point.getCoin();
     }
 
@@ -38,13 +40,14 @@ public class PointService {
      * 포인트 적립
      */
     @Transactional
-    public void earnPoint(Long memberId, int amount, String description) {
+    public int earnPoint(Long memberId, int amount, String description) {
         Point point = getOrCreatePoint(memberId);
         point.increase(amount);
 
         saveHistory(memberId, amount, UserPointHistory.Type.EARN, description);
-
         log.info("[PointService] memberId={} {}포인트 적립 완료", memberId, amount);
+
+        return point.getCoin();
     }
 
     /**
@@ -55,7 +58,7 @@ public class PointService {
         Point point = getOrCreatePoint(memberId);
 
         if (point.getCoin() < amount) {
-            throw new IllegalStateException("포인트가 부족합니다.");
+            throw new CustomException(ErrorCode.INSUFFICIENT_COIN);
         }
 
         point.decrease(amount);
@@ -81,7 +84,7 @@ public class PointService {
     private Point getOrCreatePoint(Long memberId) {
         return pointRepository.findById(memberId).orElseGet(() -> {
             Member member = memberRepository.findById(memberId)
-                    .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
             Point newPoint = Point.builder()
                     .member(member)
                     .coin(0)
@@ -92,11 +95,10 @@ public class PointService {
 
     private void saveHistory(Long memberId, int amount, UserPointHistory.Type type, String description) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         UserPointHistory history = UserPointHistory.builder()
                 .member(member)
-                .parentId(member.getParentId())
                 .amount(amount)
                 .type(type)
                 .description(description)

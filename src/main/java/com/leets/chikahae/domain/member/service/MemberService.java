@@ -1,13 +1,16 @@
 package com.leets.chikahae.domain.member.service;
 
+import com.leets.chikahae.domain.member.entity.Gender;
 import com.leets.chikahae.domain.member.entity.Member;
 import com.leets.chikahae.domain.member.repository.MemberRepository;
+import com.leets.chikahae.domain.parent.repository.ParentRepository;
 import com.leets.chikahae.domain.notification.service.NotificationSlotService;
 import com.leets.chikahae.domain.point.entity.Point;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Nullable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -18,25 +21,32 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final ParentRepository parentRepository;
     private final NotificationSlotService notificationSlotService;
+
     /**
-     * 자녀 등록
+     * 사용자 등록
+     * - 14세 미만일 경우에만 보호자(parentId 저장)
+     * -14세 이상이라면 parentId 없이 등록
      */
     @Transactional
-    public Member registerChild(Long parentId, String nickname,
-                                LocalDate birth, Boolean gender, String profileImage) {
+    public Member registerMember(@Nullable Long parentId, String kakaoId, String nickname, String email,
+                                 LocalDate birth, Gender gender) {
+
+
 
         Member member = Member.builder()
                 .parentId(parentId)
-                .nickname(nickname)
+                .kakaoId(kakaoId)
+                .nickname(nickname) // 매개변수 추가 - 석준
+                .kakaoEmail(email) // 7/30 카카오이메일추가
                 .birth(birth)
                 .gender(gender)
-                .profileImage(profileImage)
                 .isDeleted(false)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
-        Member savedMember=memberRepository.saveAndFlush(member);
+        Member savedMember = memberRepository.saveAndFlush(member);
 
         //  Point 엔티티 생성 및 저장
         Point point = Point.of(member);
@@ -47,17 +57,31 @@ public class MemberService {
     }
 
     /**
-     * 부모 ID로 첫 번째 자녀 조회
-     */
-    public Optional<Member> findFirstChildByParentId(Long parentId) {
-        return memberRepository.findFirstByParentId(parentId);
-    }
-
-    /**
-     * 카카오 ID로 회원 조회
+     * 카카오 ID로 사용자 조회
      */
     public Optional<Member> findByKakaoId(String kakaoId) {
-        return memberRepository.findByParentKakaoId(kakaoId);
+        return memberRepository.findByKakaoId(kakaoId);
     }
 
-}
+    @Transactional
+    public void deleteMember(Long memberId) {
+        // 1. 자녀 정보 조회 (부모 정보 얻기 위해)
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("해당 member가 존재하지 않습니다."));
+
+        Long parentId = member.getParentId(); // null일 수 있음 (14세 이상 회원)
+
+        // 2. 자녀 삭제
+        memberRepository.deleteById(memberId);
+
+        // 3. 부모 삭제 조건: 해당 부모에게 자녀가 더 이상 없을 경우
+        if (parentId != null) {
+            boolean hasOtherChildren = memberRepository.existsByParentId(parentId);
+            if (!hasOtherChildren) {
+                parentRepository.deleteById(parentId);
+            }
+        }
+    }
+
+
+}//class

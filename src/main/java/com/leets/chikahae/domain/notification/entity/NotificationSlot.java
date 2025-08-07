@@ -1,10 +1,12 @@
 package com.leets.chikahae.domain.notification.entity;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 
 import com.leets.chikahae.domain.BaseEntity;
 
@@ -46,7 +48,7 @@ public class NotificationSlot extends BaseEntity {
 	private LocalTime sendTime;
 
 	@Column(name = "next_send_at", nullable = false)
-	private Instant nextSendAt;  // Instant 타입 (?)
+	private LocalDateTime nextSendAt;
 
 	@Column(name = "is_enabled", nullable = false)
 	private boolean enabled;
@@ -64,26 +66,33 @@ public class NotificationSlot extends BaseEntity {
 		LocalTime sendTime, ZoneId zone, String title, String message) {
 		this.member   = member;
 		this.slotType = slotType;
+		this.sendTime  = sendTime;
 		this.title    = title;
 		this.message  = message;
 		this.enabled  = true;
-		changeSendTime(sendTime, zone);
+		computeNextSendAt();
 	}
 
 
 	public void changeEnabled(boolean enabled) {
 		this.enabled = enabled;
+		computeNextSendAt();
 	}
 
 	public void changeSendTime(LocalTime sendTime, ZoneId zone) {
 		this.sendTime = sendTime;
-		ZonedDateTime now      = Instant.now().atZone(zone);
-		LocalDateTime target   = LocalDateTime.of(now.toLocalDate(), sendTime);
-		ZonedDateTime sendDate = target.atZone(zone);
-		if ( now.isAfter(sendDate) ) {
-			sendDate = sendDate.plusDays(1);
-		}
-		this.nextSendAt = sendDate.toInstant();
+		computeNextSendAt();
+
+	}
+
+	private void computeNextSendAt() {
+		ZoneId zone = ZoneId.systemDefault(); // 수정: zone 인스턴스 필드 대신 로컬로 읽음
+		LocalDate tomorrow = LocalDate.now(zone).plusDays(1);
+		this.nextSendAt = LocalDateTime.of(tomorrow, this.sendTime);
+	}
+
+	public void scheduleNextSend() {
+		computeNextSendAt();
 	}
 
 }
