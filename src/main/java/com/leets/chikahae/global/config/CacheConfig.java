@@ -30,7 +30,7 @@ public class CacheConfig {
 		// 2) Default Typing 활성화: NON_FINAL 타입(엔티티, DTO 등)에는 JSON에 @class 정보 추가
 		mapper.activateDefaultTyping(
 			LaissezFaireSubTypeValidator.instance,
-			ObjectMapper.DefaultTyping.NON_FINAL,
+			ObjectMapper.DefaultTyping.EVERYTHING,
 			JsonTypeInfo.As.PROPERTY
 		);
 
@@ -39,10 +39,22 @@ public class CacheConfig {
 			new GenericJackson2JsonRedisSerializer(mapper);
 
 		return RedisCacheConfiguration.defaultCacheConfig()
+			.prefixCacheNameWith("chikahae::")
 			.entryTtl(Duration.ofHours(6))
 			.serializeKeysWith(RedisSerializationContext.SerializationPair
 				.fromSerializer(new StringRedisSerializer()))
 			.serializeValuesWith(RedisSerializationContext.SerializationPair
 				.fromSerializer(jsonSerializer));
+	}
+
+	@Bean
+	public org.springframework.cache.CacheManager cacheManager(
+		org.springframework.data.redis.connection.RedisConnectionFactory cf,
+		RedisCacheConfiguration config) {
+
+		return org.springframework.data.redis.cache.RedisCacheManager
+			.builder(cf)
+			.cacheDefaults(config)
+			.build();
 	}
 }
