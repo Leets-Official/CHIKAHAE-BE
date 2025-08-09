@@ -1,5 +1,7 @@
 package com.leets.chikahae.domain.member.service;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,7 @@ public class MyPageService {
 
 	//마이페이지 프로필 조회 메소드
 	@Transactional(readOnly = true)
+	@Cacheable(value = "memberProfile" , key = "#memberId")
 	public MemberProfileResponse getProfile(Long memberId) {
 		Member member = memberRepository.findByIdAndIsDeletedFalse(memberId)
 			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -37,6 +40,7 @@ public class MyPageService {
 
 	// 프로필 수정 매소드
 	@Transactional
+	@CacheEvict(value = "memberProfile", key = "#memberId")
 	public void updateProfile(Long memberId, UpdateProfileRequest request) {
 		Member member = memberRepository.findByIdAndIsDeletedFalse(memberId)
 			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
