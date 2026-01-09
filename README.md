@@ -87,15 +87,49 @@ PWA 기반 푸시 알림
 
 ##  Team
 
-<div align="center">
-
-|  | Frontend Team |  |  |
-|:---:|:---:|:---:|:---:|
-| <img src="https://github.com/belovelace.png" width="80" style="border-radius: 50%"/> | <img src="https://github.com/hwangjiyoung02.png" width="80" style="border-radius: 50%"/> | <img src="https://github.com/lilloo04.png" width="80" style="border-radius: 50%"/> | <img src="https://github.com/seokjun01.png" width="80" style="border-radius: 50%"/> |
-| [신은지](https://github.com/belovelace) | [황지영](https://github.com/hwangjiyoung02) | [박시현](https://github.com/lilloo04) | [문석준](https://github.com/seokjun01) |
-| **팀장** | **파트장** | **Developer** | **Developer** |
-
-</div>
+<table align="center">
+  <thead>
+    <tr>
+      <th colspan="4" style="text-align:center;">Back-end Team</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="center">
+        <img src="https://github.com/belovelace.png" width="80" style="border-radius: 50%"/>
+      </td>
+      <td align="center">
+        <img src="https://github.com/hwangjiyoung02.png" width="80" style="border-radius: 50%"/>
+      </td>
+      <td align="center">
+        <img src="https://github.com/lilloo04.png" width="80" style="border-radius: 50%"/>
+      </td>
+      <td align="center">
+        <img src="https://github.com/seokjun01.png" width="80" style="border-radius: 50%"/>
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+        <a href="https://github.com/belovelace"><b>신은지</b></a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/hwangjiyoung02"><b>황지영</b></a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/lilloo04"><b>박시현</b></a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/seokjun01"><b>문석준</b></a>
+      </td>
+    </tr>
+    <tr>
+      <td align="center">팀장</td>
+      <td align="center">파트장</td>
+      <td align="center">Developer</td>
+      <td align="center">Developer</td>
+    </tr>
+  </tbody>
+</table>
 
 <br>
 
